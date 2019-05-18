@@ -9,7 +9,7 @@ class Tests(unittest.TestCase):
         join_callbacks = []
         discord.on_member_join_callbacks = join_callbacks
         
-        welcome_message(None, discord)
+        WelcomeMessage(None, discord)
 
         assert len(join_callbacks) == 1
         assert callable(join_callbacks[0])
@@ -23,7 +23,7 @@ class Tests(unittest.TestCase):
             "channel": "my channel"
         }
         user_joined = User(state=MagicMock(), data=MagicMock())
-        welcome_message(config, discord)
+        WelcomeMessage(config, discord)
 
         callback = discord.on_member_join_callbacks[0]
         callback(user_joined)
