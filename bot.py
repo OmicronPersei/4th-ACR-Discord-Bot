@@ -1,5 +1,5 @@
-from r".\discord_service\discord_service" import DiscordService
-import welcome_message
+from discord_service import DiscordService
+from welcome_message import WelcomeMessage
 import json
 
 
@@ -18,7 +18,12 @@ if __name__ == "__main__":
     config = read_config()
     secrets = read_secrets()
 
-    discordToken = secrets["discord-bot-token"]
-    discord_service = discord_service()
+    discord_token = secrets["discord-bot-token"]
+    
+    discord_service = DiscordService()
+    welcome_message = WelcomeMessage(config, discord_service)
+
+    discord_service.run(discord_token)
+
 
     

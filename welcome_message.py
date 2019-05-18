@@ -1,7 +1,7 @@
 class WelcomeMessage:
-    def __init__(self, config, discord):
+    def __init__(self, config, discord_service):
         self._config = config
-        self._discord = discord
+        self._discord = discord_service
 
         self._discord.on_member_join_callbacks.append(self.member_joined)
 
