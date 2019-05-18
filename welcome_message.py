@@ -1,4 +1,4 @@
-class welcome_message:
+class WelcomeMessage:
     def __init__(self, config, discord):
         self._config = config
         self._discord = discord
