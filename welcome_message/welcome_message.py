@@ -7,6 +7,9 @@ class welcome_message:
 
 
     def member_joined(self, user):
-        pass
+        messageToSend = self._config["message"]
+        destinationChannel = self._config["channel"]
+
+        self._discord.send_channel_message(message=messageToSend, channel=destinationChannel)
     
     
