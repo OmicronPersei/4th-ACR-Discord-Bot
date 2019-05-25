@@ -6,7 +6,7 @@ from discord_mention_factory import DiscordMentionFactory
 from discord_service import DiscordService
 from test_utils import create_mock_user
 
-class TestSendsChannelMessageUponOnMemberJoinCallbackWithUsernameReplacedWithMentions(asynctest.TestCase):
+class TestReplacesUserAndDiscriminatorWithCorrespondingDiscordMemberMention(asynctest.TestCase):
     def setUp(self):
         self.discord = asynctest.Mock(DiscordService())
         self.discord_mention_factory = DiscordMentionFactory(self.discord)
@@ -38,7 +38,7 @@ class TestSendsChannelMessageUponOnMemberJoinCallbackWithUsernameReplacedWithMen
         
         assert actual_message == expected_message
 
-class TestSendsChannelMessageUponJoinCallbackAndResolvesJoiningUser(asynctest.TestCase):
+class TestReplacesListOfUsersWithCorrespondingDiscordMentions(asynctest.TestCase):
     def setUp(self):
         self.discord = asynctest.Mock(DiscordService())
 
@@ -58,7 +58,7 @@ class TestSendsChannelMessageUponJoinCallbackAndResolvesJoiningUser(asynctest.Te
 
         assert actual_message == expected_message
 
-class TestWelcomeMessageResolvesRoleMention(asynctest.TestCase):
+class TestReplacesRolesWithCorrespondingDiscordMentions(asynctest.TestCase):
     def setUp(self):
         self.discord = asynctest.Mock(DiscordService())
 
