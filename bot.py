@@ -26,10 +26,12 @@ if __name__ == "__main__":
     discord_mention_factory = DiscordMentionFactory(discord_service)
 
     welcome_message_config = config["welcome_message"]
-    welcome_message = WelcomeMessage(welcome_message_config, discord_service, discord_mention_factory)
+    if welcome_message_config["enabled"]:
+        welcome_message = WelcomeMessage(welcome_message_config, discord_service, discord_mention_factory)
 
     user_leave_config = config["user_leave_notification"]
-    user_leave_notification = UserLeaveNotification(user_leave_config, discord_service, discord_mention_factory)
+    if user_leave_config["enabled"]:
+        user_leave_notification = UserLeaveNotification(user_leave_config, discord_service, discord_mention_factory)
 
     discord_service.run(discord_token)
 

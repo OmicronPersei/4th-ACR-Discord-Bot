@@ -8,12 +8,14 @@
         //{member:User#123} is replaced with the matching user/discriminator pair (their discord name, not guild displayname/nickname).
 
         "message": "{joined_user}, welcome to our discord!",
-        "channel": "general"
+        "channel": "general",
+        "enabled": false
     },
     "user_leave_notification": {
         //Supports the same tokens as "welcome_message", but uses {left_user} instead of {joined_user}
         "message": "{left_user} has left the server",
-        "channel": "user-left-log"
+        "channel": "user-left-log",
+        "enabled": true
     }
 }
 ```
