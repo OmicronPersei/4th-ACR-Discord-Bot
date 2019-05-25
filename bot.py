@@ -23,7 +23,7 @@ if __name__ == "__main__":
     discord_service = DiscordService()
 
     welcome_message_config = config["welcome_message"]
-    welcome_message = WelcomeMessage(config, discord_service)
+    welcome_message = WelcomeMessage(welcome_message_config, discord_service)
 
     discord_service.run(discord_token)
 
