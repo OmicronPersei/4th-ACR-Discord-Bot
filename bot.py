@@ -1,7 +1,8 @@
 from discord_service import DiscordService
 from welcome_message import WelcomeMessage
+from discord_mention_factory import DiscordMentionFactory
+from user_leave_notification import UserLeaveNotification
 import json
-
 
 def readJsonFile(file_name):
     with open(file_name, mode="r") as f:
@@ -16,14 +17,19 @@ def read_secrets():
 
 if __name__ == "__main__":
     config = read_config()
-    secrets = read_secrets()
 
+    secrets = read_secrets()
     discord_token = secrets["discord-bot-token"]
     
     discord_service = DiscordService()
 
+    discord_mention_factory = DiscordMentionFactory(discord_service)
+
     welcome_message_config = config["welcome_message"]
-    welcome_message = WelcomeMessage(welcome_message_config, discord_service)
+    welcome_message = WelcomeMessage(welcome_message_config, discord_service, discord_mention_factory)
+
+    user_leave_config = config["user_leave_notification"]
+    user_leave_notification = UserLeaveNotification(user_leave_config, discord_service, discord_mention_factory)
 
     discord_service.run(discord_token)
 
