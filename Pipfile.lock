@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "79e3e4b88a3a8490f1f960ef3948c05d866a21a757a341dbe8a5921a44bb58ac"
+            "sha256": "35ec44b976037e00bee7182a0dd007b4e2cbdbee525eaa37c669b1a7e9b2a040"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -72,6 +72,13 @@
             ],
             "version": "==3.0.4"
         },
+        "dependency-injector": {
+            "hashes": [
+                "sha256:2e1889a0981381f557b0d14cba900adf7476817c53c13bfb04e2a30b3db0f1d3"
+            ],
+            "index": "pypi",
+            "version": "==3.14.6"
+        },
         "discord": {
             "hashes": [
                 "sha256:9d4debb4a37845543bd4b92cb195bc53a302797333e768e70344222857ff1559",
@@ -133,6 +140,13 @@
                 "sha256:db603a1c235d110c860d5f39988ebc8218ee028f07a7cbc056ba6424372ca31b"
             ],
             "version": "==4.5.2"
+        },
+        "six": {
+            "hashes": [
+                "sha256:3350809f0555b11f552448330d0b52d5f24c91a322ea4a15ef22629740f3761c",
+                "sha256:d16a0141ec1a18405cd4ce8b4613101da75da0e9a7aec5bdd4fa804d0e0eba73"
+            ],
+            "version": "==1.12.0"
         },
         "typing-extensions": {
             "hashes": [

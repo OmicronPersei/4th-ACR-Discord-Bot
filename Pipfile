@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 discord = "*"
 asynctest = "*"
+dependency-injector = "*"
 
 [dev-packages]
 pylint = "*"
