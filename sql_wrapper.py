@@ -35,4 +35,15 @@ class SQLWrapper:
             })
         return records
 
+    def insert_forum_record(self, forum_record):
+        sql_insert = """insert into ForumMessageHistory (forum_name_prefix, forum_id, thread_id, discord_message_id)
+        values ('{}', '{}', '{}', '{}')""".format(
+            forum_record["forum_name_prefix"],
+            forum_record["forum_id"],
+            forum_record["thread_id"],
+            forum_record["discord_message_id"],
+        )
+        self._db.execute(sql_insert)
+        self._db.commit()
+
     

@@ -94,3 +94,29 @@ class TestSQLWrapperReturnsRecords(BaseSQLWrapperTests, asynctest.TestCase):
         assert actual[1]["forum_id"] == self.mock_forum_id
         assert actual[1]["thread_id"] == "457"
         assert actual[1]["discord_message_id"] == "9348346574"
+
+
+class TestSQLWrapperInsertsRecords(BaseSQLWrapperTests, asynctest.TestCase):
+    def setUp(self):
+        BaseSQLWrapperTests.setUp(self)
+        self.mock_record = {
+            "forum_name_prefix": "my_forum",
+            "forum_id": "123",
+            "thread_id": "789",
+            "discord_message_id": "923490"
+        }
+    
+    def runTest(self):
+        expected_sql_insert = """insert into ForumMessageHistory (forum_name_prefix, forum_id, thread_id, discord_message_id)
+        values ('{}', '{}', '{}', '{}')""".format(
+            "my_forum",
+            "123",
+            "789",
+            "923490"
+        )
+
+        self.sql_wrapper.insert_forum_record(self.mock_record)
+
+        self.mock_sqlite3.execute.assert_called_with(expected_sql_insert)
+        self.mock_sqlite3.commit.assert_called()
+
