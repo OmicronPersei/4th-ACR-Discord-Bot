@@ -30,7 +30,7 @@ class BaseSQLWrapperTests:
 #     def runTest(self):
 #         self.mock_sqlite3.connect.assert_called_once_with(self.mock_config["db_filename"])
 
-class TestSQLWrapperChecksForumMessageTableExists(BaseSQLWrapperTests, asynctest.TestCase):
+class TestSQLWrapperChecksForumMessageTableExists_DoesntExist(BaseSQLWrapperTests, asynctest.TestCase):
     def setUp(self):
         BaseSQLWrapperTests.setUp(self)
         self.mock_forum_name_prefix = "xenforo1"
@@ -41,18 +41,30 @@ class TestSQLWrapperChecksForumMessageTableExists(BaseSQLWrapperTests, asynctest
         if self.execute_calls == 1:
             raise sqlite3.OperationalError
         elif self.execute_calls == 2:
-            return []
+            return MagicMock()
 
-    def handlesTableNotExisting(self):
+    def runTest(self):
         self.execute_calls = 0
         self.mock_sqlite3.execute.side_effect = self.sqlExecuteCreateTableSideEffect
         self.sql_wrapper.check_forum_has_allocated_storage(self.mock_forum_name_prefix, self.mock_forum_id)
-        # { "forum_name_prefix": "xenforo1", "forum_id": "1", "thread_id": "1", "discord_message_id": "1" }
         expected_sql = [ "select top 1 * from ForumMessageHistory",
             "create table ForumMessageHistory (forum_name_prefix nvarchar, forum_id nvarchar, thread_id nvarchar, discord_message_id nvarchar)"]
         expected_calls = [call(x) for x in expected_sql]
         self.mock_sqlite3.execute.assert_has_calls(expected_calls, any_order=False)
         self.mock_sqlite3.commit.assert_called_once()
+
+class TestSQLWrapperChecksForumMessageTableExists_AlreadyExists(BaseSQLWrapperTests, asynctest.TestCase):
+    def setUp(self):
+        BaseSQLWrapperTests.setUp(self)
+        self.mock_forum_name_prefix = "xenforo1"
+        self.mock_forum_id = "123"
+
+    def runTest(self):
+        self.mock_sqlite3.execute.return_value = MagicMock()
+
+        self.sql_wrapper.check_forum_has_allocated_storage(self.mock_forum_name_prefix, self.mock_forum_id)
+        expected_sql = "select top 1 * from ForumMessageHistory"
+        self.mock_sqlite3.execute.assert_called_with(expected_sql)
 
 
 
