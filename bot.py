@@ -1,10 +1,8 @@
-from discord_service import DiscordService
-from welcome_message import WelcomeMessage
-from discord_mention_factory import DiscordMentionFactory
-from user_leave_notification import UserLeaveNotification
-
-from dependency_injection import Dependencies
 import json
+import asyncio
+
+from discord_service import DiscordService
+from dependency_injection import Dependencies
 
 def readJsonFile(file_name):
     with open(file_name, mode="r") as f:
@@ -16,16 +14,24 @@ def read_secrets():
 def read_config():
     return readJsonFile("config.json")
 
-def setup_dependency_injection(config):
-    return Dependencies(config)
+def setup_dependency_injection(config, secrets):
+    return Dependencies(config, secrets)
 
-if __name__ == "__main__":
-    config = read_config()
-    secrets = read_secrets()
-    discord_token = secrets["discord-bot-token"]
+def start_bot(services, discord_token):
+    discord_service = services.discord_service()
+    loop = asyncio.get_event_loop()
+    try:
+        loop.run_until_complete(discord_service.start(discord_token))
+    except KeyboardInterrupt:
+        handle_KeyboardInterrupt(discord_service, loop)
 
-    services = setup_dependency_injection(config)
+def handle_KeyboardInterrupt(discord_service, loop):
+    print("Received keyboard interrupt, stopping services...")
+    loop.run_until_complete(discord_service.logout())
+    print("Logged out.")
+    loop.close()
 
+def start_services(services, config):
     if config["welcome_message"]["enabled"]:
         services.welcome_message()
 
@@ -34,6 +40,14 @@ if __name__ == "__main__":
 
     if config["user_role_self_service"]["enabled"]:
         services.user_roles_service()
+    
+    if config["xen_foro_integration"]["enabled"]:
+        services.xen_foro_new_message_dispatcher()
 
-    discord_service = services.discord_service()
-    discord_service.run(discord_token)
+if __name__ == "__main__":
+    config = read_config()
+    secrets = read_secrets()
+    discord_token = secrets["discord-bot-token"]
+    services = setup_dependency_injection(config, secrets)
+    
+    start_bot(services, discord_token)

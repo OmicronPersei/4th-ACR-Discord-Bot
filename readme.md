@@ -52,7 +52,25 @@ Example:
         "enabled": true,
         //The below may be ommitted such that this feature is restricted to the below channel
         "restrict_to_channel": "role-request"
-    }
+    },
+    "xen_foro_integration": {
+        "enabled": false,
+        //A unique identifier for this form, can be anything
+        "forum_name": "my_unique_prefix",
+        "base_url": "https://myforum.xyz/",
+        //Update period for checking each specified thread for new messages, in seconds
+        "update_period": "60",
+        "forums": [
+            {
+                "forum_id": "234",
+                "target_discord_channel": "forum posts",
+                "message_template": "A new forum post has appeared! {thread_url}",
+                //Default reactions to apply to the message automatically
+                "discord_message_reactions": [ "👍", "👎", "🤷" ]
+            }
+        ]
+    },
+    "db_filename": "my_db"
 }
 ```
 
@@ -62,6 +80,7 @@ Primary configuration file for sensitive info, primary the bot's discord secret.
 Example:
 ```
 {
-    "discord-bot-token": "bot-secret-goes-here"
+    "discord-bot-token": "bot-secret-goes-here",
+    "xen_foro_integration_api_token": "token here"
 }
 ```

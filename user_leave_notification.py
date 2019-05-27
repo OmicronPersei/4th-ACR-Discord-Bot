@@ -2,10 +2,10 @@ class UserLeaveNotification:
     def __init__(self, config, discord_service, discord_mention_factory):
         self._config = config
         self._discord = discord_service
-        self._discord.on_member_remove_callbacks.append(self.user_leave_callback)
+        self._discord.on_member_remove_callbacks.append(self._user_leave_callback)
         self._discord_mention_factory = discord_mention_factory
 
-    async def user_leave_callback(self, user):
+    async def _user_leave_callback(self, user):
         message = self._config["message"]
         channel = self._config["channel"]
         

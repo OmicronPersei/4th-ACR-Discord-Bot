@@ -19,7 +19,11 @@ class DiscordService(discord.Client):
     async def send_channel_message(self, message, channel_name):
         channels = self.get_all_channels()
         channel = [x for x in channels if x.name == channel_name][0]
-        await channel.send(message)
+        return await channel.send(message)
+
+    async def set_reactions_for_message(self, message, reactions):
+        for reaction in reactions:
+            await message.add_reaction(reaction)
 
     def get_matching_Member(self, username, discriminator):
         all_members = self.get_all_members()
