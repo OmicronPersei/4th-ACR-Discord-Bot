@@ -67,4 +67,30 @@ class TestSQLWrapperChecksForumMessageTableExists_AlreadyExists(BaseSQLWrapperTe
         self.mock_sqlite3.execute.assert_called_with(expected_sql)
 
 
+class TestSQLWrapperReturnsRecords(BaseSQLWrapperTests, asynctest.TestCase):
+    def setUp(self):
+        BaseSQLWrapperTests.setUp(self)
+        self.mock_forum_name_prefix = "xenforo1"
+        self.mock_forum_id = "123"
+        self.mock_sqlite3.execute.return_value = iter([
+                (self.mock_forum_name_prefix, self.mock_forum_id, "456", "9348394391"),
+                (self.mock_forum_name_prefix, self.mock_forum_id, "457", "9348346574"),
+            ])
+        
+    def runTest(self):
+        actual = self.sql_wrapper.get_forum_records(self.mock_forum_name_prefix, self.mock_forum_id)
 
+        expected_sql_query = "select * from ForumMessageHistory where forum_name_prefix='{}' and forum_id='{}'".format(self.mock_forum_name_prefix, self.mock_forum_id)
+        self.mock_sqlite3.execute.assert_called_once_with(expected_sql_query)
+        
+        assert len(actual) == 2
+
+        assert actual[0]["forum_name_prefix"] == self.mock_forum_name_prefix
+        assert actual[0]["forum_id"] == self.mock_forum_id
+        assert actual[0]["thread_id"] == "456"
+        assert actual[0]["discord_message_id"] == "9348394391"
+
+        assert actual[1]["forum_name_prefix"] == self.mock_forum_name_prefix
+        assert actual[1]["forum_id"] == self.mock_forum_id
+        assert actual[1]["thread_id"] == "457"
+        assert actual[1]["discord_message_id"] == "9348346574"
