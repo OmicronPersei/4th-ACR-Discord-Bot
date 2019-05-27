@@ -49,9 +49,3 @@ class TestForumDataStorageReturnsExistingForumThreadRecords(ForumThreadDataStora
         self.mock_sql.get_forum_records.assert_called_once_with("xenforo1", "1")
         assert len(actual) == 1
         assert actual == self.forum_id1_records
-    
-
-
-        
-
-
