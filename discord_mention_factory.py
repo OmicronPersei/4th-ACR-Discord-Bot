@@ -7,7 +7,8 @@ class DiscordMentionFactory:
     def perform_replacement(self, template, user_objs=None):
         template = self.perform_member_replacement(template)
         if user_objs is not None:
-            template = self.perform_user_objs_replacement(template, user_objs)
+            template = self.perform_user_mention_replacement(template, user_objs)
+            template = self.perform_user_display_name_replacement(template, user_objs)
         template = self.perform_role_replacement(template)
         return template
 
@@ -26,10 +27,16 @@ class DiscordMentionFactory:
 
         return message
 
-    def perform_user_objs_replacement(self, message, user_objs):
+    def perform_user_mention_replacement(self, message, user_objs):
         for i,user in enumerate(user_objs, 0):
             replace = "{user:" + str(i) + "}"
             message = message.replace(replace, user.mention)
+        return message
+
+    def perform_user_display_name_replacement(self, message, user_objs):
+        for i,user in enumerate(user_objs, 0):
+            replace = "{user:display_name:" + str(i) + "}"
+            message = message.replace(replace, user.display_name)
         return message
     
     def perform_role_replacement(self, message):

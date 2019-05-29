@@ -32,7 +32,7 @@ class TestUserUserLeaveNotificationSendsMessageUponUserLeft(asynctest.TestCase):
         }
         self.discord = asynctest.Mock(DiscordService)
         self.discord.on_member_remove_callbacks = []
-        self.mock_left_user = create_mock_user("lame_guy")
+        self.mock_left_user = create_mock_user("lame_guy", "lame_guy_name")
 
         self.discord_mention_service = MagicMock(DiscordMentionFactory)
         self.message_from_mention_factory = "generated message from factory"
@@ -44,5 +44,5 @@ class TestUserUserLeaveNotificationSendsMessageUponUserLeft(asynctest.TestCase):
         callback = self.discord.on_member_remove_callbacks[0]
         await callback(self.mock_left_user)
 
-        self.discord_mention_service.perform_replacement.assert_called_with("{user:0} has left", [self.mock_left_user])
+        self.discord_mention_service.perform_replacement.assert_called_with("{user:display_name:0} has left", [self.mock_left_user])
         self.discord.send_channel_message.assert_called_with(self.message_from_mention_factory, "user-left-channel")
