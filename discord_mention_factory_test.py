@@ -49,12 +49,16 @@ class TestReplacesListOfUsersWithCorrespondingDiscordMentions(asynctest.TestCase
 
         self.mock_joining_user1_mention_val = "dfasdf"
         self.mock_joining_user1 = create_mock_user(self.mock_joining_user1_mention_val)
+
+        self.mock_joining_user2_mention_val = "sdfs"
+        self.mock_joining_user2_display_name = "display_name_here"
+        self.mock_joining_user2 = create_mock_user(self.mock_joining_user2_mention_val, self.mock_joining_user2_display_name)
         
-        self.message_template = "yo {user:0} and {user:1}"
+        self.message_template = "yo {user:0} and {user:1} and {user:display_name:2}"
 
     async def test(self):
-        actual_message = self.discord_mention_factory.perform_replacement(self.message_template, [self.mock_joining_user0, self.mock_joining_user1])
-        expected_message = "yo {} and {}".format(self.mock_joining_user0_mention_val, self.mock_joining_user1_mention_val)
+        actual_message = self.discord_mention_factory.perform_replacement(self.message_template, [self.mock_joining_user0, self.mock_joining_user1, self.mock_joining_user2])
+        expected_message = "yo {} and {} and {}".format(self.mock_joining_user0_mention_val, self.mock_joining_user1_mention_val, self.mock_joining_user2_display_name)
 
         assert actual_message == expected_message
 

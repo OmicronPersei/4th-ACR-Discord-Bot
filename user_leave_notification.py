@@ -9,7 +9,7 @@ class UserLeaveNotification:
         message = self._config["message"]
         channel = self._config["channel"]
         
-        message = message.replace("{left_user}", "{user:0}")
+        message = message.replace("{left_user}", "{user:display_name:0}")
         message = self._discord_mention_factory.perform_replacement(message, [user])
 
         await self._discord.send_channel_message(message, channel)
