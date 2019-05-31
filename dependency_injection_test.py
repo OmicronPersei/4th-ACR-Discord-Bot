@@ -8,6 +8,8 @@ from welcome_message import WelcomeMessage
 from user_leave_notification import UserLeaveNotification
 from forum_thread_data_storage import ForumThreadDataStorage
 from sql_wrapper import SQLWrapper
+from xen_foro_request_factory import XenForoRequestFactory
+from xen_foro_thread_getter import XenForoThreadGetter
 
 def create_mock_config():
     return {
@@ -20,7 +22,8 @@ def create_mock_config():
             "message": "the message",
             "channel": "the channel",
             "enabled": True
-        }
+        },
+        "db_filename": ":memory:"
     }
 
 class TestDependenciesSetsConfig(asynctest.TestCase):
@@ -57,6 +60,24 @@ class TestDependenciesSetsupDependencies(asynctest.TestCase):
         assert isinstance(user_leave_notification, dependency_injector.providers.Singleton)
         assert isinstance(user_leave_notification_instance, UserLeaveNotification)
 
-        # forum_thread_data_storage = self.dependencies.
+        sql_wrapper = self.dependencies.sql_wrapper
+        sql_wrapper_instance = self.dependencies.sql_wrapper()
+        assert isinstance(sql_wrapper, dependency_injector.providers.Singleton)
+        assert isinstance(sql_wrapper_instance, SQLWrapper)
+
+        forum_thread_data_storage = self.dependencies.forum_thread_data_storage
+        forum_thread_data_storage_instance = self.dependencies.forum_thread_data_storage()
+        assert isinstance(forum_thread_data_storage, dependency_injector.providers.Singleton)
+        assert isinstance(forum_thread_data_storage_instance, ForumThreadDataStorage)
+
+        xen_foro_request_factory = self.dependencies.xen_foro_request_factory
+        xen_foro_request_factory_instance = self.dependencies.xen_foro_request_factory()
+        assert isinstance(xen_foro_request_factory, dependency_injector.providers.Singleton)
+        assert isinstance(xen_foro_request_factory_instance, XenForoRequestFactory)
+
+        xen_foro_thread_getter = self.dependencies.xen_foro_thread_getter
+        xen_foro_thread_getter_instance = self.dependencies.xen_foro_thread_getter()
+        assert isinstance(xen_foro_thread_getter, dependency_injector.providers.Singleton)
+        assert isinstance(xen_foro_thread_getter_instance, XenForoThreadGetter)
 
     

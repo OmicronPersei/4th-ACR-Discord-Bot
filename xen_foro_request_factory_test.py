@@ -8,7 +8,7 @@ class TestXenForoRequestFactoryCreateThreadGetRequest(asynctest.TestCase):
         forum_id = "123"
         base_url = "https://myform.xyz"
 
-        actual = XenForoRequestFactory.create_thread_get_request(api_token, forum_id, base_url)
+        actual = XenForoRequestFactory().create_thread_get_request(api_token, forum_id, base_url)
 
         assert actual.get_full_url() == "{}/threads/{}".format(base_url, forum_id)
         assert actual.get_method() == "GET"
