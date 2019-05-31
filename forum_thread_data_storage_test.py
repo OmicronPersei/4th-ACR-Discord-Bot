@@ -3,22 +3,22 @@ import asynctest
 from asynctest import MagicMock, call
 
 mock_forum_threads = [ {
-        "forum_name_prefix": "xenforo1",
+        "forum_name": "xenforo1",
         "forum_id": "1"
     }, 
     {
-        "forum_name_prefix": "xenforo1",
+        "forum_name": "xenforo1",
         "forum_id": "2"
     }]
 
 class ForumThreadDataStorageTestBase:
     def setUp(self):
         self.mock_forum_threads = [ {
-                "forum_name_prefix": "xenforo1",
+                "forum_name": "xenforo1",
                 "forum_id": "1"
             }, 
             {
-                "forum_name_prefix": "xenforo1",
+                "forum_name": "xenforo1",
                 "forum_id": "2"
             }]
         self.mock_sql = MagicMock()
@@ -38,12 +38,12 @@ class TestForumDataStorageReturnsExistingForumThreadRecords(ForumThreadDataStora
         ForumThreadDataStorageTestBase.setUp(self)
         
         self.forum_id1_records = [
-            { "forum_name_prefix": "xenforo1", "forum_id": "1", "thread_id": "1", "discord_message_id": "1" }
+            { "forum_name": "xenforo1", "forum_id": "1", "thread_id": "1", "discord_message_id": "1" }
         ]
         self.mock_sql.get_forum_records = MagicMock(return_value=self.forum_id1_records)
     
     def runTest(self):
-        forum_thread_query = { "forum_name_prefix": "xenforo1", "forum_id": "1" }
+        forum_thread_query = { "forum_name": "xenforo1", "forum_id": "1" }
         actual = self.forum_thread_data_storage.get_forum_thread_records(forum_thread_query)
 
         self.mock_sql.get_forum_records.assert_called_once_with("xenforo1", "1")

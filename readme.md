@@ -16,6 +16,19 @@
         "message": "{left_user} has left the server",
         "channel": "user-left-log",
         "enabled": true
+    },
+    "xen_foro_integration: {
+        "forum_name": "my_unique_prefix",
+        "base_url": "https://myforum.xyz/",
+        "forums": [
+            {
+                "update_period": "60",
+                "target_forum_id": "234",
+                "target_discord_channel": "forum posts",
+                "message_template": "A new forum post has appeared! {thread_url}",
+                "discord_message_emojis": []
+            }
+        ]
     }
 }
 ```
@@ -23,6 +36,12 @@
 ## Example `secrets.json`
 ```
 {
-    "discord-bot-token": "bot-secret-goes-here"
+    "discord-bot-token": "bot-secret-goes-here",
+    "xen_foro_integrations": [
+        {
+            "forum_name": "my unique forum name",
+            "api_token": "token here"
+        }
+    ]
 }
 ```
