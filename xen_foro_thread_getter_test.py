@@ -23,10 +23,18 @@ class BaseXenForoThreadGetter(TestCase):
         self.mock_xen_foro_request_factory.create_thread_get_request = MagicMock(return_value=self.mock_request)
         
         self.mock_json_response = """
-
+        {
+            \"my prop\": \"my val\"
+        }
         """
         
         self.mock_xen_foro_thread_request_getter = MockXenForoThreadGetter(self.mock_json_response, self.mock_xen_foro_request_factory)
+
+    def runTest(self):
+        actual = self.mock_xen_foro_thread_request_getter.get_threads(self.base_url, self.api_token, self.forum_id)
+
+        self.mock_xen_foro_request_factory.create_thread_get_request.assert_called_with(self.api_token, self.forum_id, self.base_url)
+        assert actual["my prop"] == "my val"
         
 
 
