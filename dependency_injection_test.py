@@ -6,6 +6,8 @@ from discord_service import DiscordService
 from discord_mention_factory import DiscordMentionFactory
 from welcome_message import WelcomeMessage
 from user_leave_notification import UserLeaveNotification
+from forum_thread_data_storage import ForumThreadDataStorage
+from sql_wrapper import SQLWrapper
 
 def create_mock_config():
     return {
@@ -54,5 +56,7 @@ class TestDependenciesSetsupDependencies(asynctest.TestCase):
         user_leave_notification_instance = user_leave_notification()
         assert isinstance(user_leave_notification, dependency_injector.providers.Singleton)
         assert isinstance(user_leave_notification_instance, UserLeaveNotification)
+
+        # forum_thread_data_storage = self.dependencies.
 
     

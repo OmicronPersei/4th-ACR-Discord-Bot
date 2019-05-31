@@ -17,7 +17,7 @@
         "channel": "user-left-log",
         "enabled": true
     },
-    "xen_foro_integration: {
+    "xen_foro_integration": {
         "forum_name": "my_unique_prefix",
         "base_url": "https://myforum.xyz/",
         "forums": [
@@ -29,7 +29,8 @@
                 "discord_message_emojis": []
             }
         ]
-    }
+    },
+    "db_filename": "my_db"
 }
 ```
 
