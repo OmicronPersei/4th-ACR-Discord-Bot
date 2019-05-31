@@ -37,11 +37,6 @@
 ```
 {
     "discord-bot-token": "bot-secret-goes-here",
-    "xen_foro_integrations": [
-        {
-            "forum_name": "my unique forum name",
-            "api_token": "token here"
-        }
-    ]
+    "xen_foro_integration_api_token": "token here"
 }
 ```
