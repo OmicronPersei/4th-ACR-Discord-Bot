@@ -23,7 +23,7 @@
         "forums": [
             {
                 "update_period": "60",
-                "target_forum_id": "234",
+                "forum_id": "234",
                 "target_discord_channel": "forum posts",
                 "message_template": "A new forum post has appeared! {thread_url}",
                 "discord_message_emojis": []

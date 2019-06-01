@@ -1,0 +1,43 @@
+from asynctest import TestCase, MagicMock, main
+from xen_foro_thread_processor import XenForoThreadProcessor
+
+mock_config = {
+    "forum_name": "my_forum",
+    "base_url": "http://forum",
+    "forums": [ {
+        "update_period": "60",
+        "forum_id": "123",
+        "target_discord_channel": "forum posts",
+        "message_template": "A new forum post has appeared! {thread_url}",
+        "discord_message_emojis": []
+    }]
+}
+mock_token = "asdfs"
+
+class TestThreadProcessorReturnsNoMessagesToSend(TestCase):
+    def setUp(self):
+        self.thread_getter = MagicMock()
+        self.threads_from_forum = [{
+            "thread_id": "123",
+            "first_message_contents": "post here"
+        }]
+        self.thread_getter.get_threads = MagicMock(return_value = self.threads_from_forum)
+
+        self.threads_from_data_storage = [{
+            "thread_id": "123",
+            "first_message_contents": "post here"
+        }]
+        self.thread_data_storage = MagicMock()
+        self.thread_data_storage.get_forum_thread_records = MagicMock(return_value=self.threads_from_data_storage)
+
+        self.thread_processor = XenForoThreadProcessor(self.thread_getter, self.thread_data_storage, mock_config, mock_token)
+
+    def runTest(self):
+        actual = self.thread_processor.get_threads_needing_messages()
+
+        assert len(actual) == 0
+        self.thread_getter.get_threads.assert_called_with("http://forum", "asdfs", "123")
+        self.thread_data_storage.get_forum_thread_records({"forum_name": "my_forum", "forum_id": "123"})
+
+# main()
+

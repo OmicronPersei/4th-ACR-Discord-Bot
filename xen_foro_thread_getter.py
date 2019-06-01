@@ -7,8 +7,8 @@ class XenForoThreadGetter:
 
     def get_threads(self, base_url, api_token, forum_id):
         request = self.xen_foro_request_factory.create_thread_get_request(api_token, forum_id, base_url)
-        response = self.get_response(request)
+        response = self.__get_response(request)
         return json.loads(response)
 
-    def get_response(self, request):
+    def __get_response(self, request):
         return urllib.request.urlopen(request)
