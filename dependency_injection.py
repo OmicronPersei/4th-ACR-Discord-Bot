@@ -8,12 +8,16 @@ from sql_wrapper import SQLWrapper
 from forum_thread_data_storage import ForumThreadDataStorage
 from xen_foro_request_factory import XenForoRequestFactory
 from xen_foro_thread_getter import XenForoThreadGetter
+from xen_foro_new_thread_detector import XenForoNewThreadDetector
 
 class Dependencies:
-    def __init__(self, config):
+    def __init__(self, config, secrets):
         super().__init__()
         self.config = providers.Configuration("config")
         self.config.override(config)
+
+        self.secrets = providers.Configuration("config")
+        self.secrets.override(secrets)
 
         self.discord_service = providers.Singleton(DiscordService)
         self.discord_mention_factory = providers.Singleton(DiscordMentionFactory, self.discord_service)
@@ -23,4 +27,5 @@ class Dependencies:
         self.forum_thread_data_storage = providers.Singleton(ForumThreadDataStorage, self.config.xen_foro_integration)
         self.xen_foro_request_factory = providers.Singleton(XenForoRequestFactory)
         self.xen_foro_thread_getter = providers.Singleton(XenForoThreadGetter, self.xen_foro_request_factory)
+        self.xen_foro_new_thread_detector = providers.Singleton(XenForoNewThreadDetector, self.xen_foro_thread_getter, self.forum_thread_data_storage, self.config.xen_foro_integration, self.secrets.xen_foro_integration_api_token)
 

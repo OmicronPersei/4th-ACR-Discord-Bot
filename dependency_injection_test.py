@@ -10,6 +10,7 @@ from forum_thread_data_storage import ForumThreadDataStorage
 from sql_wrapper import SQLWrapper
 from xen_foro_request_factory import XenForoRequestFactory
 from xen_foro_thread_getter import XenForoThreadGetter
+from xen_foro_new_thread_detector import XenForoNewThreadDetector
 
 def create_mock_config():
     return {
@@ -26,18 +27,26 @@ def create_mock_config():
         "db_filename": ":memory:"
     }
 
-class TestDependenciesSetsConfig(asynctest.TestCase):
+def create_mock_secrets():
+    return {
+        "xen_foro_integration_api_token": "imsecret"
+    }
+
+class TestDependenciesSetsConfigAndSecrets(asynctest.TestCase):
     def setUp(self):
         self.config = create_mock_config()
+        self.secrets = create_mock_secrets()
     
     def runTest(self):
-        dependencies = Dependencies(self.config)
+        dependencies = Dependencies(self.config, self.secrets)
         assert dependencies.config.welcome_message.enabled() == True
+        assert dependencies.secrets.xen_foro_integration_api_token() == "imsecret"
 
 class TestDependenciesSetsupDependencies(asynctest.TestCase):
     def setUp(self):
         self.config = create_mock_config()
-        self.dependencies = Dependencies(self.config)
+        self.secrets = create_mock_secrets()
+        self.dependencies = Dependencies(self.config, self.secrets)
     
     def runTest(self):
         discord_service = self.dependencies.discord_service
@@ -79,5 +88,10 @@ class TestDependenciesSetsupDependencies(asynctest.TestCase):
         xen_foro_thread_getter_instance = self.dependencies.xen_foro_thread_getter()
         assert isinstance(xen_foro_thread_getter, dependency_injector.providers.Singleton)
         assert isinstance(xen_foro_thread_getter_instance, XenForoThreadGetter)
+
+        xen_foro_new_thread_detector = self.dependencies.xen_foro_new_thread_detector
+        xen_foro_new_thread_detector_instance = self.dependencies.xen_foro_new_thread_detector()
+        assert isinstance(xen_foro_new_thread_detector, dependency_injector.providers.Singleton)
+        assert isinstance(xen_foro_new_thread_detector_instance, XenForoNewThreadDetector)
 
     
