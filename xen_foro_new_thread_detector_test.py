@@ -1,5 +1,5 @@
 from asynctest import TestCase, MagicMock, main
-from xen_foro_thread_processor import XenForoThreadProcessor
+from xen_foro_new_thread_detector import XenForoNewThreadDetector
 
 mock_config = {
     "forum_name": "my_forum",
@@ -30,7 +30,7 @@ class TestThreadProcessorReturnsNoMessagesToSend(TestCase):
         self.thread_data_storage = MagicMock()
         self.thread_data_storage.get_forum_thread_records = MagicMock(return_value=self.threads_from_data_storage)
 
-        self.thread_processor = XenForoThreadProcessor(self.thread_getter, self.thread_data_storage, mock_config, mock_token)
+        self.thread_processor = XenForoNewThreadDetector(self.thread_getter, self.thread_data_storage, mock_config, mock_token)
 
     def runTest(self):
         actual = self.thread_processor.get_threads_needing_messages()
@@ -59,7 +59,7 @@ class TestThreadProcessorReturnsOneMessageToSend(TestCase):
         self.thread_data_storage = MagicMock()
         self.thread_data_storage.get_forum_thread_records = MagicMock(return_value=self.threads_from_data_storage)
 
-        self.thread_processor = XenForoThreadProcessor(self.thread_getter, self.thread_data_storage, mock_config, mock_token)
+        self.thread_processor = XenForoNewThreadDetector(self.thread_getter, self.thread_data_storage, mock_config, mock_token)
 
     def runTest(self):
         actual = self.thread_processor.get_threads_needing_messages()
@@ -89,7 +89,7 @@ class TestThreadProcessorReturnsTwoMessagesToSendWhenNoPreviousRecorded(TestCase
         self.thread_data_storage = MagicMock()
         self.thread_data_storage.get_forum_thread_records = MagicMock(return_value=self.threads_from_data_storage)
 
-        self.thread_processor = XenForoThreadProcessor(self.thread_getter, self.thread_data_storage, mock_config, mock_token)
+        self.thread_processor = XenForoNewThreadDetector(self.thread_getter, self.thread_data_storage, mock_config, mock_token)
 
     def runTest(self):
         actual = self.thread_processor.get_threads_needing_messages()
