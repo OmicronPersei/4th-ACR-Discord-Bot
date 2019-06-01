@@ -9,7 +9,7 @@ class MockXenForoThreadGetter(XenForoThreadGetter):
 
         self.mock_json_response = mock_json_response
 
-    def __get_response(self, request):
+    def get_response(self, request):
         return self.mock_json_response
 
 class BaseXenForoThreadGetter(TestCase):
