@@ -16,15 +16,15 @@ def read_secrets():
 def read_config():
     return readJsonFile("config.json")
 
-def setup_dependency_injection(config):
-    return Dependencies(config)
+def setup_dependency_injection(config, secrets):
+    return Dependencies(config, secrets)
 
 if __name__ == "__main__":
     config = read_config()
     secrets = read_secrets()
     discord_token = secrets["discord-bot-token"]
 
-    services = setup_dependency_injection(config)
+    services = setup_dependency_injection(config, secrets)
 
     if config["welcome_message"]["enabled"]:
         services.welcome_message()
@@ -34,8 +34,3 @@ if __name__ == "__main__":
 
     discord_service = services.discord_service()
     discord_service.run(discord_token)
-
-
-
-
-    
