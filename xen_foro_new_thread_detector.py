@@ -19,8 +19,8 @@ class XenForoNewThreadDetector:
                 "forum_id": forum_id
             }
 
-            threads_recorded = self.map_by_thread_id(self._thread_data_storage.get_forum_thread_records(data_storage_query))
-            threads_on_forum = self.map_by_thread_id(self._thread_getter.get_threads(forum_base_url, api_token, forum_id))
+            threads_recorded = self._map_by_thread_id(self._thread_data_storage.get_forum_thread_records(data_storage_query))
+            threads_on_forum = self._map_by_thread_id(self._thread_getter.get_threads(forum_base_url, api_token, forum_id))
 
             for thread_id,thread_forum_item in threads_on_forum.items():
                 if thread_id not in threads_recorded:
@@ -28,7 +28,7 @@ class XenForoNewThreadDetector:
 
         return forum_threads_needing_messages
 
-    def map_by_thread_id(self, items):
+    def _map_by_thread_id(self, items):
         dict_by_thread_id = dict()
         for item in items:
             dict_by_thread_id[item["thread_id"]] = item

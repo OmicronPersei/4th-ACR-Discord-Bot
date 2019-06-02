@@ -20,9 +20,9 @@
     "xen_foro_integration": {
         "forum_name": "my_unique_prefix",
         "base_url": "https://myforum.xyz/",
+        "update_period": "60",
         "forums": [
             {
-                "update_period": "60",
                 "forum_id": "234",
                 "target_discord_channel": "forum posts",
                 "message_template": "A new forum post has appeared! {thread_url}",
