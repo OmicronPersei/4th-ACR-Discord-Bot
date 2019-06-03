@@ -4,13 +4,13 @@ class SQLWrapper:
     def __init__(self, config):
         self._config = config
 
-        self.connect()
+        self._connect()
 
-    def connect(self):
+    def _connect(self):
         db_filename = self._config["db_filename"]
-        self._db = self.get_db_connection(db_filename)
+        self._db = self._get_db_connection(db_filename)
     
-    def get_db_connection(self, db_filename):
+    def _get_db_connection(self, db_filename):
         return sqlite3.connect(db_filename)
     
     def check_forum_has_allocated_storage(self):
