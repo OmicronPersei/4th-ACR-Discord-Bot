@@ -11,6 +11,7 @@ from sql_wrapper import SQLWrapper
 from xen_foro_request_factory import XenForoRequestFactory
 from xen_foro_thread_getter import XenForoThreadGetter
 from xen_foro_new_thread_detector import XenForoNewThreadDetector
+from xen_foro_forum_thread_url_factory import XenForoForumThreadURLFactory
 from xen_foro_new_message_dispatcher import XenForoNewMessageDispatcher
 
 def create_mock_config():
@@ -113,4 +114,13 @@ class TestDependenciesSetsupDependencies(asynctest.TestCase):
         assert xen_foro_new_thread_detector_instance._forum_config["forum_name"] == "my_unique_prefix"
         assert xen_foro_new_thread_detector_instance._forum_api_token == "imsecret"
 
-    
+        xen_foro_url_forum_factory = self.dependencies.xen_foro_forum_thread_url_factory
+        xen_foro_url_forum_factory_instance = self.dependencies.xen_foro_forum_thread_url_factory()
+        assert isinstance(xen_foro_url_forum_factory, dependency_injector.providers.Singleton)
+        assert isinstance(xen_foro_url_forum_factory_instance, XenForoForumThreadURLFactory)
+
+        xen_foro_new_message_dispatcher = self.dependencies.xen_foro_new_message_dispatcher
+        xen_foro_new_message_dispatcher_instance = self.dependencies.xen_foro_new_message_dispatcher()
+        assert isinstance(xen_foro_new_message_dispatcher, dependency_injector.providers.Singleton)
+        assert isinstance(xen_foro_new_message_dispatcher_instance, XenForoNewMessageDispatcher)
+        assert xen_foro_new_message_dispatcher_instance._config["forum_name"] == "my_unique_prefix"

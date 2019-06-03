@@ -10,7 +10,7 @@ from xen_foro_request_factory import XenForoRequestFactory
 from xen_foro_thread_getter import XenForoThreadGetter
 from xen_foro_new_thread_detector import XenForoNewThreadDetector
 from xen_foro_new_message_dispatcher import XenForoNewMessageDispatcher
-from clock_source import ClockSource
+from xen_foro_forum_thread_url_factory import XenForoForumThreadURLFactory
 
 class Dependencies:
     def __init__(self, config, secrets):
@@ -30,6 +30,6 @@ class Dependencies:
         self.xen_foro_request_factory = providers.Singleton(XenForoRequestFactory)
         self.xen_foro_thread_getter = providers.Singleton(XenForoThreadGetter, self.xen_foro_request_factory)
         self.xen_foro_new_thread_detector = providers.Singleton(XenForoNewThreadDetector, self.xen_foro_thread_getter, self.forum_thread_data_storage, self.config.xen_foro_integration, self.secrets.xen_foro_integration_api_token)
-        #def __init__(self, xen_foro_new_thread_detector, discord_service, discord_mention_factory, forum_thread_data_storage, clock_signal, forum_thread_url_factory, config)
-        # self.xen_foro_new_message_dispatcher = providers.Singleton(XenForoNewMessageDispatcher, self.xen_foro_new_thread_detector, self.discord_service, self.discord_mention_factory, self.forum_thread_data_storage)
+        self.xen_foro_forum_thread_url_factory = providers.Singleton(XenForoForumThreadURLFactory)
+        self.xen_foro_new_message_dispatcher = providers.Singleton(XenForoNewMessageDispatcher, self.xen_foro_new_thread_detector, self.discord_service, self.discord_mention_factory, self.forum_thread_data_storage, self.xen_foro_forum_thread_url_factory, self.config.xen_foro_integration)
 
