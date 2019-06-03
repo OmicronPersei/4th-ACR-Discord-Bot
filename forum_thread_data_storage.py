@@ -8,3 +8,6 @@ class ForumThreadDataStorage:
 
     def get_forum_thread_records(self, forum_thread_query):
         return self._sql_wrapper.get_forum_records(forum_thread_query["forum_name"], forum_thread_query["forum_id"])
+
+    def store_new_forum_thread_record(self, new_forum_record):
+        self._sql_wrapper.insert_forum_record(new_forum_record)

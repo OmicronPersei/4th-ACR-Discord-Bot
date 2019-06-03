@@ -50,3 +50,19 @@ class TestForumDataStorageReturnsExistingForumThreadRecords(ForumThreadDataStora
         self.mock_sql.get_forum_records.assert_called_once_with("xenforo1", "1")
         assert len(actual) == 1
         assert actual == self.forum_id1_records
+
+class TestForumDataStorageStoresNewForumRecord(ForumThreadDataStorageTestBase, asynctest.TestCase):
+    def setUp(self):
+        ForumThreadDataStorageTestBase.setUp(self)
+        self.new_forum_thread_record = {
+            "forum_name": "sdfadsf",
+            "forum_id": "123",
+            "thread_id": "q4213",
+            "discord_message_id": "DSfadf"
+        }
+
+    def runTest(self):
+        self.forum_thread_data_storage.store_new_forum_thread_record(self.new_forum_thread_record)
+
+        self.mock_sql.insert_forum_record.assert_called_with(self.new_forum_thread_record)
+
