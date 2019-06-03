@@ -10,9 +10,6 @@ class MockClockSource(ClockSource):
 
 class TestClockSourceCanHandleCoroutinesAndRegularMethods(TestCase):
     async def my_coroutine(self):
-        await self.co_routine()
-
-    async def co_routine(self):
         self.my_coroutine_called = True
 
     def regular_func(self):
@@ -27,6 +24,3 @@ class TestClockSourceCanHandleCoroutinesAndRegularMethods(TestCase):
 
         assert self.regular_func_called == True
         assert self.my_coroutine_called == True
-
-# main()
-

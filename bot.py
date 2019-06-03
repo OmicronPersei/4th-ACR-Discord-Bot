@@ -5,6 +5,7 @@ from user_leave_notification import UserLeaveNotification
 
 from dependency_injection import Dependencies
 import json
+import asyncio
 
 def readJsonFile(file_name):
     with open(file_name, mode="r") as f:
@@ -19,6 +20,20 @@ def read_config():
 def setup_dependency_injection(config, secrets):
     return Dependencies(config, secrets)
 
+def start_bot(services, discord_token):
+    discord_service = services.discord_service()
+    loop = asyncio.get_event_loop()
+    try:
+        loop.run_until_complete(discord_service.start(discord_token))
+    except KeyboardInterrupt:
+        handle_KeyboardInterrupt(discord_service, loop)
+
+def handle_KeyboardInterrupt(discord_service, loop):
+    print("Received keyboard interrupt, stopping services...")
+    loop.run_until_complete(discord_service.logout())
+    print("Logged out.")
+    loop.close()
+
 if __name__ == "__main__":
     config = read_config()
     secrets = read_secrets()
@@ -32,5 +47,5 @@ if __name__ == "__main__":
     if config["user_leave_notification"]["enabled"]:
         services.user_leave_notification()
 
-    discord_service = services.discord_service()
-    discord_service.run(discord_token)
+    start_bot(services, discord_token)
+    

@@ -33,6 +33,7 @@ class TestBase:
         self.mock_clock_signal = MagicMock()
         self.mock_clock_signal.callbacks = []
         self.mock_clock_signal.start = MagicMock()
+        self.mock_clock_signal.stop = MagicMock()
 
         self.new_message_dispatcher = MockXenForoNewMessageDispatcher(self.mock_new_forum_detector, self.mock_discord_service, self.mock_discord_mention_factory, self.mock_forum_thread_data_storage, self.mock_forum_url_thread_factory, self.mock_config, self.mock_clock_signal)
 
@@ -54,6 +55,15 @@ class XenForoNewMessageDispatcherTestStart(TestCase, TestBase):
 
         self.mock_clock_signal.start.assert_called()
 
+class XenForoNewMessageDispatcherTestStop(TestCase, TestBase):
+    def setUp(self):
+        TestBase.setUp(self)
+
+    def runTest(self):
+        self.new_message_dispatcher.stop()
+
+        self.mock_clock_signal.stop.assert_called()
+
 class XenForoNewMessageDispatcherHandlesNewlyDetectedForumPost(TestCase, TestBase):
     def setUp(self):
         TestBase.setUp(self)
@@ -62,8 +72,8 @@ class XenForoNewMessageDispatcherHandlesNewlyDetectedForumPost(TestCase, TestBas
             "forum_id": "111",
             "thread_id": "123"
         }]
-        self.url = "generated url"
-        self.mock_forum_url_thread_factory.get_url=MagicMock(return_value=self.url)
+        self.url_from_factory = "generated url"
+        self.mock_forum_url_thread_factory.get_url=MagicMock(return_value=self.url_from_factory)
         self.mock_new_forum_detector.get_threads_needing_messages = MagicMock(return_value = self.new_forum_threads)
         self.mention_service_return_val = "mention service did work"
         self.mock_discord_mention_factory.perform_replacement = MagicMock(return_value=self.mention_service_return_val)
@@ -81,7 +91,7 @@ class XenForoNewMessageDispatcherHandlesNewlyDetectedForumPost(TestCase, TestBas
 
         self.mock_forum_url_thread_factory.get_url.assert_called_with("https://myforum.xyz/", "111", "123")
 
-        expected_template = "A new forum post has appeared! {}".format(self.url)
+        expected_template = "A new forum post has appeared! {}".format(self.url_from_factory)
         self.mock_discord_mention_factory.perform_replacement.assert_called_with(expected_template)
 
         self.mock_discord_service.send_channel_message.assert_called_with(self.mention_service_return_val, "forum posts")

@@ -23,6 +23,9 @@ class XenForoNewMessageDispatcher:
     def start(self):
         self._clock_signal.start()
 
+    def stop(self):
+        self._clock_signal.stop()
+
     async def _check_for_new_threads(self):
         threads_needing_messages = self._xen_foro_new_thread_detector.get_threads_needing_messages()
         for new_thread in threads_needing_messages:
