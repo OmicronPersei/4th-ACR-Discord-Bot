@@ -10,6 +10,7 @@ from xen_foro_request_factory import XenForoRequestFactory
 from xen_foro_thread_getter import XenForoThreadGetter
 from xen_foro_new_thread_detector import XenForoNewThreadDetector
 from xen_foro_new_message_dispatcher import XenForoNewMessageDispatcher
+from clock_source import ClockSource
 
 class Dependencies:
     def __init__(self, config, secrets):

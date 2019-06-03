@@ -1,23 +1,27 @@
+from clock_source import ClockSource
+
 class XenForoNewMessageDispatcher:
-    def __init__(self, xen_foro_new_thread_detector, discord_service, discord_mention_factory, forum_thread_data_storage, clock_signal, forum_thread_url_factory, config):
+    def __init__(self, xen_foro_new_thread_detector, discord_service, discord_mention_factory, forum_thread_data_storage, forum_thread_url_factory, config):
         self._xen_foro_new_thread_detector = xen_foro_new_thread_detector
         self._discord_service = discord_service
         self._discord_mention_factory = discord_mention_factory
-        self._clock_signal = clock_signal
         self._forum_thread_url_factory = forum_thread_url_factory
         self._forum_thread_data_storage = forum_thread_data_storage
         self._config = config
         self._forums_by_forum_id = self.map_forum_configs_by_forum_id(config)
 
-        update_period = config["update_period"]
-        self._clock_signal.create_callback(update_period, self._check_for_new_threads)
+        self._setup_clock_signal_callback()
 
-    def map_forum_configs_by_forum_id(self, config):
-        by_forum_id = dict()
-        for forum_thread in config["forums"]:
-            forum_id = forum_thread["forum_id"]
-            by_forum_id[forum_id] = forum_thread
-        return by_forum_id
+    def _setup_clock_signal_callback(self):
+        update_period = self._config["update_period"]
+        self._clock_signal = self._get_clock_source(update_period)
+        self._clock_signal.callbacks.append(self._check_for_new_threads)
+
+    def _get_clock_source(self, update_period):
+        return ClockSource(update_period)
+
+    def start(self):
+        self._clock_signal.start()
 
     async def _check_for_new_threads(self):
         threads_needing_messages = self._xen_foro_new_thread_detector.get_threads_needing_messages()
@@ -47,3 +51,10 @@ class XenForoNewMessageDispatcher:
             "thread_id": thread_id
         }
         self._forum_thread_data_storage.store_new_forum_thread_record(record_obj)
+
+    def map_forum_configs_by_forum_id(self, config):
+        by_forum_id = dict()
+        for forum_thread in config["forums"]:
+            forum_id = forum_thread["forum_id"]
+            by_forum_id[forum_id] = forum_thread
+        return by_forum_id
