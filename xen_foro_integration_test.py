@@ -63,6 +63,7 @@ class XenForoIntegrationTest(TestCase):
     def setUpAPIs(self):
         self.mock_sql = MagicMock()
         self.mock_sql.execute = MagicMock()
+        self.mock_sql.commit = MagicMock()
 
         self.thread_getter = MagicMock()
         self.thread_getter.get_threads = MagicMock(return_value = mock_threads)
@@ -100,8 +101,15 @@ class XenForoIntegrationTest(TestCase):
 
         self.discord_service.send_channel_message.assert_called_with(mock_mention_factory_return_val, "forum posts")
         
-        expected_sql = "insert into "
-        self.mock_sql
+        expected_sql_insert = """insert into ForumMessageHistory (forum_name, forum_id, thread_id)
+        values ('{}', '{}', '{}')""".format(
+            "my_unique_prefix",
+            "234",
+            "111"
+        )
+        self.mock_sql.execute.assert_called_with(expected_sql_insert)
+        self.mock_sql.commit.assert_any_call()
+
 
 
 
