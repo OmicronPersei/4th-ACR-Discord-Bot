@@ -12,7 +12,7 @@ class MockXenForoThreadGetter(XenForoThreadGetter):
     def _get_response(self, request):
         return self.mock_json_response
 
-class BaseXenForoThreadGetter(TestCase):
+class TestXenForoThreadGetter(TestCase):
     def setUp(self):
         self.api_token = "SDfasdf"
         self.base_url = "https://asdfdsafsda.com"

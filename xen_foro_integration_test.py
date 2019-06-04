@@ -110,10 +110,3 @@ class XenForoIntegrationTest(TestCase):
         )
         self.mock_sql.execute.assert_called_with(expected_sql_insert)
         self.mock_sql.commit.assert_any_call()
-
-
-
-
-
-
-
