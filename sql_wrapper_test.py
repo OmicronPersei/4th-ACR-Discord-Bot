@@ -1,6 +1,6 @@
 import sqlite3
 import asynctest
-from asynctest import MagicMock, call
+from asynctest import MagicMock, call, main
 
 from sql_wrapper import SQLWrapper
 
@@ -9,7 +9,7 @@ class MockSQLWrapper(SQLWrapper):
         self._mock_sql = mock_sql
         super().__init__(config)
 
-    def get_db_connection(self, db_filename):
+    def _get_db_connection(self, db_filename):
         return self._mock_sql
 
 class BaseSQLWrapperTests:
@@ -47,7 +47,7 @@ class TestSQLWrapperChecksForumMessageTableExists_DoesntExist(BaseSQLWrapperTest
         self.execute_calls = 0
         self.mock_sqlite3.execute.side_effect = self.sqlExecuteCreateTableSideEffect
         self.sql_wrapper.check_forum_has_allocated_storage()
-        expected_sql = [ "select top 1 * from ForumMessageHistory",
+        expected_sql = [ "select top 1 1 from ForumMessageHistory",
             "create table ForumMessageHistory (forum_name nvarchar, forum_id nvarchar, thread_id nvarchar)"]
         expected_calls = [call(x) for x in expected_sql]
         self.mock_sqlite3.execute.assert_has_calls(expected_calls, any_order=False)
@@ -63,7 +63,7 @@ class TestSQLWrapperChecksForumMessageTableExists_AlreadyExists(BaseSQLWrapperTe
         self.mock_sqlite3.execute.return_value = MagicMock()
 
         self.sql_wrapper.check_forum_has_allocated_storage()
-        expected_sql = "select top 1 * from ForumMessageHistory"
+        expected_sql = "select top 1 1 from ForumMessageHistory"
         self.mock_sqlite3.execute.assert_called_with(expected_sql)
 
 
@@ -115,4 +115,3 @@ class TestSQLWrapperInsertsRecords(BaseSQLWrapperTests, asynctest.TestCase):
 
         self.mock_sqlite3.execute.assert_called_with(expected_sql_insert)
         self.mock_sqlite3.commit.assert_called()
-
