@@ -1,4 +1,5 @@
 from asynctest import MagicMock, TestCase, main
+from asyncio import Future
 
 from sql_wrapper import SQLWrapper
 from xen_foro_forum_thread_url_factory import XenForoForumThreadURLFactory
@@ -69,7 +70,8 @@ class XenForoIntegrationTest(TestCase):
         self.thread_getter.get_threads = MagicMock(return_value = mock_threads)
         
         self.discord_service = MagicMock()
-        self.discord_service.send_channel_message = MagicMock()
+        self.discord_service.send_channel_message = MagicMock(return_value=Future())
+        self.discord_service.send_channel_message.return_value.set_result(None)
 
     def setUpObjectsForTest(self):
         self.mock_sql_wrapper = MockSQLWrapper(mock_config, self.mock_sql)
@@ -87,30 +89,28 @@ class XenForoIntegrationTest(TestCase):
         self.discord_mention_factory = DiscordMentionFactory(self.discord_service)
         self.discord_mention_factory.perform_replacement = MagicMock(return_value=mock_mention_factory_return_val)
 
-        self.new_thread_dispatcher = XenForoNewMessageDispatcher(self.new_thread_detector, self.discord_service, self.discord_mention_factory, self.forum_data_storage, self.forum_thread_url_factory, xen_forum_config)
+        self.new_thread_dispatcher = XenForoNewMessageDispatcher(self.new_thread_detector, self.discord_service, self.discord_mention_factory, self.forum_data_storage, self.forum_url_factory, xen_forum_config)
 
-    # def runTest(self):
-    #     #simulate the callback from ClockSignal
-    #     self.new_thread_dispatcher._check_for_new_threads()
+    async def runTest(self):
+        #simulate the callback from ClockSignal
+        await self.new_thread_dispatcher._check_for_new_threads()
 
-    #     #def get_threads(self, base_url, api_token, forum_id):
-    #     self.thread_getter.get_threads.assert_called_with("https://myforum.xyz/", "imsecret", "234")
+        #def get_threads(self, base_url, api_token, forum_id):
+        self.thread_getter.get_threads.assert_called_with("https://myforum.xyz/", "imsecret", "234")
 
-    #     expected_mention_factory_replacement_template = "A new forum post has appeared! https://myforum.xyz/forums/234/111"
-    #     self.discord_mention_factory.perform_replacement.assert_called_with(expected_mention_factory_replacement_template, [])
+        expected_mention_factory_replacement_template = "A new forum post has appeared! https://myforum.xyz/forums/234/111"
+        self.discord_mention_factory.perform_replacement.assert_called_with(expected_mention_factory_replacement_template)
 
-    #     self.discord_service.send_channel_message.assert_called_with(mock_mention_factory_return_val, "forum posts")
+        self.discord_service.send_channel_message.assert_called_with(mock_mention_factory_return_val, "forum posts")
         
-    #     expected_sql_insert = """insert into ForumMessageHistory (forum_name, forum_id, thread_id)
-    #     values ('{}', '{}', '{}')""".format(
-    #         "my_unique_prefix",
-    #         "234",
-    #         "111"
-    #     )
-    #     self.mock_sql.execute.assert_called_with(expected_sql_insert)
-    #     self.mock_sql.commit.assert_any_call()
-
-# main()
+        expected_sql_insert = """insert into ForumMessageHistory (forum_name, forum_id, thread_id)
+        values ('{}', '{}', '{}')""".format(
+            "my_unique_prefix",
+            "234",
+            "111"
+        )
+        self.mock_sql.execute.assert_called_with(expected_sql_insert)
+        self.mock_sql.commit.assert_any_call()
 
 
 
