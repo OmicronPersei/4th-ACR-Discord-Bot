@@ -22,6 +22,7 @@ class XenForoNewMessageDispatcher:
 
     def start(self):
         self._clock_signal.start()
+        self._forum_thread_data_storage.check_forums_have_allocated_storage()
 
     def stop(self):
         self._clock_signal.stop()

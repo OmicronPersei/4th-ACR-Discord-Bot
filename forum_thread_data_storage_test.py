@@ -30,9 +30,8 @@ class TestForumDataStorageChecksIfTablesExistsUponConstructionAndDoesNothingWhen
         ForumThreadDataStorageTestBase.setUp(self)
 
     def runTest(self):
-        self.forum_thread_data_storage.check_forums_have_allocated_storage(self.mock_forum_threads)
-        expected_calls = [call("xenforo1", "1"), call("xenforo1", "2")]
-        self.mock_sql.check_forum_has_allocated_storage.assert_has_calls(expected_calls, any_order=True)
+        self.forum_thread_data_storage.check_forums_have_allocated_storage()
+        self.mock_sql.check_forum_has_allocated_storage.assert_called
 
 class TestForumDataStorageReturnsExistingForumThreadRecords(ForumThreadDataStorageTestBase, asynctest.TestCase):
     def setUp(self):

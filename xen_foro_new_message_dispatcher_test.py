@@ -50,10 +50,13 @@ class XenForoNewMessageDispatcherTestStart(TestCase, TestBase):
     def setUp(self):
         TestBase.setUp(self)
 
+        self.mock_forum_thread_data_storage.check_forums_have_allocated_storage = MagicMock()
+
     def runTest(self):
         self.new_message_dispatcher.start()
 
         self.mock_clock_signal.start.assert_called()
+        self.mock_forum_thread_data_storage.check_forums_have_allocated_storage.assert_called()
 
 class XenForoNewMessageDispatcherTestStop(TestCase, TestBase):
     def setUp(self):

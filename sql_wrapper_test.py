@@ -46,7 +46,7 @@ class TestSQLWrapperChecksForumMessageTableExists_DoesntExist(BaseSQLWrapperTest
     def runTest(self):
         self.execute_calls = 0
         self.mock_sqlite3.execute.side_effect = self.sqlExecuteCreateTableSideEffect
-        self.sql_wrapper.check_forum_has_allocated_storage(self.mock_forum_name, self.mock_forum_id)
+        self.sql_wrapper.check_forum_has_allocated_storage()
         expected_sql = [ "select top 1 * from ForumMessageHistory",
             "create table ForumMessageHistory (forum_name nvarchar, forum_id nvarchar, thread_id nvarchar, discord_message_id nvarchar)"]
         expected_calls = [call(x) for x in expected_sql]
@@ -62,7 +62,7 @@ class TestSQLWrapperChecksForumMessageTableExists_AlreadyExists(BaseSQLWrapperTe
     def runTest(self):
         self.mock_sqlite3.execute.return_value = MagicMock()
 
-        self.sql_wrapper.check_forum_has_allocated_storage(self.mock_forum_name, self.mock_forum_id)
+        self.sql_wrapper.check_forum_has_allocated_storage()
         expected_sql = "select top 1 * from ForumMessageHistory"
         self.mock_sqlite3.execute.assert_called_with(expected_sql)
 

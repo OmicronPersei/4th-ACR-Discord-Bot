@@ -13,7 +13,7 @@ class SQLWrapper:
     def get_db_connection(self, db_filename):
         return sqlite3.connect(db_filename)
     
-    def check_forum_has_allocated_storage(self, forum_name, forum_id):
+    def check_forum_has_allocated_storage(self):
         get_a_record_query = "select top 1 * from ForumMessageHistory"
         try:
             self._db.execute(get_a_record_query)
