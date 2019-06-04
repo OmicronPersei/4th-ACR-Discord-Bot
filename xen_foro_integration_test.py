@@ -1,4 +1,4 @@
-from asynctest import MagicMock, TestCase
+from asynctest import MagicMock, TestCase, main
 
 from sql_wrapper import SQLWrapper
 from xen_foro_forum_thread_url_factory import XenForoForumThreadURLFactory
@@ -49,8 +49,8 @@ mock_mention_factory_return_val = "sdfadsfds"
 
 class MockSQLWrapper(SQLWrapper):
     def __init__(self, config, mock_sql):
-        super().__init__(config)
         self.mock_sql = mock_sql
+        super().__init__(config)
 
     def _get_db_connection(self, db_filename):
         return self.mock_sql
@@ -82,7 +82,7 @@ class XenForoIntegrationTest(TestCase):
 
         xen_forum_config = mock_config["xen_foro_integration"]
         xen_forum_api_token = mock_secrets["xen_foro_integration_api_token"]
-        self.new_thread_detector = XenForoNewThreadDetector(self.thread_getter, self.thread_data_storage, xen_forum_config, xen_forum_api_token)
+        self.new_thread_detector = XenForoNewThreadDetector(self.thread_getter, self.forum_data_storage, xen_forum_config, xen_forum_api_token)
 
         self.discord_mention_factory = DiscordMentionFactory(self.discord_service)
         self.discord_mention_factory.perform_replacement = MagicMock(return_value=mock_mention_factory_return_val)
@@ -109,6 +109,10 @@ class XenForoIntegrationTest(TestCase):
         )
         self.mock_sql.execute.assert_called_with(expected_sql_insert)
         self.mock_sql.commit.assert_any_call()
+
+main()
+
+
 
 
 
