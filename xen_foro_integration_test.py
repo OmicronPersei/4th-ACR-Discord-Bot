@@ -95,7 +95,6 @@ class XenForoIntegrationTest(TestCase):
         #simulate the callback from ClockSignal
         await self.new_thread_dispatcher._check_for_new_threads()
 
-        #def get_threads(self, base_url, api_token, forum_id):
         self.thread_getter.get_threads.assert_called_with("https://myforum.xyz/", "imsecret", "234")
 
         expected_mention_factory_replacement_template = "A new forum post has appeared! https://myforum.xyz/forums/234/111"
