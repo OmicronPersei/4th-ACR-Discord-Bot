@@ -14,7 +14,7 @@ class SQLWrapper:
         return sqlite3.connect(db_filename)
     
     def check_forum_has_allocated_storage(self):
-        get_a_record_query = "select top 1 1 from ForumMessageHistory"
+        get_a_record_query = "select 1 from ForumMessageHistory"
         try:
             self._db.execute(get_a_record_query)
         except sqlite3.OperationalError:

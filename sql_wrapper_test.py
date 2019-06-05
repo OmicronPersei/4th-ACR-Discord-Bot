@@ -22,14 +22,6 @@ class BaseSQLWrapperTests:
 
         self.sql_wrapper = MockSQLWrapper(self.mock_config, self.mock_sqlite3)
 
-# not sure how to implement the below...
-# class TestSQLWrapperChecksTableConnectsToDBSpecifiedInConfig(BaseSQLWrapperTests, TestCase):
-#     def setUp(self):
-#         BaseSQLWrapperTests.setUp(self)
-
-#     def runTest(self):
-#         self.mock_sqlite3.connect.assert_called_once_with(self.mock_config["db_filename"])
-
 class TestSQLWrapperChecksForumMessageTableExists_DoesntExist(BaseSQLWrapperTests, TestCase):
     def setUp(self):
         BaseSQLWrapperTests.setUp(self)
@@ -47,7 +39,7 @@ class TestSQLWrapperChecksForumMessageTableExists_DoesntExist(BaseSQLWrapperTest
         self.execute_calls = 0
         self.mock_sqlite3.execute.side_effect = self.sqlExecuteCreateTableSideEffect
         self.sql_wrapper.check_forum_has_allocated_storage()
-        expected_sql = [ "select top 1 1 from ForumMessageHistory",
+        expected_sql = [ "select 1 from ForumMessageHistory",
             "create table ForumMessageHistory (forum_name nvarchar, forum_id nvarchar, thread_id nvarchar)"]
         expected_calls = [call(x) for x in expected_sql]
         self.mock_sqlite3.execute.assert_has_calls(expected_calls, any_order=False)
@@ -63,7 +55,7 @@ class TestSQLWrapperChecksForumMessageTableExists_AlreadyExists(BaseSQLWrapperTe
         self.mock_sqlite3.execute.return_value = MagicMock()
 
         self.sql_wrapper.check_forum_has_allocated_storage()
-        expected_sql = "select top 1 1 from ForumMessageHistory"
+        expected_sql = "select 1 from ForumMessageHistory"
         self.mock_sqlite3.execute.assert_called_with(expected_sql)
 
 
