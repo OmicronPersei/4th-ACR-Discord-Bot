@@ -1,5 +1,4 @@
 import sqlite3
-import asynctest
 from asynctest import MagicMock, call, TestCase
 
 from sql_wrapper import SQLWrapper

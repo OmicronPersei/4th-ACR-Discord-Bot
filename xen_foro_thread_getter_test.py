@@ -1,6 +1,5 @@
 from xen_foro_thread_getter import XenForoThreadGetter
 from forum_thread_data_storage import ForumThreadDataStorage
-import unittest
 from asynctest import TestCase, MagicMock
 
 class MockXenForoThreadGetter(XenForoThreadGetter):

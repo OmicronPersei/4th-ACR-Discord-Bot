@@ -1,8 +1,8 @@
 from xen_foro_request_factory import XenForoRequestFactory
 import unittest
-import asynctest
+from asynctest import TestCase
 
-class TestXenForoRequestFactoryCreateThreadGetRequest(asynctest.TestCase):
+class TestXenForoRequestFactoryCreateThreadGetRequest(TestCase):
     def runTest(self):
         api_token = "SDfasfs"
         forum_id = "123"
@@ -14,6 +14,3 @@ class TestXenForoRequestFactoryCreateThreadGetRequest(asynctest.TestCase):
         assert actual.get_method() == "GET"
         assert actual.has_header("Xf-api-key")
         assert actual.get_header("Xf-api-key") == api_token
-
-
-# asynctest.main()

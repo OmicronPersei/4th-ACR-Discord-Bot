@@ -94,9 +94,6 @@ class XenForoIntegrationTest(TestCase):
 
         self.thread_getter.get_threads.assert_called_with("https://myforum.xyz/", "imsecret", "234")
 
-        # expected_mention_factory_replacement_template = "A new forum post has appeared! https://myforum.xyz/forums/234/111"
-        # self.discord_mention_factory.perform_replacement.assert_called_with(expected_mention_factory_replacement_template)
-
         self.discord_service.send_channel_message.assert_called_with("A new forum post has appeared! https://myforum.xyz/forums/234/111", "forum posts")
         
         expected_sql_insert = """insert into ForumMessageHistory (forum_name, forum_id, thread_id)

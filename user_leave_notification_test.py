@@ -1,4 +1,3 @@
-import unittest
 import asyncio
 from asynctest import Mock, MagicMock, PropertyMock, call, TestCase
 import user_leave_notification

@@ -8,7 +8,7 @@ class XenForoNewMessageDispatcher:
         self._forum_thread_url_factory = forum_thread_url_factory
         self._forum_thread_data_storage = forum_thread_data_storage
         self._config = config
-        self._forums_by_forum_id = self.map_forum_configs_by_forum_id(config)
+        self._forums_by_forum_id = self._map_forum_configs_by_forum_id(config)
 
         self._setup_clock_signal_callback()
 
@@ -56,7 +56,7 @@ class XenForoNewMessageDispatcher:
         }
         self._forum_thread_data_storage.store_new_forum_thread_record(record_obj)
 
-    def map_forum_configs_by_forum_id(self, config):
+    def _map_forum_configs_by_forum_id(self, config):
         by_forum_id = dict()
         for forum_thread in config["forums"]:
             forum_id = forum_thread["forum_id"]
