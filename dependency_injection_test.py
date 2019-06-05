@@ -1,5 +1,5 @@
 import dependency_injector
-import asynctest
+from asynctest import TestCase
 
 from dependency_injection import Dependencies
 from discord_service import DiscordService
@@ -47,7 +47,7 @@ def create_mock_secrets():
         "xen_foro_integration_api_token": "imsecret"
     }
 
-class TestDependenciesSetsConfigAndSecrets(asynctest.TestCase):
+class TestDependenciesSetsConfigAndSecrets(TestCase):
     def setUp(self):
         self.config = create_mock_config()
         self.secrets = create_mock_secrets()
@@ -57,7 +57,7 @@ class TestDependenciesSetsConfigAndSecrets(asynctest.TestCase):
         assert dependencies.config.welcome_message.enabled() == True
         assert dependencies.secrets.xen_foro_integration_api_token() == "imsecret"
 
-class TestDependenciesSetsupDependencies(asynctest.TestCase):
+class TestDependenciesSetsupDependencies(TestCase):
     def setUp(self):
         self.config = create_mock_config()
         self.secrets = create_mock_secrets()

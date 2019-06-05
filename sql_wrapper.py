@@ -22,7 +22,7 @@ class SQLWrapper:
             self._db.execute(new_table_query)
             self._db.commit()
 
-    def get_forum_records(self, forum_name, forum_id):
+    def get_forum_thread_records(self, forum_name, forum_id):
         get_records_query = "select * from ForumMessageHistory where forum_name='{}' and forum_id='{}'".format(forum_name, forum_id)
         cursor = self._db.execute(get_records_query)
         records = []
@@ -33,7 +33,7 @@ class SQLWrapper:
                 "thread_id": record[2]})
         return records
 
-    def insert_forum_record(self, forum_record):
+    def insert_forum_thread_record(self, forum_record):
         sql_insert = """insert into ForumMessageHistory (forum_name, forum_id, thread_id)
         values ('{}', '{}', '{}')""".format(
             forum_record["forum_name"],

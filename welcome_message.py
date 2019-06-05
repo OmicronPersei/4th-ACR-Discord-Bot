@@ -1,15 +1,12 @@
-import re
-
 class WelcomeMessage:
-    
     def __init__(self, config, discord_service, discord_mention_service):
         self._config = config
         self._discord = discord_service
         self._discord_mention_service = discord_mention_service
 
-        self._discord.on_member_join_callbacks.append(self.member_joined)
+        self._discord.on_member_join_callbacks.append(self._member_joined)
 
-    async def member_joined(self, user):
+    async def _member_joined(self, user):
         messageToSend = self._config["message"]
         destinationChannel = self._config["channel"]
 

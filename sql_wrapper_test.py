@@ -1,6 +1,6 @@
 import sqlite3
 import asynctest
-from asynctest import MagicMock, call, main
+from asynctest import MagicMock, call, TestCase
 
 from sql_wrapper import SQLWrapper
 
@@ -23,14 +23,14 @@ class BaseSQLWrapperTests:
         self.sql_wrapper = MockSQLWrapper(self.mock_config, self.mock_sqlite3)
 
 # not sure how to implement the below...
-# class TestSQLWrapperChecksTableConnectsToDBSpecifiedInConfig(BaseSQLWrapperTests, asynctest.TestCase):
+# class TestSQLWrapperChecksTableConnectsToDBSpecifiedInConfig(BaseSQLWrapperTests, TestCase):
 #     def setUp(self):
 #         BaseSQLWrapperTests.setUp(self)
 
 #     def runTest(self):
 #         self.mock_sqlite3.connect.assert_called_once_with(self.mock_config["db_filename"])
 
-class TestSQLWrapperChecksForumMessageTableExists_DoesntExist(BaseSQLWrapperTests, asynctest.TestCase):
+class TestSQLWrapperChecksForumMessageTableExists_DoesntExist(BaseSQLWrapperTests, TestCase):
     def setUp(self):
         BaseSQLWrapperTests.setUp(self)
         self.mock_forum_name = "xenforo1"
@@ -53,7 +53,7 @@ class TestSQLWrapperChecksForumMessageTableExists_DoesntExist(BaseSQLWrapperTest
         self.mock_sqlite3.execute.assert_has_calls(expected_calls, any_order=False)
         self.mock_sqlite3.commit.assert_called_once()
 
-class TestSQLWrapperChecksForumMessageTableExists_AlreadyExists(BaseSQLWrapperTests, asynctest.TestCase):
+class TestSQLWrapperChecksForumMessageTableExists_AlreadyExists(BaseSQLWrapperTests, TestCase):
     def setUp(self):
         BaseSQLWrapperTests.setUp(self)
         self.mock_forum_name = "xenforo1"
@@ -67,7 +67,7 @@ class TestSQLWrapperChecksForumMessageTableExists_AlreadyExists(BaseSQLWrapperTe
         self.mock_sqlite3.execute.assert_called_with(expected_sql)
 
 
-class TestSQLWrapperReturnsRecords(BaseSQLWrapperTests, asynctest.TestCase):
+class TestSQLWrapperReturnsRecords(BaseSQLWrapperTests, TestCase):
     def setUp(self):
         BaseSQLWrapperTests.setUp(self)
         self.mock_forum_name = "xenforo1"
@@ -78,7 +78,7 @@ class TestSQLWrapperReturnsRecords(BaseSQLWrapperTests, asynctest.TestCase):
             ])
         
     def runTest(self):
-        actual = self.sql_wrapper.get_forum_records(self.mock_forum_name, self.mock_forum_id)
+        actual = self.sql_wrapper.get_forum_thread_records(self.mock_forum_name, self.mock_forum_id)
 
         expected_sql_query = "select * from ForumMessageHistory where forum_name='{}' and forum_id='{}'".format(self.mock_forum_name, self.mock_forum_id)
         self.mock_sqlite3.execute.assert_called_once_with(expected_sql_query)
@@ -94,7 +94,7 @@ class TestSQLWrapperReturnsRecords(BaseSQLWrapperTests, asynctest.TestCase):
         assert actual[1]["thread_id"] == "457"
 
 
-class TestSQLWrapperInsertsRecords(BaseSQLWrapperTests, asynctest.TestCase):
+class TestSQLWrapperInsertsRecords(BaseSQLWrapperTests, TestCase):
     def setUp(self):
         BaseSQLWrapperTests.setUp(self)
         self.mock_record = {
@@ -111,7 +111,7 @@ class TestSQLWrapperInsertsRecords(BaseSQLWrapperTests, asynctest.TestCase):
             "789"
         )
 
-        self.sql_wrapper.insert_forum_record(self.mock_record)
+        self.sql_wrapper.insert_forum_thread_record(self.mock_record)
 
         self.mock_sqlite3.execute.assert_called_with(expected_sql_insert)
         self.mock_sqlite3.commit.assert_called()

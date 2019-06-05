@@ -1,14 +1,13 @@
 import unittest
 import asyncio
-import asynctest
-from unittest.mock import Mock, MagicMock, PropertyMock, call
+from asynctest import Mock, MagicMock, PropertyMock, call, TestCase
 import user_leave_notification
 from test_utils import create_mock_user
 from user_leave_notification import UserLeaveNotification
 from discord_service import DiscordService
 from discord_mention_factory import DiscordMentionFactory
 
-class TestUserLeaveNotificationAddsCallbackToDiscordOnMemberRemoveCallbacks(asynctest.TestCase):
+class TestUserLeaveNotificationAddsCallbackToDiscordOnMemberRemoveCallbacks(TestCase):
     def setUp(self):
         self.config = {
             "message": "{left_user} has left",
@@ -24,13 +23,13 @@ class TestUserLeaveNotificationAddsCallbackToDiscordOnMemberRemoveCallbacks(asyn
         callback = self.discord.on_member_remove_callbacks[0]
         assert callable(callback)
 
-class TestUserUserLeaveNotificationSendsMessageUponUserLeft(asynctest.TestCase):
+class TestUserUserLeaveNotificationSendsMessageUponUserLeft(TestCase):
     def setUp(self):
         self.config = {
             "message": "{left_user} has left",
             "channel": "user-left-channel"
         }
-        self.discord = asynctest.Mock(DiscordService)
+        self.discord = Mock(DiscordService)
         self.discord.on_member_remove_callbacks = []
         self.mock_left_user = create_mock_user("lame_guy", "lame_guy_name")
 

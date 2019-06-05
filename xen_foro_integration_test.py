@@ -46,8 +46,6 @@ mock_threads = [ {
     "thread_id": "111"
 }]
 
-mock_mention_factory_return_val = "sdfadsfds"
-
 class MockSQLWrapper(SQLWrapper):
     def __init__(self, config, mock_sql):
         self.mock_sql = mock_sql
@@ -87,7 +85,6 @@ class XenForoIntegrationTest(TestCase):
         self.new_thread_detector = XenForoNewThreadDetector(self.thread_getter, self.forum_data_storage, xen_forum_config, xen_forum_api_token)
 
         self.discord_mention_factory = DiscordMentionFactory(self.discord_service)
-        self.discord_mention_factory.perform_replacement = MagicMock(return_value=mock_mention_factory_return_val)
 
         self.new_thread_dispatcher = XenForoNewMessageDispatcher(self.new_thread_detector, self.discord_service, self.discord_mention_factory, self.forum_data_storage, self.forum_url_factory, xen_forum_config)
 
@@ -97,10 +94,10 @@ class XenForoIntegrationTest(TestCase):
 
         self.thread_getter.get_threads.assert_called_with("https://myforum.xyz/", "imsecret", "234")
 
-        expected_mention_factory_replacement_template = "A new forum post has appeared! https://myforum.xyz/forums/234/111"
-        self.discord_mention_factory.perform_replacement.assert_called_with(expected_mention_factory_replacement_template)
+        # expected_mention_factory_replacement_template = "A new forum post has appeared! https://myforum.xyz/forums/234/111"
+        # self.discord_mention_factory.perform_replacement.assert_called_with(expected_mention_factory_replacement_template)
 
-        self.discord_service.send_channel_message.assert_called_with(mock_mention_factory_return_val, "forum posts")
+        self.discord_service.send_channel_message.assert_called_with("A new forum post has appeared! https://myforum.xyz/forums/234/111", "forum posts")
         
         expected_sql_insert = """insert into ForumMessageHistory (forum_name, forum_id, thread_id)
         values ('{}', '{}', '{}')""".format(

@@ -1,5 +1,5 @@
 from clock_source import ClockSource
-from asynctest import TestCase, main
+from asynctest import TestCase
 
 class MockClockSource(ClockSource):
     def __init__(self, update_period):

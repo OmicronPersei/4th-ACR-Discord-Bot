@@ -1,14 +1,13 @@
 import unittest
 import asyncio
-import asynctest
-from unittest.mock import Mock, MagicMock, PropertyMock, call
+from asynctest import TestCase, Mock, MagicMock, PropertyMock, call
 from discord_mention_factory import DiscordMentionFactory
 from discord_service import DiscordService
 from test_utils import create_mock_user
 
-class TestReplacesUserAndDiscriminatorWithCorrespondingDiscordMemberMention(asynctest.TestCase):
+class TestReplacesUserAndDiscriminatorWithCorrespondingDiscordMemberMention(TestCase):
     def setUp(self):
-        self.discord = asynctest.Mock(DiscordService())
+        self.discord = Mock(DiscordService())
         self.discord_mention_factory = DiscordMentionFactory(self.discord)
 
         self.mock_user_one_mention="<one_str>"
@@ -38,9 +37,9 @@ class TestReplacesUserAndDiscriminatorWithCorrespondingDiscordMemberMention(asyn
         
         assert actual_message == expected_message
 
-class TestReplacesListOfUsersWithCorrespondingDiscordMentions(asynctest.TestCase):
+class TestReplacesListOfUsersWithCorrespondingDiscordMentions(TestCase):
     def setUp(self):
-        self.discord = asynctest.Mock(DiscordService())
+        self.discord = Mock(DiscordService())
 
         self.discord_mention_factory=DiscordMentionFactory(self.discord)
 
@@ -62,9 +61,9 @@ class TestReplacesListOfUsersWithCorrespondingDiscordMentions(asynctest.TestCase
 
         assert actual_message == expected_message
 
-class TestReplacesRolesWithCorrespondingDiscordMentions(asynctest.TestCase):
+class TestReplacesRolesWithCorrespondingDiscordMentions(TestCase):
     def setUp(self):
-        self.discord = asynctest.Mock(DiscordService())
+        self.discord = Mock(DiscordService())
 
         self.discord_mention_factory = DiscordMentionFactory(self.discord)
 
