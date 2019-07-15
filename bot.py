@@ -32,10 +32,8 @@ if __name__ == "__main__":
     if config["user_leave_notification"]["enabled"]:
         services.user_leave_notification()
 
+    if config["user_role_self_service"]["enabled"]:
+        services.user_roles_service()
+
     discord_service = services.discord_service()
     discord_service.run(discord_token)
-
-
-
-
-    

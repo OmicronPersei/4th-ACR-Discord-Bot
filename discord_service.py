@@ -5,6 +5,7 @@ class DiscordService(discord.Client):
         super().__init__()
         self.on_member_join_callbacks = []
         self.on_member_remove_callbacks = []
+        self.bot_command_callbacks = []
 
     async def on_member_join(self, member):
         for callback in self.on_member_join_callbacks:
@@ -27,4 +28,18 @@ class DiscordService(discord.Client):
 
     def get_matching_role(self, role_name):
         all_roles = self.guilds[0].roles
-        return [x for x in all_roles if x.name == role_name][0]
+        return [x for x in all_roles if x.name.lower() == role_name.lower()][0]
+
+    def get_all_roles_names(self):
+        return [x.name for x in self.guilds[0].roles]
+
+    def create_listener_for_bot_command(self, command_prefix, callback):
+        self.bot_command_callbacks.append({ 
+            "prefix": command_prefix, 
+            "callback": callback
+            })
+
+    async def on_message(self, message):
+        for bot_command_callback in self.bot_command_callbacks:
+            if message.content.startswith(bot_command_callback["prefix"]):
+                await bot_command_callback["callback"](message)

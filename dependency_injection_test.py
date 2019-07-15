@@ -6,6 +6,7 @@ from discord_service import DiscordService
 from discord_mention_factory import DiscordMentionFactory
 from welcome_message import WelcomeMessage
 from user_leave_notification import UserLeaveNotification
+from user_roles_service import UserRolesService
 
 def create_mock_config():
     return {
@@ -18,6 +19,10 @@ def create_mock_config():
             "message": "the message",
             "channel": "the channel",
             "enabled": True
+        },
+        "user_role_self_service": {
+            "blacklisted_roles": [ "admin" ],
+            "command_keyword": "!roles"
         }
     }
 
@@ -55,4 +60,7 @@ class TestDependenciesSetsupDependencies(asynctest.TestCase):
         assert isinstance(user_leave_notification, dependency_injector.providers.Singleton)
         assert isinstance(user_leave_notification_instance, UserLeaveNotification)
 
-    
+        user_roles_service = self.dependencies.user_roles_service
+        user_roles_service_instance = user_roles_service()
+        assert isinstance(user_roles_service, dependency_injector.providers.Singleton)
+        assert isinstance(user_roles_service_instance, UserRolesService)
