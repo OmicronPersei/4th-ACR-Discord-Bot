@@ -41,6 +41,16 @@ Example:
         "message": "{left_user} has left the server",
         "channel": "user-left-log",
         "enabled": true
+    },
+    "user_role_self_service": {
+        //All roles that users cannot self add/remove from.
+        "blacklisted_roles": [
+            "admin"
+        ],
+        "command_keyword": "!roles",
+        "enabled": true,
+        //The below may be ommitted such that this feature is restricted to the below channel
+        "restrict_to_channel": "role-request"
     }
 }
 ```
