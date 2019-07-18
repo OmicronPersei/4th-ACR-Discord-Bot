@@ -1,6 +1,6 @@
-from bot_command_service import BotCommandService
+from bot_command_service_base import BotCommandServiceBase
 
-class UserRolesService(BotCommandService):
+class UserRolesService(BotCommandServiceBase):
     def __init__(self, config, discord_service):
         super().__init__(config, discord_service)
 
