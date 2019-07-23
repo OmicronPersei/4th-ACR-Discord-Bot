@@ -1,7 +1,8 @@
-# 4th Squadron, 9th Cavalry Discord Bot
+# 4th Armored Cavalry Regiment Discord Bot
 This is a [Discord](https://discordapp.com/) bot that makes use of the [`discord.py`](https://github.com/Rapptz/discord.py) package with a few configurable features:
 * Welcome message, user leave notifications.
 * Configurable to mention specific users, roles, users who joined/left.
+* Configurable self service role management.
 
 ## Requirements
 * Python 3.6.x
