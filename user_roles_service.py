@@ -25,47 +25,60 @@ class UserRolesService(BotCommandServiceBase):
             message.channel.name.lower() != self.config["restrict_to_channel"].lower())
 
     async def reply_with_all_roles(self, message):
-        available_role_strs = ["`{}`".format(x) for x in self.get_available_roles()]
+        available_role_strs = ["`{}`".format(x.name) for x in self.get_available_roles()]
         response = "Roles available:\n{}".format("\n".join(available_role_strs))
         destination_channel = message.channel.name
         await self.discord_service.send_channel_message(response, destination_channel)
 
-    def get_available_roles(self):
-        blacklisted_roles = list_lower(self.config["blacklisted_roles"])
-        all_roles = self.discord_service.get_all_roles_names()
-        return [x for x in all_roles if x.lower() not in blacklisted_roles]
-
     async def handle_add_role(self, message):
         role_name = get_role_name_from_command(message)
+        try:
+            new_role = self.get_role_obj_from_name(role_name)
+        except:
+            # Role name didn't resolve to an existing role object, return
+            return
 
-        if role_name not in list_lower(self.get_available_roles()):
+        if new_role.id not in [x.id for x in self.get_available_roles()]:
+            # Role is not available for self assignment, return
             return
 
         new_roles = message.author.roles[:]
 
-        if role_name in [x.name.lower() for x in new_roles]:
+        if new_role.id in [x.id for x in new_roles]:
+            # User already has this role, return
             return
 
-        matching_new_role = self.discord_service.get_matching_role(role_name)
-        new_roles.append(matching_new_role)
+        new_roles.append(new_role)
         await message.author.edit(roles=new_roles)
 
     async def handle_remove_role(self, message):
         role_name = get_role_name_from_command(message)
-
-        if role_name not in list_lower(self.get_available_roles()):
+        try:
+            matching_role_obj = self.get_role_obj_from_name(role_name)
+        except:
+            # Role name didn't resolve to an existing role object, return
             return
 
-        if role_name not in [x.name.lower() for x in message.author.roles]:
+        if matching_role_obj.id not in [x.id for x in self.get_available_roles()]:
+            # Role is not available for self assignment, return
             return
+
+        if matching_role_obj.id not in [x.id for x in message.author.roles]:
+            # User doesn't have this role, return
+            return        
         
-        new_roles = [x for x in message.author.roles if x.name.lower() != role_name]
+        new_roles = [x for x in message.author.roles if x.id != matching_role_obj.id]
 
         await message.author.edit(roles=new_roles)
 
+    def get_available_roles(self):
+        blacklisted_roles = self.config["blacklisted_roles"]
+        all_roles = self.discord_service.get_all_roles()
+        return [x for x in all_roles if x.id not in blacklisted_roles]
 
-def list_lower(items):
-    return [x.lower() for x in items]
+    def get_role_obj_from_name(self, name):
+        roles = self.get_available_roles()
+        return [x for x in roles if x.name.lower() == name.lower()][0]
 
 def get_role_name_from_command(message):
     return " ".join(message.content.split(" ")[2:]).lower()
