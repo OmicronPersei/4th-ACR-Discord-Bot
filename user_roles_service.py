@@ -30,19 +30,6 @@ class UserRolesService(BotCommandServiceBase):
         destination_channel = message.channel.name
         await self.discord_service.send_channel_message(response, destination_channel)
 
-    def get_available_roles(self):
-        blacklisted_roles = self.config["blacklisted_roles"]
-        all_roles = self.discord_service.get_all_roles()
-        return [x for x in all_roles if x.id not in blacklisted_roles]
-
-    def get_available_role_names(self):
-        roles = self.get_available_roles()
-        return [x.name for x in roles]
-
-    def get_role_obj_from_name(self, name):
-        roles = self.get_available_roles()
-        return [x for x in roles if x.name.lower() == name.lower()][0]
-
     async def handle_add_role(self, message):
         role_name = get_role_name_from_command(message)
         try:
@@ -84,8 +71,14 @@ class UserRolesService(BotCommandServiceBase):
 
         await message.author.edit(roles=new_roles)
 
-def list_lower(items):
-    return [x.lower() for x in items]
+    def get_available_roles(self):
+        blacklisted_roles = self.config["blacklisted_roles"]
+        all_roles = self.discord_service.get_all_roles()
+        return [x for x in all_roles if x.id not in blacklisted_roles]
+
+    def get_role_obj_from_name(self, name):
+        roles = self.get_available_roles()
+        return [x for x in roles if x.name.lower() == name.lower()][0]
 
 def get_role_name_from_command(message):
     return " ".join(message.content.split(" ")[2:]).lower()

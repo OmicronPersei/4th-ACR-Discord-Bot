@@ -19,7 +19,7 @@ def create_mock_message(msg_content, channel_name, user_roles=None):
 
     if user_roles is not None:
         mock_member = MagicMock()
-        
+
         type(mock_member).roles = user_roles
         
         mock_edit = MagicMock(return_value=Future())
@@ -104,8 +104,6 @@ class TestCantAddBlacklistedRole(BaseTestSetup, TestCase):
     async def runTest(self):
         await self.callback(self.mock_message)
 
-        # self.mock_discord_service.get_matching_role.assert_not_called()
-
         self.mock_message.author.edit.assert_not_called()
 
 class TestCantAddBlacklistedRoleDifferentCase(BaseTestSetup, TestCase):
@@ -115,8 +113,6 @@ class TestCantAddBlacklistedRoleDifferentCase(BaseTestSetup, TestCase):
 
     async def runTest(self):
         await self.callback(self.mock_message)
-
-        # self.mock_discord_service.get_matching_role.assert_not_called()
 
         self.mock_message.author.edit.assert_not_called()
 

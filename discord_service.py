@@ -27,7 +27,6 @@ class DiscordService(discord.Client):
         matching_member = [x for x in all_members if x.name == username and x.discriminator == discriminator][0]
         return matching_member
 
-    #todo: remove?
     def get_matching_role(self, role_name):
         all_roles = self.guilds[0].roles
         return [x for x in all_roles if x.name.lower() == role_name.lower()][0]
