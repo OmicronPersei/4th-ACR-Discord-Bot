@@ -44,9 +44,9 @@ Example:
         "enabled": true
     },
     "user_role_self_service": {
-        //All roles that users cannot self add/remove from.
+        //All role IDs that users cannot self add/remove from.
         "blacklisted_roles": [
-            "admin"
+            45645646545465
         ],
         "command_keyword": "!roles",
         "enabled": true,
