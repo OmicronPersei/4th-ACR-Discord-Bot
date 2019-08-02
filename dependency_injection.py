@@ -31,7 +31,7 @@ class Dependencies:
         self.forum_thread_data_storage = providers.Singleton(ForumThreadDataStorage, self.sql_wrapper)
         self.xen_foro_request_factory = providers.Singleton(XenForoRequestFactory)
         self.xen_foro_thread_getter = providers.Singleton(XenForoThreadGetter, self.xen_foro_request_factory)
-        self.new_thread_detector = providers.Singleton(NewThreadDetector, self.xen_foro_thread_getter, self.forum_thread_data_storage, self.config.xen_foro_integration, self.secrets.xen_foro_integration_api_token)
+        self.xen_foro_new_thread_detector = providers.Singleton(NewThreadDetector, self.xen_foro_thread_getter, self.forum_thread_data_storage, self.config.xen_foro_integration, self.secrets.xen_foro_integration_api_token)
         self.xen_foro_forum_thread_url_factory = providers.Singleton(XenForoForumThreadURLFactory)
-        self.new_message_dispatcher = providers.Singleton(NewMessageDispatcher, self.new_thread_detector, self.discord_service, self.discord_mention_factory, self.forum_thread_data_storage, self.xen_foro_forum_thread_url_factory, self.config.xen_foro_integration)
+        self.xen_foro_new_message_dispatcher = providers.Singleton(NewMessageDispatcher, self.xen_foro_new_thread_detector, self.discord_service, self.discord_mention_factory, self.forum_thread_data_storage, self.xen_foro_forum_thread_url_factory, self.config.xen_foro_integration)
 
