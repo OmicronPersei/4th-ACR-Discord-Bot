@@ -1,9 +1,9 @@
 from unittest import TestCase
-from xen_foro_forum_thread_url_factory import XenForoForumThreadURLFactory
+from forum_watcher.xen_foro.forum_thread_url_factory import ForumThreadURLFactory
 
 class XenForoForumThreadURLFactoryTest(TestCase):
     def _test_returns_expected(self, base_url, thread_title, expected_result):
-        factory = XenForoForumThreadURLFactory()
+        factory = ForumThreadURLFactory()
         actual = factory.get_url(base_url, thread_title)
 
         assert expected_result == actual

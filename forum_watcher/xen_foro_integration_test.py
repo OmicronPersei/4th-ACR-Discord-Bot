@@ -1,13 +1,13 @@
 from asynctest import MagicMock, TestCase, main
 from asyncio import Future
 
-from sql_wrapper import SQLWrapper
-from xen_foro_forum_thread_url_factory import XenForoForumThreadURLFactory
-from xen_foro_new_message_dispatcher import XenForoNewMessageDispatcher
-from xen_foro_new_thread_detector import XenForoNewThreadDetector
-from xen_foro_request_factory import XenForoRequestFactory
-from xen_foro_thread_getter import XenForoThreadGetter
-from forum_thread_data_storage import ForumThreadDataStorage
+from forum_watcher.sql_wrapper import SQLWrapper
+from forum_watcher.xen_foro.forum_thread_url_factory import ForumThreadURLFactory
+from forum_watcher.new_message_dispatcher import NewMessageDispatcher
+from forum_watcher.new_thread_detector import NewThreadDetector
+from forum_watcher.xen_foro.request_factory import RequestFactory
+from forum_watcher.xen_foro.thread_getter import ThreadGetter
+from forum_watcher.forum_thread_data_storage import ForumThreadDataStorage
 from discord_mention_factory import DiscordMentionFactory
 
 mock_config = {
@@ -80,25 +80,26 @@ class XenForoIntegrationTest(TestCase):
     def setUpObjectsForTest(self):
         self.mock_sql_wrapper = MockSQLWrapper(mock_config, self.mock_sql)
 
-        self.forum_url_factory = XenForoForumThreadURLFactory()
+        self.forum_url_factory = ForumThreadURLFactory()
 
-        self.request_factory = XenForoRequestFactory()
+        self.request_factory = RequestFactory()
 
         self.forum_data_storage = ForumThreadDataStorage(self.mock_sql_wrapper)
 
         xen_forum_config = mock_config["xen_foro_integration"]
         xen_forum_api_token = mock_secrets["xen_foro_integration_api_token"]
-        self.new_thread_detector = XenForoNewThreadDetector(self.thread_getter, self.forum_data_storage, xen_forum_config, xen_forum_api_token)
+        self.new_thread_detector = NewThreadDetector(self.thread_getter, self.forum_data_storage, xen_forum_config, xen_forum_api_token)
 
         self.discord_mention_factory = DiscordMentionFactory(self.discord_service)
 
-        self.new_thread_dispatcher = XenForoNewMessageDispatcher(self.new_thread_detector, self.discord_service, self.discord_mention_factory, self.forum_data_storage, self.forum_url_factory, xen_forum_config)
+        self.new_thread_dispatcher = NewMessageDispatcher(self.new_thread_detector, self.discord_service, self.discord_mention_factory, self.forum_data_storage, self.forum_url_factory, xen_forum_config)
 
     async def runTest(self):
         #simulate the callback from ClockSignal
         await self.new_thread_dispatcher._check_for_new_threads()
 
-        self.thread_getter.get_threads.assert_called_with("https://myforum.xyz/", "imsecret", "234")
+        expected_get_threads_query = {"base_url": "https://myforum.xyz/", "api_token": "imsecret", "forum_id": "234"}
+        self.thread_getter.get_threads.assert_called_with(expected_get_threads_query)
 
         self.discord_service.send_channel_message.assert_called_with("A new forum post has appeared! https://myforum.xyz/threads/my_thread_title", "forum posts")
 

@@ -1,6 +1,7 @@
-from forum_thread_data_storage import ForumThreadDataStorage
 import asynctest
 from asynctest import MagicMock, call, TestCase
+
+from forum_watcher.forum_thread_data_storage import ForumThreadDataStorage
 
 mock_forum_threads = [ {
         "forum_name": "xenforo1",

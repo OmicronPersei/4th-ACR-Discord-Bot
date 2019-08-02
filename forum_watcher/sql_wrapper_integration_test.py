@@ -1,6 +1,6 @@
 import sqlite3
 
-from sql_wrapper import SQLWrapper
+from forum_watcher.sql_wrapper import SQLWrapper
 from asynctest import TestCase
 
 class MockSQLWrapper(SQLWrapper):
