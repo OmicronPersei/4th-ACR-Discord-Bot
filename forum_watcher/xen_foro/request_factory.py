@@ -1,6 +1,6 @@
 import urllib.request
 
-class XenForoRequestFactory:
+class RequestFactory:
     
     def create_thread_get_request(self, api_token, forum_id, base_url):
         url = "{}/forums/{}".format(base_url, forum_id)

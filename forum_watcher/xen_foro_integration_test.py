@@ -2,11 +2,11 @@ from asynctest import MagicMock, TestCase, main
 from asyncio import Future
 
 from forum_watcher.sql_wrapper import SQLWrapper
-from forum_watcher.xen_foro_forum_thread_url_factory import XenForoForumThreadURLFactory
+from forum_watcher.xen_foro.forum_thread_url_factory import ForumThreadURLFactory
 from forum_watcher.new_message_dispatcher import NewMessageDispatcher
 from forum_watcher.new_thread_detector import NewThreadDetector
-from forum_watcher.xen_foro_request_factory import XenForoRequestFactory
-from forum_watcher.xen_foro_thread_getter import XenForoThreadGetter
+from forum_watcher.xen_foro.request_factory import RequestFactory
+from forum_watcher.xen_foro.thread_getter import ThreadGetter
 from forum_watcher.forum_thread_data_storage import ForumThreadDataStorage
 from discord_mention_factory import DiscordMentionFactory
 
@@ -80,9 +80,9 @@ class XenForoIntegrationTest(TestCase):
     def setUpObjectsForTest(self):
         self.mock_sql_wrapper = MockSQLWrapper(mock_config, self.mock_sql)
 
-        self.forum_url_factory = XenForoForumThreadURLFactory()
+        self.forum_url_factory = ForumThreadURLFactory()
 
-        self.request_factory = XenForoRequestFactory()
+        self.request_factory = RequestFactory()
 
         self.forum_data_storage = ForumThreadDataStorage(self.mock_sql_wrapper)
 

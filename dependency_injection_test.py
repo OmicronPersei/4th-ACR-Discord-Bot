@@ -9,10 +9,10 @@ from user_leave_notification import UserLeaveNotification
 from user_roles_service import UserRolesService
 from forum_watcher.forum_thread_data_storage import ForumThreadDataStorage
 from forum_watcher.sql_wrapper import SQLWrapper
-from forum_watcher.xen_foro_request_factory import XenForoRequestFactory
-from forum_watcher.xen_foro_thread_getter import XenForoThreadGetter
+from forum_watcher.xen_foro.request_factory import RequestFactory as XenForoRequestFactory
+from forum_watcher.xen_foro.thread_getter import ThreadGetter as XenForoThreadGetter
 from forum_watcher.new_thread_detector import NewThreadDetector
-from forum_watcher.xen_foro_forum_thread_url_factory import XenForoForumThreadURLFactory
+from forum_watcher.xen_foro.forum_thread_url_factory import ForumThreadURLFactory as XenForoForumThreadURLFactory
 from forum_watcher.new_message_dispatcher import NewMessageDispatcher
 
 def create_mock_config():
