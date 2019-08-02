@@ -1,5 +1,5 @@
 from unittest import TestCase
-from xen_foro_forum_thread_url_factory import XenForoForumThreadURLFactory
+from forum_watcher.xen_foro_forum_thread_url_factory import XenForoForumThreadURLFactory
 
 class XenForoForumThreadURLFactoryTest(TestCase):
     def _test_returns_expected(self, base_url, thread_title, expected_result):

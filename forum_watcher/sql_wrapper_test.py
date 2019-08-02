@@ -1,7 +1,7 @@
 import sqlite3
 from asynctest import MagicMock, call, TestCase
 
-from sql_wrapper import SQLWrapper
+from forum_watcher.sql_wrapper import SQLWrapper
 
 class MockSQLWrapper(SQLWrapper):
     def __init__(self, config, mock_sql):

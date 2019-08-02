@@ -7,13 +7,13 @@ from discord_mention_factory import DiscordMentionFactory
 from welcome_message import WelcomeMessage
 from user_leave_notification import UserLeaveNotification
 from user_roles_service import UserRolesService
-from forum_thread_data_storage import ForumThreadDataStorage
-from sql_wrapper import SQLWrapper
-from xen_foro_request_factory import XenForoRequestFactory
-from xen_foro_thread_getter import XenForoThreadGetter
-from xen_foro_new_thread_detector import XenForoNewThreadDetector
-from xen_foro_forum_thread_url_factory import XenForoForumThreadURLFactory
-from xen_foro_new_message_dispatcher import XenForoNewMessageDispatcher
+from forum_watcher.forum_thread_data_storage import ForumThreadDataStorage
+from forum_watcher.sql_wrapper import SQLWrapper
+from forum_watcher.xen_foro_request_factory import XenForoRequestFactory
+from forum_watcher.xen_foro_thread_getter import XenForoThreadGetter
+from forum_watcher.xen_foro_new_thread_detector import XenForoNewThreadDetector
+from forum_watcher.xen_foro_forum_thread_url_factory import XenForoForumThreadURLFactory
+from forum_watcher.xen_foro_new_message_dispatcher import XenForoNewMessageDispatcher
 
 def create_mock_config():
     return {

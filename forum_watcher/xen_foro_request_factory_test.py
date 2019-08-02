@@ -1,4 +1,4 @@
-from xen_foro_request_factory import XenForoRequestFactory
+from forum_watcher.xen_foro_request_factory import XenForoRequestFactory
 import unittest
 from asynctest import TestCase
 

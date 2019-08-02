@@ -1,5 +1,5 @@
 from asynctest import TestCase, MagicMock, main
-from xen_foro_new_thread_detector import XenForoNewThreadDetector
+from forum_watcher.xen_foro_new_thread_detector import XenForoNewThreadDetector
 
 mock_config = {
     "forum_name": "my_forum",

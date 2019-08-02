@@ -1,6 +1,6 @@
 from asynctest import TestCase, MagicMock
 from asyncio import Future
-from xen_foro_new_message_dispatcher import XenForoNewMessageDispatcher
+from forum_watcher.xen_foro_new_message_dispatcher import XenForoNewMessageDispatcher
 
 class MockXenForoNewMessageDispatcher(XenForoNewMessageDispatcher):
     def __init__(self, xen_foro_new_thread_detector, discord_service, discord_mention_factory, forum_thread_data_storage, forum_thread_url_factory, config, mock_clock_source):

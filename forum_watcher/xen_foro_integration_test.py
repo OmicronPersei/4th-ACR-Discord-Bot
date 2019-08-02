@@ -1,13 +1,13 @@
 from asynctest import MagicMock, TestCase, main
 from asyncio import Future
 
-from sql_wrapper import SQLWrapper
-from xen_foro_forum_thread_url_factory import XenForoForumThreadURLFactory
-from xen_foro_new_message_dispatcher import XenForoNewMessageDispatcher
-from xen_foro_new_thread_detector import XenForoNewThreadDetector
-from xen_foro_request_factory import XenForoRequestFactory
-from xen_foro_thread_getter import XenForoThreadGetter
-from forum_thread_data_storage import ForumThreadDataStorage
+from forum_watcher.sql_wrapper import SQLWrapper
+from forum_watcher.xen_foro_forum_thread_url_factory import XenForoForumThreadURLFactory
+from forum_watcher.xen_foro_new_message_dispatcher import XenForoNewMessageDispatcher
+from forum_watcher.xen_foro_new_thread_detector import XenForoNewThreadDetector
+from forum_watcher.xen_foro_request_factory import XenForoRequestFactory
+from forum_watcher.xen_foro_thread_getter import XenForoThreadGetter
+from forum_watcher.forum_thread_data_storage import ForumThreadDataStorage
 from discord_mention_factory import DiscordMentionFactory
 
 mock_config = {
