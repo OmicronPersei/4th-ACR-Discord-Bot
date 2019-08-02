@@ -1,6 +1,6 @@
 from clock_source import ClockSource
 
-class XenForoNewMessageDispatcher:
+class NewMessageDispatcher:
     def __init__(self, xen_foro_new_thread_detector, discord_service, discord_mention_factory, forum_thread_data_storage, forum_thread_url_factory, config):
         self._xen_foro_new_thread_detector = xen_foro_new_thread_detector
         self._discord_service = discord_service

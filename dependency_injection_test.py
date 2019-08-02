@@ -11,9 +11,9 @@ from forum_watcher.forum_thread_data_storage import ForumThreadDataStorage
 from forum_watcher.sql_wrapper import SQLWrapper
 from forum_watcher.xen_foro_request_factory import XenForoRequestFactory
 from forum_watcher.xen_foro_thread_getter import XenForoThreadGetter
-from forum_watcher.xen_foro_new_thread_detector import XenForoNewThreadDetector
+from forum_watcher.new_thread_detector import NewThreadDetector
 from forum_watcher.xen_foro_forum_thread_url_factory import XenForoForumThreadURLFactory
-from forum_watcher.xen_foro_new_message_dispatcher import XenForoNewMessageDispatcher
+from forum_watcher.new_message_dispatcher import NewMessageDispatcher
 
 def create_mock_config():
     return {
@@ -117,20 +117,20 @@ class TestDependenciesSetsupDependencies(TestCase):
         assert isinstance(xen_foro_thread_getter, dependency_injector.providers.Singleton)
         assert isinstance(xen_foro_thread_getter_instance, XenForoThreadGetter)
 
-        xen_foro_new_thread_detector = self.dependencies.xen_foro_new_thread_detector
-        xen_foro_new_thread_detector_instance = self.dependencies.xen_foro_new_thread_detector()
-        assert isinstance(xen_foro_new_thread_detector, dependency_injector.providers.Singleton)
-        assert isinstance(xen_foro_new_thread_detector_instance, XenForoNewThreadDetector)
-        assert xen_foro_new_thread_detector_instance._forum_config["forum_name"] == "my_unique_prefix"
-        assert xen_foro_new_thread_detector_instance._forum_api_token == "imsecret"
+        new_thread_detector = self.dependencies.new_thread_detector
+        new_thread_detector_instance = self.dependencies.new_thread_detector()
+        assert isinstance(new_thread_detector, dependency_injector.providers.Singleton)
+        assert isinstance(new_thread_detector_instance, NewThreadDetector)
+        assert new_thread_detector_instance._forum_config["forum_name"] == "my_unique_prefix"
+        assert new_thread_detector_instance._forum_api_token == "imsecret"
 
         xen_foro_url_forum_factory = self.dependencies.xen_foro_forum_thread_url_factory
         xen_foro_url_forum_factory_instance = self.dependencies.xen_foro_forum_thread_url_factory()
         assert isinstance(xen_foro_url_forum_factory, dependency_injector.providers.Singleton)
         assert isinstance(xen_foro_url_forum_factory_instance, XenForoForumThreadURLFactory)
 
-        xen_foro_new_message_dispatcher = self.dependencies.xen_foro_new_message_dispatcher
-        xen_foro_new_message_dispatcher_instance = self.dependencies.xen_foro_new_message_dispatcher()
-        assert isinstance(xen_foro_new_message_dispatcher, dependency_injector.providers.Singleton)
-        assert isinstance(xen_foro_new_message_dispatcher_instance, XenForoNewMessageDispatcher)
-        assert xen_foro_new_message_dispatcher_instance._config["forum_name"] == "my_unique_prefix"
+        new_message_dispatcher = self.dependencies.new_message_dispatcher
+        new_message_dispatcher_instance = self.dependencies.new_message_dispatcher()
+        assert isinstance(new_message_dispatcher, dependency_injector.providers.Singleton)
+        assert isinstance(new_message_dispatcher_instance, NewMessageDispatcher)
+        assert new_message_dispatcher_instance._config["forum_name"] == "my_unique_prefix"

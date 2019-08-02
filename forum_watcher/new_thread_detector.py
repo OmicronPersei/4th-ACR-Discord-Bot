@@ -1,4 +1,4 @@
-class XenForoNewThreadDetector:
+class NewThreadDetector:
     def __init__(self, thread_getter, thread_data_storage, forum_config, forum_api_token):
         self._thread_getter = thread_getter
         self._thread_data_storage = thread_data_storage

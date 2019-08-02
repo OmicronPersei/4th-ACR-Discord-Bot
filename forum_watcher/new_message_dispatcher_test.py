@@ -1,8 +1,8 @@
 from asynctest import TestCase, MagicMock
 from asyncio import Future
-from forum_watcher.xen_foro_new_message_dispatcher import XenForoNewMessageDispatcher
+from forum_watcher.new_message_dispatcher import NewMessageDispatcher
 
-class MockXenForoNewMessageDispatcher(XenForoNewMessageDispatcher):
+class MockNewMessageDispatcher(NewMessageDispatcher):
     def __init__(self, xen_foro_new_thread_detector, discord_service, discord_mention_factory, forum_thread_data_storage, forum_thread_url_factory, config, mock_clock_source):
         self.mock_clock_source = mock_clock_source
         super().__init__(xen_foro_new_thread_detector, discord_service, discord_mention_factory, forum_thread_data_storage, forum_thread_url_factory, config)
@@ -35,9 +35,9 @@ class TestBase:
         self.mock_clock_signal.start = MagicMock()
         self.mock_clock_signal.stop = MagicMock()
 
-        self.new_message_dispatcher = MockXenForoNewMessageDispatcher(self.mock_new_forum_detector, self.mock_discord_service, self.mock_discord_mention_factory, self.mock_forum_thread_data_storage, self.mock_forum_url_thread_factory, self.mock_config, self.mock_clock_signal)
+        self.new_message_dispatcher = MockNewMessageDispatcher(self.mock_new_forum_detector, self.mock_discord_service, self.mock_discord_mention_factory, self.mock_forum_thread_data_storage, self.mock_forum_url_thread_factory, self.mock_config, self.mock_clock_signal)
 
-class XenForoNewMessageDispatcherTestConstructor(TestCase, TestBase):
+class NewMessageDispatcherTestConstructor(TestCase, TestBase):
     def setUp(self):
         TestBase.setUp(self)
 
@@ -46,7 +46,7 @@ class XenForoNewMessageDispatcherTestConstructor(TestCase, TestBase):
         assert callable(self.new_message_dispatcher.mock_clock_source.callbacks[0])
         assert int(self.new_message_dispatcher.mock_update_period) == 60
 
-class XenForoNewMessageDispatcherTestStart(TestCase, TestBase):
+class NewMessageDispatcherTestStart(TestCase, TestBase):
     def setUp(self):
         TestBase.setUp(self)
 
@@ -58,7 +58,7 @@ class XenForoNewMessageDispatcherTestStart(TestCase, TestBase):
         self.mock_clock_signal.start.assert_called()
         self.mock_forum_thread_data_storage.check_forums_have_allocated_storage.assert_called()
 
-class XenForoNewMessageDispatcherTestStop(TestCase, TestBase):
+class NewMessageDispatcherTestStop(TestCase, TestBase):
     def setUp(self):
         TestBase.setUp(self)
 
@@ -67,7 +67,7 @@ class XenForoNewMessageDispatcherTestStop(TestCase, TestBase):
 
         self.mock_clock_signal.stop.assert_called()
 
-class XenForoNewMessageDispatcherHandlesNewlyDetectedForumPost(TestCase, TestBase):
+class NewMessageDispatcherHandlesNewlyDetectedForumPost(TestCase, TestBase):
     def setUp(self):
         TestBase.setUp(self)
 

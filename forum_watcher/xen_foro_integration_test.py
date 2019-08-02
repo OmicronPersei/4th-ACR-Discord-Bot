@@ -3,8 +3,8 @@ from asyncio import Future
 
 from forum_watcher.sql_wrapper import SQLWrapper
 from forum_watcher.xen_foro_forum_thread_url_factory import XenForoForumThreadURLFactory
-from forum_watcher.xen_foro_new_message_dispatcher import XenForoNewMessageDispatcher
-from forum_watcher.xen_foro_new_thread_detector import XenForoNewThreadDetector
+from forum_watcher.new_message_dispatcher import NewMessageDispatcher
+from forum_watcher.new_thread_detector import NewThreadDetector
 from forum_watcher.xen_foro_request_factory import XenForoRequestFactory
 from forum_watcher.xen_foro_thread_getter import XenForoThreadGetter
 from forum_watcher.forum_thread_data_storage import ForumThreadDataStorage
@@ -88,11 +88,11 @@ class XenForoIntegrationTest(TestCase):
 
         xen_forum_config = mock_config["xen_foro_integration"]
         xen_forum_api_token = mock_secrets["xen_foro_integration_api_token"]
-        self.new_thread_detector = XenForoNewThreadDetector(self.thread_getter, self.forum_data_storage, xen_forum_config, xen_forum_api_token)
+        self.new_thread_detector = NewThreadDetector(self.thread_getter, self.forum_data_storage, xen_forum_config, xen_forum_api_token)
 
         self.discord_mention_factory = DiscordMentionFactory(self.discord_service)
 
-        self.new_thread_dispatcher = XenForoNewMessageDispatcher(self.new_thread_detector, self.discord_service, self.discord_mention_factory, self.forum_data_storage, self.forum_url_factory, xen_forum_config)
+        self.new_thread_dispatcher = NewMessageDispatcher(self.new_thread_detector, self.discord_service, self.discord_mention_factory, self.forum_data_storage, self.forum_url_factory, xen_forum_config)
 
     async def runTest(self):
         #simulate the callback from ClockSignal
