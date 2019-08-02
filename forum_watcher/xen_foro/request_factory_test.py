@@ -14,3 +14,5 @@ class TestRequestFactoryCreateThreadGetRequest(TestCase):
         assert actual.get_method() == "GET"
         assert actual.has_header("Xf-api-key")
         assert actual.get_header("Xf-api-key") == api_token
+        assert actual.has_header("Content-type")
+        assert actual.get_header("Content-type") == "application/json"
