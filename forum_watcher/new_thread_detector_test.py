@@ -36,7 +36,7 @@ class TestThreadProcessorReturnsNoMessagesToSend(TestCase):
         actual = self.thread_processor.get_threads_needing_messages()
 
         assert len(actual) == 0
-        self.thread_getter.get_threads.assert_called_with("http://forum", "asdfs", "123")
+        self.thread_getter.get_threads.assert_called_with({ "base_url": "http://forum", "api_token": "asdfs", "forum_id": "123" })
         self.thread_data_storage.get_forum_thread_records.assert_called_with({"forum_name": "my_forum", "forum_id": "123"})
 
 class TestThreadProcessorReturnsOneMessageToSend(TestCase):
@@ -69,7 +69,7 @@ class TestThreadProcessorReturnsOneMessageToSend(TestCase):
             "thread_id": "222",
             "first_message_contents": "new and improved post, last one sucked really"
         }
-        self.thread_getter.get_threads.assert_called_with("http://forum", "asdfs", "123")
+        self.thread_getter.get_threads.assert_called_with({ "base_url": "http://forum", "api_token": "asdfs", "forum_id": "123" })
         self.thread_data_storage.get_forum_thread_records.assert_called_with({"forum_name": "my_forum", "forum_id": "123"})
 
 class TestThreadProcessorReturnsTwoMessagesToSendWhenNoPreviousRecorded(TestCase):
@@ -103,7 +103,7 @@ class TestThreadProcessorReturnsTwoMessagesToSendWhenNoPreviousRecorded(TestCase
             "thread_id": "222",
             "first_message_contents": "new and improved post, last one sucked really"
         }
-        self.thread_getter.get_threads.assert_called_with("http://forum", "asdfs", "123")
+        self.thread_getter.get_threads.assert_called_with({ "base_url": "http://forum", "api_token": "asdfs", "forum_id": "123" })
         self.thread_data_storage.get_forum_thread_records.assert_called_with({"forum_name": "my_forum", "forum_id": "123"})        
 
         

@@ -30,7 +30,12 @@ class TestThreadGetter(TestCase):
         self.mock_thread_request_getter = MockThreadGetter(self.mock_json_response, self.mock_request_factory)
 
     def runTest(self):
-        actual = self.mock_thread_request_getter.get_threads(self.base_url, self.api_token, self.forum_id)
+        thread_query = {
+            "base_url": self.base_url,
+            "api_token": self.api_token,
+            "forum_id": self.forum_id
+        }
+        actual = self.mock_thread_request_getter.get_threads(thread_query)
 
         self.mock_request_factory.create_thread_get_request.assert_called_with(self.api_token, self.forum_id, self.base_url)
         assert actual["my prop"] == "my val"

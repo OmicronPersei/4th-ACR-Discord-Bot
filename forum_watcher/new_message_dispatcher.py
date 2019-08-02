@@ -1,8 +1,8 @@
 from clock_source import ClockSource
 
 class NewMessageDispatcher:
-    def __init__(self, xen_foro_new_thread_detector, discord_service, discord_mention_factory, forum_thread_data_storage, forum_thread_url_factory, config):
-        self._xen_foro_new_thread_detector = xen_foro_new_thread_detector
+    def __init__(self, new_thread_detector, discord_service, discord_mention_factory, forum_thread_data_storage, forum_thread_url_factory, config):
+        self._new_thread_detector = new_thread_detector
         self._discord_service = discord_service
         self._discord_mention_factory = discord_mention_factory
         self._forum_thread_url_factory = forum_thread_url_factory
@@ -28,7 +28,7 @@ class NewMessageDispatcher:
         self._clock_signal.stop()
 
     async def _check_for_new_threads(self):
-        threads_needing_messages = self._xen_foro_new_thread_detector.get_threads_needing_messages()
+        threads_needing_messages = self._new_thread_detector.get_threads_needing_messages()
         for new_thread in threads_needing_messages:
             await self._handle_new_thread(new_thread)
 

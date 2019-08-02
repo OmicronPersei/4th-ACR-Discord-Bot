@@ -29,6 +29,11 @@ class Dependencies:
         self.user_roles_service = providers.Singleton(UserRolesService, self.config.user_role_self_service, self.discord_service)
         self.sql_wrapper = providers.Singleton(SQLWrapper, self.config)
         self.forum_thread_data_storage = providers.Singleton(ForumThreadDataStorage, self.sql_wrapper)
+
+        self.setup_xen_foro_dependencies()
+        
+
+    def setup_xen_foro_dependencies(self):
         self.xen_foro_request_factory = providers.Singleton(XenForoRequestFactory)
         self.xen_foro_thread_getter = providers.Singleton(XenForoThreadGetter, self.xen_foro_request_factory)
         self.xen_foro_new_thread_detector = providers.Singleton(NewThreadDetector, self.xen_foro_thread_getter, self.forum_thread_data_storage, self.config.xen_foro_integration, self.secrets.xen_foro_integration_api_token)

@@ -123,6 +123,8 @@ class TestDependenciesSetsupDependencies(TestCase):
         assert isinstance(xen_foro_new_thread_detector_instance, NewThreadDetector)
         assert xen_foro_new_thread_detector_instance._forum_config["forum_name"] == "my_xen_foro_unique_prefix"
         assert xen_foro_new_thread_detector_instance._forum_api_token == "imsecret"
+        # Check for xen foro specific injection
+        assert xen_foro_new_thread_detector_instance._thread_getter == xen_foro_thread_getter_instance
 
         xen_foro_url_forum_factory = self.dependencies.xen_foro_forum_thread_url_factory
         xen_foro_url_forum_factory_instance = self.dependencies.xen_foro_forum_thread_url_factory()
@@ -133,8 +135,7 @@ class TestDependenciesSetsupDependencies(TestCase):
         xen_foro_new_message_dispatcher_instance = self.dependencies.xen_foro_new_message_dispatcher()
         assert isinstance(xen_foro_new_message_dispatcher, dependency_injector.providers.Singleton)
         assert isinstance(xen_foro_new_message_dispatcher_instance, NewMessageDispatcher)
-        
         # Check for xen foro specific injections
-        assert xen_foro_new_message_dispatcher_instance._xen_foro_new_thread_detector == xen_foro_new_thread_detector_instance
+        assert xen_foro_new_message_dispatcher_instance._new_thread_detector == xen_foro_new_thread_detector_instance
         assert xen_foro_new_message_dispatcher_instance._forum_thread_url_factory == xen_foro_url_forum_factory_instance
         assert xen_foro_new_message_dispatcher_instance._config["forum_name"] == "my_xen_foro_unique_prefix"

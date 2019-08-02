@@ -98,7 +98,8 @@ class XenForoIntegrationTest(TestCase):
         #simulate the callback from ClockSignal
         await self.new_thread_dispatcher._check_for_new_threads()
 
-        self.thread_getter.get_threads.assert_called_with("https://myforum.xyz/", "imsecret", "234")
+        expected_get_threads_query = {"base_url": "https://myforum.xyz/", "api_token": "imsecret", "forum_id": "234"}
+        self.thread_getter.get_threads.assert_called_with(expected_get_threads_query)
 
         self.discord_service.send_channel_message.assert_called_with("A new forum post has appeared! https://myforum.xyz/threads/my_thread_title", "forum posts")
 
