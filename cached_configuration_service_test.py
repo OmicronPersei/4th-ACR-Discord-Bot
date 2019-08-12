@@ -1,5 +1,5 @@
 from cached_configuration_service import CachedConfigurationService
-from asynctest import TestCase, MagicMock, main
+from asynctest import TestCase, MagicMock, call, main
 
 class MockCachedConfigurationService(CachedConfigurationService):
     def __init__(self, config_file_path, mock_config_file_contents):
@@ -32,4 +32,33 @@ class TestConfigReadsFirstTime(BaseTestCase, TestCase):
         actual = self.mock_cached_config_service._cache_accessed_time
         assert actual == expected
 
+class TestConfigReadsOnlyOnceWhileCacheIsStillFresh(BaseTestCase, TestCase):
+    def setUp(self):
+        BaseTestCase.setUp(self)
+        
+
+    def runTest(self):
+        self.mock_cached_config_service.mock_current_time = MagicMock(return_value=1000)
+        self.mock_cached_config_service.get_config_value("my_prop")
+        self.mock_cached_config_service.mock_current_time = MagicMock(return_value=1200)
+        self.mock_cached_config_service.get_config_value("my_prop")
+
+        self.mock_cached_config_service._read_config_file.assert_called_once()
+
+class TestConfigReadsMultipleTimesDueToStaleCache(BaseTestCase, TestCase):
+    def setUp(self):
+        BaseTestCase.setUp(self)
+        
+
+    def runTest(self):
+        self.mock_cached_config_service.mock_current_time = MagicMock(return_value=1000)
+        self.mock_cached_config_service.get_config_value("my_prop")
+
+        # cache is now stale, should reread from disk
+        self.mock_cached_config_service.mock_current_time = MagicMock(return_value=1400)
+        self.mock_cached_config_service.get_config_value("my_prop")
+
+        # test it was called twice, once for initial fetch, second for stale cache
+        self.mock_cached_config_service._read_config_file.assert_has_calls([call(), call()])
+        
 # main()
