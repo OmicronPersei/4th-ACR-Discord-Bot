@@ -4,7 +4,7 @@ config_key = "user_role_self_service"
 
 class UserRolesService(BotCommandServiceBase):
     def __init__(self, config, discord_service):
-        super().__init__(config, discord_service)
+        super().__init__(config, config_key, discord_service)
 
     async def bot_command_callback(self, message):
         command_tokens = message.content.split(" ")

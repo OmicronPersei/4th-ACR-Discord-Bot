@@ -8,6 +8,6 @@ def create_mock_user(mention_val, display_name_val="stub_name_here"):
 
 def MockConfigurationService(config_obj):
     service = MagicMock()
-    service.get_config_value = MagicMock()
-    service.get_config_value.side_effect = lambda x: config_obj[x]
+    service.get = MagicMock()
+    service.get.side_effect = lambda x: config_obj[x]
     return service
