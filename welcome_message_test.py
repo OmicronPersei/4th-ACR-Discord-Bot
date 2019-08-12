@@ -7,6 +7,8 @@ from discord_service import DiscordService
 from test_utils import create_mock_user
 from discord_mention_factory import DiscordMentionFactory
 
+from test_utils import MockConfigurationService
+
 class TestConstructionSubscribesToOnMemberJoinCallback(asynctest.TestCase):
     def setUp(self):
         self.discord = MagicMock()
@@ -24,15 +26,16 @@ class TestSendsChannelMessageUponOnMemberJoinCallback(asynctest.TestCase):
     def setUp(self):
         self.discord = asynctest.Mock(DiscordService())
         self.discord.on_member_join_callbacks = []
-        self.config = {
+        self.config = { "welcome_message": {
             "message": "my message {joined_user}",
             "channel": "my channel"
-        }
+        } }
+        self.mock_config_service = MockConfigurationService(self.config)
         self.mock_user_joined = create_mock_user("val")
         self.returned_message = "dsfasf"
         self.discord_mention_service = asynctest.Mock(DiscordMentionFactory(None))
         self.discord_mention_service.perform_replacement=MagicMock(return_value=self.returned_message)
-        WelcomeMessage(self.config, self.discord, self.discord_mention_service)
+        WelcomeMessage(self.mock_config_service, self.discord, self.discord_mention_service)
 
     async def test(self):
         callback = self.discord.on_member_join_callbacks[0]
