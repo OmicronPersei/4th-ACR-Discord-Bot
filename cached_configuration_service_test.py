@@ -21,7 +21,7 @@ class TestConfigReadsFirstTime(BaseTestCase, TestCase):
 
     def runTest(self):
         expected = "my_val"
-        actual = self.mock_cached_config_service.get_config_value("my_prop")
+        actual = self.mock_cached_config_service.get("my_prop")
         assert actual == expected
 
         expected = 300
@@ -39,9 +39,9 @@ class TestConfigReadsOnlyOnceWhileCacheIsStillFresh(BaseTestCase, TestCase):
 
     def runTest(self):
         self.mock_cached_config_service.mock_current_time = 1000
-        self.mock_cached_config_service.get_config_value("my_prop")
+        self.mock_cached_config_service.get("my_prop")
         self.mock_cached_config_service.mock_current_time = 1200
-        self.mock_cached_config_service.get_config_value("my_prop")
+        self.mock_cached_config_service.get("my_prop")
 
         self.mock_cached_config_service._read_config_file.assert_called_once()
 
@@ -52,11 +52,11 @@ class TestConfigReadsMultipleTimesDueToStaleCache(BaseTestCase, TestCase):
 
     def runTest(self):
         self.mock_cached_config_service.mock_current_time = 1000
-        self.mock_cached_config_service.get_config_value("my_prop")
+        self.mock_cached_config_service.get("my_prop")
 
         # cache is now stale, should reread from disk
         self.mock_cached_config_service.mock_current_time = 1400
-        self.mock_cached_config_service.get_config_value("my_prop")
+        self.mock_cached_config_service.get("my_prop")
 
         # test it was called twice, once for initial fetch, second for stale cache
         self.mock_cached_config_service._read_config_file.assert_has_calls([call(), call()])

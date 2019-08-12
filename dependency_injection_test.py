@@ -7,6 +7,7 @@ from discord_mention_factory import DiscordMentionFactory
 from welcome_message import WelcomeMessage
 from user_leave_notification import UserLeaveNotification
 from user_roles_service import UserRolesService
+from cached_configuration_service import CachedConfigurationService
 
 def create_mock_config():
     return {
@@ -40,6 +41,11 @@ class TestDependenciesSetsupDependencies(asynctest.TestCase):
         self.dependencies = Dependencies(self.config)
     
     def runTest(self):
+        config = self.dependencies.config
+        config_instance = self.dependencies.config()
+        assert isinstance(config, dependency_injector.providers.Singleton)
+        assert isinstance(config_instance, CachedConfigurationService)
+
         discord_service = self.dependencies.discord_service
         discord_service_instance = discord_service()
         assert isinstance(discord_service, dependency_injector.providers.Singleton)

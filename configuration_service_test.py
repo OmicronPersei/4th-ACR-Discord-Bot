@@ -22,6 +22,6 @@ class TestGetConfigValue(BaseTestCase, TestCase):
 
     def runTest(self):
         expected = "my_val"
-        actual = self.mock_config_service.get_config_value("my_prop")
+        actual = self.mock_config_service.get("my_prop")
 
         assert actual == expected

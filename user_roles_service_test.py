@@ -3,6 +3,8 @@ from asyncio import Future
 from asynctest import MagicMock, TestCase, PropertyMock
 from user_roles_service import UserRolesService
 
+from test_utils import MockConfigurationService
+
 def create_mock_role(role_props):
     role = MagicMock()
     type(role).name = role_props["name"]
@@ -34,7 +36,7 @@ def create_mock_message(msg_content, channel_name, user_roles=None):
     return mock_message 
 
 class BaseTestSetup:
-    def setUp(self):
+    def setUp(self, mock_config=None):
         self.mock_discord_service = MagicMock()
         self.mock_discord_service.create_listener_for_bot_command.side_effect = self.create_callback_side_effect
 
@@ -48,9 +50,14 @@ class BaseTestSetup:
         self.mock_discord_service.send_channel_message = MagicMock(return_value=Future())
         self.mock_discord_service.send_channel_message.return_value.set_result(None)
 
-        self.mock_config = { "command_keyword": "!roles", "blacklisted_roles": [ 1111 ] }
+        if not mock_config:
+            self.mock_config = { "user_role_self_service": { "command_keyword": "!roles", "blacklisted_roles": [ 1111 ] } }
+        else:
+            self.mock_config = mock_config
 
-        self.user_roles_service = UserRolesService(self.mock_config, self.mock_discord_service)
+        self.mock_config_service = MockConfigurationService(self.mock_config)
+
+        self.user_roles_service = UserRolesService(self.mock_config_service, self.mock_discord_service)
 
     def create_callback_side_effect(self, *args, **kwargs):
         self.callback = args[1]
@@ -171,8 +178,9 @@ class TestMessageIsDeleted(BaseTestSetup, TestCase):
 
 class TestFunctionalityIsRestrictedToSpecificChannel(BaseTestSetup, TestCase):
     def setUp(self):
-        BaseTestSetup.setUp(self)
-        self.mock_config["restrict_to_channel"] = "role-request"
+        mock_config = { "user_role_self_service": { "command_keyword": "!roles", "blacklisted_roles": [ 1111 ], "restrict_to_channel": "role-request" } }
+        BaseTestSetup.setUp(self, mock_config)
+        
         self.mock_message = create_mock_message("!roles", "barracks", [])
 
     async def runTest(self):
@@ -182,8 +190,9 @@ class TestFunctionalityIsRestrictedToSpecificChannel(BaseTestSetup, TestCase):
 
 class TestFunctionalityIsNotRestrictedToSpecificChannelWhenNotSpecifiedInConfig(BaseTestSetup, TestCase):
     def setUp(self):
-        BaseTestSetup.setUp(self)
-        self.mock_config["restrict_to_channel"] = None
+        mock_config = { "user_role_self_service": { "command_keyword": "!roles", "blacklisted_roles": [ 1111 ], "restrict_to_channel": None } }
+        BaseTestSetup.setUp(self, mock_config)
+
         self.mock_message = create_mock_message("!roles", "barracks", [])
 
     async def runTest(self):

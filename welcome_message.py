@@ -1,5 +1,7 @@
 import re
 
+config_key = "welcome_message"
+
 class WelcomeMessage:
     
     def __init__(self, config, discord_service, discord_mention_service):
@@ -10,8 +12,9 @@ class WelcomeMessage:
         self._discord.on_member_join_callbacks.append(self.member_joined)
 
     async def member_joined(self, user):
-        messageToSend = self._config["message"]
-        destinationChannel = self._config["channel"]
+        config = self._config.get(config_key)
+        messageToSend = config["message"]
+        destinationChannel = config["channel"]
 
         messageToSend = messageToSend.replace("{joined_user}", "{user:0}")
 

@@ -5,7 +5,7 @@ class ConfigurationService:
     def __init__(self, config_file_path):
         self._config_file_path = config_file_path
 
-    def get_config_value(self, prop_name):
+    def get(self, prop_name):
         config = self._get_config_contents()
         return config[prop_name]
 

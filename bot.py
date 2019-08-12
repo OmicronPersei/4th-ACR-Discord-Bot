@@ -13,26 +13,23 @@ def readJsonFile(file_name):
 def read_secrets():
     return readJsonFile("secrets.json")
 
-def read_config():
-    return readJsonFile("config.json")
-
 def setup_dependency_injection(config):
     return Dependencies(config)
 
 if __name__ == "__main__":
-    config = read_config()
     secrets = read_secrets()
     discord_token = secrets["discord-bot-token"]
 
-    services = setup_dependency_injection(config)
-
-    if config["welcome_message"]["enabled"]:
+    services = setup_dependency_injection("config.json")
+    config_service = services.config()
+    
+    if config_service.get("welcome_message").enabled:
         services.welcome_message()
 
-    if config["user_leave_notification"]["enabled"]:
+    if config_service.get("user_leave_notification").enabled:
         services.user_leave_notification()
 
-    if config["user_role_self_service"]["enabled"]:
+    if config_service.get("user_role_self_service").enabled:
         services.user_roles_service()
 
     discord_service = services.discord_service()

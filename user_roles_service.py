@@ -1,5 +1,7 @@
 from bot_command_service_base import BotCommandServiceBase
 
+config_key = "user_role_self_service"
+
 class UserRolesService(BotCommandServiceBase):
     def __init__(self, config, discord_service):
         super().__init__(config, discord_service)
@@ -20,9 +22,10 @@ class UserRolesService(BotCommandServiceBase):
         await message.delete()
 
     def should_ignore_command(self, message):
-        return ("restrict_to_channel" in self.config and
-            self.config["restrict_to_channel"] != None and
-            message.channel.name.lower() != self.config["restrict_to_channel"].lower())
+        config = self.config.get(config_key)
+        return ("restrict_to_channel" in config and
+            config["restrict_to_channel"] != None and
+            message.channel.name.lower() != config["restrict_to_channel"].lower())
 
     async def reply_with_all_roles(self, message):
         available_role_strs = ["`{}`".format(x.name) for x in self.get_available_roles()]
@@ -72,7 +75,7 @@ class UserRolesService(BotCommandServiceBase):
         await message.author.edit(roles=new_roles)
 
     def get_available_roles(self):
-        blacklisted_roles = self.config["blacklisted_roles"]
+        blacklisted_roles = self.config.get(config_key)["blacklisted_roles"]
         all_roles = self.discord_service.get_all_roles()
         return [x for x in all_roles if x.id not in blacklisted_roles]
 
