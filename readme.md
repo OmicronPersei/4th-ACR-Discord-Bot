@@ -27,6 +27,8 @@ Example:
 *Please note that the below is not valid JSON as comments aren't allowed.  Simply remove the comments (lines of text with `//` after them, including the slashes) for it to be a valid example.*
 ```
 {
+    //Config is cached and not reloaded for 300 seconds (5 minutes)
+    "config_cache_expires_after": 300
     "welcome_message": {
         //The following tokens are replaced with appropriate Discord mentions:
         //{joined_user} is replaced with the user who joined the Discord guild

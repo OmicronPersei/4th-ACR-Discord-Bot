@@ -8,16 +8,19 @@ from user_leave_notification import UserLeaveNotification
 from discord_service import DiscordService
 from discord_mention_factory import DiscordMentionFactory
 
+from test_utils import MockConfigurationService
+
 class TestUserLeaveNotificationAddsCallbackToDiscordOnMemberRemoveCallbacks(asynctest.TestCase):
     def setUp(self):
-        self.config = {
+        self.config = { "user_leave_notification": {
             "message": "{left_user} has left",
             "channel": "user-left-channel"
-        }
+        } }
+        self.mock_config_service = MockConfigurationService(self.config)
         self.discord = MagicMock()
         self.discord_mention_service = MagicMock()
         self.discord.on_member_remove_callbacks = []
-        UserLeaveNotification(self.config, self.discord, self.discord_mention_service)
+        UserLeaveNotification(self.mock_config_service, self.discord, self.discord_mention_service)
 
     def runTest(self):
         assert len(self.discord.on_member_remove_callbacks) == 1
@@ -26,10 +29,11 @@ class TestUserLeaveNotificationAddsCallbackToDiscordOnMemberRemoveCallbacks(asyn
 
 class TestUserUserLeaveNotificationSendsMessageUponUserLeft(asynctest.TestCase):
     def setUp(self):
-        self.config = {
+        self.config = { "user_leave_notification": {
             "message": "{left_user} has left",
             "channel": "user-left-channel"
-        }
+        } }
+        self.mock_config_service = MockConfigurationService(self.config)
         self.discord = asynctest.Mock(DiscordService)
         self.discord.on_member_remove_callbacks = []
         self.mock_left_user = create_mock_user("lame_guy", "lame_guy_name")
@@ -38,7 +42,7 @@ class TestUserUserLeaveNotificationSendsMessageUponUserLeft(asynctest.TestCase):
         self.message_from_mention_factory = "generated message from factory"
         self.discord_mention_service.perform_replacement=MagicMock(return_value=self.message_from_mention_factory)
 
-        UserLeaveNotification(self.config, self.discord, self.discord_mention_service)
+        UserLeaveNotification(self.mock_config_service, self.discord, self.discord_mention_service)
 
     async def runTest(self):
         callback = self.discord.on_member_remove_callbacks[0]
