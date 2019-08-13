@@ -60,21 +60,12 @@ Example:
         "command_keyword": "!expected-attendance",
         "restrict_to_channel": "expected-attendance",
         "emojis": [
-            { 
-                "emoji": "👍",
-                "display_template": "**{user} ({name})**"
-            },
-            { 
-                "emoji": "👎",
-                "display_template": "~~{user} ({name})~~"
-            },
-            { 
-                "emoji": "🤷",
-                "display_template": "*{user} ({name})?*"
-            }
+            { "emoji": "👍", "display_template": "**{user} ({name})**" },
+            { "emoji": "👎", "display_template": "~~{user} ({name})~~" },
+            { "emoji": "🤷", "display_template": "*{user} ({name})?*" }
         ],
-        "no_reaction_template": "~~{user} ({name})~~"
-        //The structure below can have any depth and/or of children.
+        "no_reaction_template": "~~{user} ({name})~~",
+        //The structure below can have any depth and/or number of children.
         //Names are not necessary to specify
         "structure": {
             "name": "1st Platoon Leader",
