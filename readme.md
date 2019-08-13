@@ -54,6 +54,46 @@ Example:
         "enabled": true,
         //The below may be ommitted such that this feature is restricted to the below channel
         "restrict_to_channel": "role-request"
+    },
+    "user_reaction_reporter": {
+        "enabled": "true",
+        "command_keyword": "!expected-attendance",
+        "restrict_to_channel": "expected-attendance",
+        "emojis": [
+            { 
+                "emoji": "👍",
+                "display_template": "**{user} ({name})**"
+            },
+            { 
+                "emoji": "👎",
+                "display_template": "~~{user} ({name})~~"
+            },
+            { 
+                "emoji": "🤷",
+                "display_template": "*{user} ({name})?*"
+            }
+        ],
+        "no_reaction_template": "~~{user} ({name})~~"
+        //The structure below can have any depth and/or of children.
+        //Names are not necessary to specify
+        "structure": {
+            "name": "1st Platoon Leader",
+            "discord_id": "Blah#123",
+            "children": [ 
+                {
+                    "name": "1st Squad Lead",
+                    "discord_id": "Blah#789",
+                    "children": [
+                        {
+                            "discord_id": "asdfsd#23423"
+                        },
+                        {
+                            "discord_id": "szdfsda#892348"
+                        }
+                    ]
+                }
+            ]
+        }
     }
 }
 ```
