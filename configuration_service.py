@@ -14,5 +14,5 @@ class ConfigurationService:
         return json.loads(file_contents)
 
     def _read_config_file(self):
-        with open(self._config_file_path, mode='r') as f:
+        with open(self._config_file_path, mode='r', encoding='utf-8') as f:
             return f.read()

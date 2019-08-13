@@ -54,6 +54,30 @@ Example:
         "enabled": true,
         //The below may be ommitted such that this feature is restricted to the below channel
         "restrict_to_channel": "role-request"
+    },
+    "user_reaction_reporter": {
+        "enabled": true,
+        "command_keyword": "!expected-attendance",
+        "restrict_to_channel": "expected-attendance",
+        "emojis": [
+            { "emoji": "👍", "display_template": "**{user} ({role})**" },
+            { "emoji": "👎", "display_template": "~~{user} ({role})~~" },
+            { "emoji": "🤷", "display_template": "*{user} ({role})?*" },
+            { "emoji": "", "display_template": "~~{user} ({role})~~" }
+        ],
+        "role_aliases": {
+            "12234234232423": "1234234234"
+        },
+        "role_structure": [
+            {
+                "role_id": "1",
+                "children": [
+                    {
+                        "role_id": "2"
+                    }
+                ]
+            }
+        ]
     }
 }
 ```

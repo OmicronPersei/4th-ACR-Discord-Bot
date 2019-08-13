@@ -8,6 +8,7 @@ from welcome_message import WelcomeMessage
 from user_leave_notification import UserLeaveNotification
 from user_roles_service import UserRolesService
 from cached_configuration_service import CachedConfigurationService
+from user_reaction_report.user_reaction_report import UserReactionReport
 
 def create_mock_config():
     return {
@@ -31,6 +32,7 @@ class TestBase:
     def setUp(self):
         self.dependencies = Dependencies(None)
 
+
 class TestConfigurationServiceDependencyInjection(TestBase, TestCase):
     def setUp(self):
         TestBase.setUp(self)
@@ -41,6 +43,7 @@ class TestConfigurationServiceDependencyInjection(TestBase, TestCase):
         assert isinstance(config, dependency_injector.providers.Singleton)
         assert isinstance(config_instance, CachedConfigurationService)
 
+
 class TestDiscordServiceeDependencyInjection(TestBase, TestCase):
     def setUp(self):
         TestBase.setUp(self)
@@ -50,6 +53,7 @@ class TestDiscordServiceeDependencyInjection(TestBase, TestCase):
         discord_service_instance = discord_service()
         assert isinstance(discord_service, dependency_injector.providers.Singleton)
         assert isinstance(discord_service_instance, DiscordService)
+
 
 class TestDiscordMentionFactoryDependencyInjection(TestBase, TestCase):
     def setUp(self):
@@ -72,6 +76,7 @@ class TestWelcomeMessageDependencyInjection(TestBase, TestCase):
         assert isinstance(welcome_message, dependency_injector.providers.Singleton)
         assert isinstance(welcome_message_instance, WelcomeMessage)
 
+
 class TestUserLeaveNotificationDependencyInjection(TestBase, TestCase):
     def setUp(self):
         TestBase.setUp(self)
@@ -82,20 +87,44 @@ class TestUserLeaveNotificationDependencyInjection(TestBase, TestCase):
         assert isinstance(user_leave_notification, dependency_injector.providers.Singleton)
         assert isinstance(user_leave_notification_instance, UserLeaveNotification)
 
-class MockConfigService:
+
+class MockConfigServiceForUserRolesService:
     def get(self, prop_key):
         return { "command_keyword": "!roles" }
 
-class MockDependencies(Dependencies):
+
+class MockDependenciesForUserRolesService(Dependencies):
     def _create_config_service(self, config_path):
-        return dependency_injector.providers.Singleton(MockConfigService)
+        return dependency_injector.providers.Singleton(MockConfigServiceForUserRolesService)
+
 
 class TestUserRolesServiceDependencyInjection(TestCase):
     def setUp(self):
-        self.dependencies = MockDependencies(None)
+        self.dependencies = MockDependenciesForUserRolesService(None)
     
     def runTest(self):
         user_roles_service = self.dependencies.user_roles_service
         user_roles_service_instance = user_roles_service()
         assert isinstance(user_roles_service, dependency_injector.providers.Singleton)
         assert isinstance(user_roles_service_instance, UserRolesService)
+
+
+class MockConfigServiceForUserReactionReport:
+    def get(self, prop_key):
+        return { "command_keyword": "!roles" }
+
+
+class MockDependenciesForUserReactionReport(Dependencies):
+    def _create_config_service(self, config_path):
+        return dependency_injector.providers.Singleton(MockConfigServiceForUserReactionReport)
+
+
+class TestUserReactionReportDependencyInjection(TestCase):
+    def setUp(self):
+        self.dependencies = MockDependenciesForUserReactionReport(None)
+
+    def runTest(self):
+        user_reaction_report = self.dependencies.user_reaction_report
+        user_reaction_report_instance = self.dependencies.user_reaction_report()
+        assert isinstance(user_reaction_report, dependency_injector.providers.Singleton)
+        assert isinstance(user_reaction_report_instance, UserReactionReport)
