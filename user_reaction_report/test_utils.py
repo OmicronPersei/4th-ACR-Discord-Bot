@@ -13,6 +13,18 @@ def create_mock_role(id, name):
     type(role).name = PropertyMock(return_value=name)
     return role
 
+# emoji_dict: dict of emoji: [AsyncIterator(user_objs)]
+def create_mock_message(emoji_dict):
+    reactions = []
+    for emoji,user_objs in emoji_dict.items():
+        reaction = MagicMock()
+        type(reaction).emoji = PropertyMock(return_value=emoji)
+        reaction.users = MagicMock(return_value=AsyncIterator(user_objs))
+        reactions.append(reaction)
+    message = MagicMock()
+    type(message).reactions = PropertyMock(return_value=reactions)
+    
+    return message
 class AsyncIterator:
     def __init__(self, items):
         self._items = list(items)

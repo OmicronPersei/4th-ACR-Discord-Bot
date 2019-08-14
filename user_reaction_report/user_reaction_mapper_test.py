@@ -3,19 +3,7 @@ from asyncio import Future
 
 from user_reaction_report.user_reaction_mapper import map_message_to_user_reaction_dict
 
-from user_reaction_report.test_utils import create_mock_user, AsyncIterator
-
-# emoji_dict: dict of emoji: [user_obj]
-def create_mock_message(emoji_dict):
-    reactions = []
-    for emoji,user_objs in emoji_dict.items():
-        reaction = MagicMock()
-        type(reaction).emoji = PropertyMock(return_value=emoji)
-        reaction.users = MagicMock(return_value=AsyncIterator(user_objs))
-        reactions.append(reaction)
-    message = MagicMock()
-    type(message).reactions = PropertyMock(return_value=reactions)
-    return message
+from user_reaction_report.test_utils import create_mock_user, create_mock_message
 
 class TestUserReactionMapper(TestCase):
     def setUp(self):
