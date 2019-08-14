@@ -26,7 +26,7 @@ class UserReactionReport(BotCommandServiceBase):
         
         target_message = await self.discord_service.get_matching_message(channel_name, int(msg_id))
 
-        user_reaction_dict = map_message_to_user_reaction_dict(target_message)
+        user_reaction_dict = await map_message_to_user_reaction_dict(target_message)
 
         role_id = self.discord_service.get_matching_role(target_role).id
         
@@ -40,4 +40,4 @@ class UserReactionReport(BotCommandServiceBase):
         self.discord_service.send_channel_message(serialized, result_channel)
 
     def should_ignore_this_msg(self, message):
-        return self.config.get(service_name)["restrict_to_channel"].lower() == message.channel.name.lower()
+        return self.config.get(service_name)["restrict_to_channel"].lower() != message.channel.name.lower()
