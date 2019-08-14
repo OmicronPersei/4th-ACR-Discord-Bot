@@ -56,15 +56,15 @@ Example:
         "restrict_to_channel": "role-request"
     },
     "user_reaction_reporter": {
-        "enabled": "true",
+        "enabled": true,
         "command_keyword": "!expected-attendance",
         "restrict_to_channel": "expected-attendance",
         "emojis": [
             { "emoji": "👍", "display_template": "**{user} ({name})**" },
             { "emoji": "👎", "display_template": "~~{user} ({name})~~" },
-            { "emoji": "🤷", "display_template": "*{user} ({name})?*" }
+            { "emoji": "🤷", "display_template": "*{user} ({name})?*" },
+            { "emoji": null, "display_template": "~~{user} ({name})~~" },
         ],
-        "no_reaction_template": "~~{user} ({name})~~",
         "role_aliases": {
             "12234234232423": "1234234234"
         },

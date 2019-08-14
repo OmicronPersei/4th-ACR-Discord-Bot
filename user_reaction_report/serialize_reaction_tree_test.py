@@ -39,6 +39,10 @@ class TestSerializeReactionTree(TestCase):
                                 {
                                     "user": create_mock_user(id=4444, display_name_val="Delta"),
                                     "emoji": "👍"
+                                },
+                                {
+                                    "user": create_mock_user(id=5555, display_name_val="Foxtrot"),
+                                    "emoji": None
                                 }
                             ]
                         }
@@ -48,7 +52,8 @@ class TestSerializeReactionTree(TestCase):
         }
         self.mock_emoji_templates = {
             "👍": { "display_template": "**{user}** ({role})"},
-            "👎": { "display_template": "~~{user}~~ ({role})"}
+            "👎": { "display_template": "~~{user}~~ ({role})"},
+            None: { "display_template": "!!{user}!! ({role})"}
         }
     
     def runTest(self):
@@ -57,6 +62,7 @@ class TestSerializeReactionTree(TestCase):
             "**Alpha** (Higher Up)\n"
             "     **Bravo** (Lower)\n"
             "     ~~Charlie~~ (Lower)\n"
-            "          **Delta** (Very Low)")
+            "          **Delta** (Very Low)\n"
+            "          !!Foxtrot!! (Very Low)")
         assert actual == expected
 

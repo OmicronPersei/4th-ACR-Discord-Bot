@@ -8,7 +8,12 @@ def traverse(structure, reaction_tree, all_users, reaction_dict):
     for user in users_in_role:
         user_id = str(user.id)
         if user_id in reaction_dict and len(reaction_dict[user_id]["emojis"]) == 1:
-            reactions.append({ "user": user, "emoji": reaction_dict[user_id]["emojis"][0] })        
+            emoji = reaction_dict[user_id]["emojis"][0]
+            reactions.append({ "user": user, "emoji":  emoji})
+        elif user_id not in reaction_dict:
+            emoji = None
+            reactions.append({ "user": user, "emoji":  emoji})
+        
     reaction_tree["role_id"] = role_id
     reaction_tree["reactions"] = reactions
 

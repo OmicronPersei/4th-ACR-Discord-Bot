@@ -62,10 +62,13 @@ class TestCreateReactionTree(TestCase):
         assert role2_node["reactions"][0]["emoji"] == "👎"
         assert role2_node["reactions"][1]["user"].id == 3333
         assert role2_node["reactions"][1]["emoji"] == "🤷"
+        
 
         role3_node = actual["children"][1]
         assert role3_node["role_id"] == "3"
-        assert len(role3_node["reactions"]) == 0
+        assert len(role3_node["reactions"]) == 1
+        assert role3_node["reactions"][0]["user"].id == 5555
+        assert role3_node["reactions"][0]["emoji"] == None
 
 
 # main()
