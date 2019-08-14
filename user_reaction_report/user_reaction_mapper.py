@@ -1,12 +1,13 @@
+# map a discord.py Message object to the dict shape of
+# user_id (key): { "user": userobj, "emojis": [emojis] }
 async def map_message_to_user_reaction_dict(message):
-    username_reaction_dict = dict()
+    user_reaction_dict = dict()
     for reaction in message.reactions:
         emoji = reaction.emoji
         async for user in reaction.users():
-            username = (user.name + "#" + user.discriminator).lower()
-            if username not in username_reaction_dict:
-                username_reaction_dict[username] = [emoji]
+            if user.id not in user_reaction_dict:
+                user_reaction_dict[user.id] = { "user": user, "emojis": [emoji] }
             else:
-                username_reaction_dict[username].append(emoji)
-    return username_reaction_dict
+                user_reaction_dict[user.id]["emojis"].append(emoji)
+    return user_reaction_dict
         
