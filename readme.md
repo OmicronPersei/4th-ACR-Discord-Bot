@@ -67,24 +67,29 @@ Example:
         "no_reaction_template": "~~{user} ({name})~~",
         //The structure below can have any depth and/or number of children.
         //Names are not necessary to specify
-        "structure": {
-            "name": "1st Platoon Leader",
-            "discord_id": "Blah#123",
-            "children": [ 
-                {
-                    "name": "1st Squad Lead",
-                    "discord_id": "Blah#789",
-                    "children": [
+        "structures": [
+            {
+                "name": "1st-platoon",
+                "structure": {
+                    "name": "1st Platoon Leader",
+                    "discord_id": "Blah#123",
+                    "children": [ 
                         {
-                            "discord_id": "asdfsd#23423"
-                        },
-                        {
-                            "discord_id": "szdfsda#892348"
+                            "name": "1st Squad Lead",
+                            "discord_id": "Blah#789",
+                            "children": [
+                                {
+                                    "discord_id": "asdfsd#23423"
+                                },
+                                {
+                                    "discord_id": "szdfsda#892348"
+                                }
+                            ]
                         }
-                    ]
+                    ]           
                 }
-            ]
-        }
+            }
+        ]
     }
 }
 ```
