@@ -20,7 +20,7 @@ class AsyncIterator:
         self._index = self._index + 1
         return item
 
-# reactions: dict of emoji: [user_obj]
+# emoji_dict: dict of emoji: [user_obj]
 def create_mock_message(emoji_dict):
     reactions = []
     for emoji,user_objs in emoji_dict.items():
@@ -35,8 +35,8 @@ def create_mock_message(emoji_dict):
 class TestUserReactionMapper(TestCase):
     def setUp(self):
         mock_reactions = dict()
-        mock_reactions["👍"] = [ create_mock_user(id=1), create_mock_user(id=2)]
-        mock_reactions["👎"] = [ create_mock_user(id=3), create_mock_user(id=2)]
+        mock_reactions["👍"] = [ create_mock_user(id=1), create_mock_user(id=2) ]
+        mock_reactions["👎"] = [ create_mock_user(id=3), create_mock_user(id=2) ]
         self.mock_message = create_mock_message(mock_reactions)
 
     async def runTest(self):
