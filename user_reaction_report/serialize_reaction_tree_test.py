@@ -1,0 +1,49 @@
+from asynctest import TestCase
+
+from user_reaction_report.serialize_reaction_tree import serialize_reaction_tree
+
+from user_reaction_report.test_utils import create_mock_role, create_mock_user
+
+class TestSerializeReactionTree(TestCase):
+    def setUp(self):
+        self.mock_roles = [
+            create_mock_role(1, "Higher Up"),
+            create_mock_role(2, "Lower")
+        ]
+        self.mock_reaction_tree = {
+            "role_id": "1",
+            "reactions": [
+                {
+                    "user": create_mock_user(id=1111, display_name_val="Alpha"),
+                    "emoji": "👍"
+                }
+            ],
+            "children": [
+                {
+                    "role_id": "2",
+                    "reactions": [
+                        {
+                            "user": create_mock_user(id=2222, display_name_val="Bravo"),
+                            "emoji": "👍"
+                        },
+                        {
+                            "user": create_mock_user(id=3333, display_name_val="Charlie"),
+                            "emoji": "👎"
+                        }
+                    ]
+                }
+            ]
+        }
+        self.mock_emoji_templates = {
+            "👍": { "display_template": "**{user}** ({role})"},
+            "👎": { "display_template": "~~{user}~~ ({role})"}
+        }
+    
+    def runTest(self):
+        actual = serialize_reaction_tree(self.mock_reaction_tree, self.mock_emoji_templates, self.mock_roles)
+        expected = (
+            "**Alpha** (Higher Up)\n"
+            "     **Bravo** (Lower)\n"
+            "     ~~Charlie~~ (Lower)")
+        assert actual == expected
+
