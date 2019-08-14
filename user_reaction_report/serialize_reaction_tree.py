@@ -16,9 +16,6 @@ def serialize_nodes(reaction_tree, emoji_templates, roles_dict):
     buffer = []
     role_name = roles_dict[reaction_tree["role_id"]].name
     for reaction in reaction_tree["reactions"]:
-        # print("1: \"" + str(reaction["emoji"])+ "\"")
-        # print("2: \"" + str(emoji_templates)+ "\"")
-        # print("3: \"" + str(emoji_templates[reaction["emoji"]]) + "\"")
         template = emoji_templates[reaction["emoji"]]
         serialized = template.format(user=reaction["user"].display_name, role=role_name)
         buffer.append(serialized)
