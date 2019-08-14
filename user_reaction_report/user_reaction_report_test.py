@@ -27,7 +27,7 @@ class TestUserReactionReport(TestCase):
                 "emojis": [
                     { "emoji": "👍", "display_template": "**{user}** ({role})" },
                     { "emoji": "👎", "display_template": "~~{user}~~ ({role})" },
-                    { "emoji": None, "display_template": "!!{user}!! ({role})" }
+                    { "emoji": "", "display_template": "!!{user}!! ({role})" }
                 ],
                 "role_aliases": {
                     "123": "1"

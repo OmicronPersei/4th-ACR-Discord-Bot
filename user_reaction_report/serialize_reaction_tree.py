@@ -4,13 +4,22 @@ def serialize_reaction_tree(reaction_tree, emoji_templates, all_roles):
     roles_dict = dict()
     for role in all_roles:
         roles_dict[str(role.id)] = role
-    return "\n".join(serialize_nodes(reaction_tree, emoji_templates, roles_dict))
+    emoji_dict = dict()
+    for emoji_data in emoji_templates:
+        emoji = emoji_data["emoji"]
+        template = emoji_data["display_template"]
+        emoji_dict[emoji] = template
+    
+    return "\n".join(serialize_nodes(reaction_tree, emoji_dict, roles_dict))
 
 def serialize_nodes(reaction_tree, emoji_templates, roles_dict):
     buffer = []
     role_name = roles_dict[reaction_tree["role_id"]].name
     for reaction in reaction_tree["reactions"]:
-        template = emoji_templates[reaction["emoji"]]["display_template"]
+        # print("1: \"" + str(reaction["emoji"])+ "\"")
+        # print("2: \"" + str(emoji_templates)+ "\"")
+        # print("3: \"" + str(emoji_templates[reaction["emoji"]]) + "\"")
+        template = emoji_templates[reaction["emoji"]]
         serialized = template.format(user=reaction["user"].display_name, role=role_name)
         buffer.append(serialized)
     if "children" in reaction_tree:

@@ -42,7 +42,7 @@ class TestSerializeReactionTree(TestCase):
                                 },
                                 {
                                     "user": create_mock_user(id=5555, display_name_val="Foxtrot"),
-                                    "emoji": None
+                                    "emoji": ""
                                 }
                             ]
                         }
@@ -50,11 +50,11 @@ class TestSerializeReactionTree(TestCase):
                 }
             ]
         }
-        self.mock_emoji_templates = {
-            "👍": { "display_template": "**{user}** ({role})"},
-            "👎": { "display_template": "~~{user}~~ ({role})"},
-            None: { "display_template": "!!{user}!! ({role})"}
-        }
+        self.mock_emoji_templates = [
+            { "emoji": "👍", "display_template": "**{user}** ({role})"},
+            { "emoji": "👎", "display_template": "~~{user}~~ ({role})"},
+            { "emoji": "", "display_template": "!!{user}!! ({role})"}
+        ]
     
     def runTest(self):
         actual = serialize_reaction_tree(self.mock_reaction_tree, self.mock_emoji_templates, self.mock_roles)

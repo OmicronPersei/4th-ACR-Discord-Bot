@@ -63,7 +63,7 @@ Example:
             { "emoji": "👍", "display_template": "**{user} ({role})**" },
             { "emoji": "👎", "display_template": "~~{user} ({role})~~" },
             { "emoji": "🤷", "display_template": "*{user} ({role})?*" },
-            { "emoji": null, "display_template": "~~{user} ({role})~~" },
+            { "emoji": "", "display_template": "~~{user} ({role})~~" },
         ],
         "role_aliases": {
             "12234234232423": "1234234234"

@@ -11,7 +11,7 @@ def traverse(structure, reaction_tree, all_users, reaction_dict):
             emoji = reaction_dict[user_id]["emojis"][0]
             reactions.append({ "user": user, "emoji":  emoji})
         elif user_id not in reaction_dict:
-            emoji = None
+            emoji = ""
             reactions.append({ "user": user, "emoji":  emoji})
         
     reaction_tree["role_id"] = role_id
