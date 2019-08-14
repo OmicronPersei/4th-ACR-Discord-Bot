@@ -65,10 +65,9 @@ Example:
             { "emoji": "🤷", "display_template": "*{user} ({name})?*" }
         ],
         "no_reaction_template": "~~{user} ({name})~~",
-        "role_aliases": [
-            "alias_id": 2342342342,
-            "aliases_to_id": 23432423
-        ],
+        "role_aliases": {
+            "12234234232423": "1234234234"
+        },
         "role_structure": [
             {
                 "role_id": 2342343242342343,
