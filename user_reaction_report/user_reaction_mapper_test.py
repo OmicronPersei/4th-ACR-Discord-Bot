@@ -3,22 +3,7 @@ from asyncio import Future
 
 from user_reaction_report.user_reaction_mapper import map_message_to_user_reaction_dict
 
-from test_utils import create_mock_user
-
-class AsyncIterator:
-    def __init__(self, items):
-        self._items = list(items)
-        self._index = 0
-
-    def __aiter__(self):
-        return self
-
-    async def __anext__(self):
-        if self._index >= len(self._items):
-            raise StopAsyncIteration
-        item = self._items[self._index]
-        self._index = self._index + 1
-        return item
+from user_reaction_report.test_utils import create_mock_user, AsyncIterator
 
 # emoji_dict: dict of emoji: [user_obj]
 def create_mock_message(emoji_dict):

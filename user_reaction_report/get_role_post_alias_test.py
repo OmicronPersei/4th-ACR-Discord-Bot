@@ -14,8 +14,8 @@ class TestRoleReplacedWithAlias(TestBase, TestCase):
         TestBase.setUp(self)
         
     def runTest(self):
-        expected = 456
-        actual = get_role_post_alias(123, self.mock_config)
+        expected = "456"
+        actual = get_role_post_alias("123", self.mock_config)
         
         assert actual == expected
 
@@ -24,8 +24,8 @@ class TestRoleNotReplacedWithAlias(TestBase, TestCase):
         TestBase.setUp(self)
         
     def runTest(self):
-        expected = 789
-        actual = get_role_post_alias(789, self.mock_config)
+        expected = "789"
+        actual = get_role_post_alias("789", self.mock_config)
         
         assert actual == expected
         
