@@ -68,4 +68,4 @@ class TestCreateReactionTree(TestCase):
         assert len(role3_node["reactions"]) == 0
 
 
-main()
+# main()
