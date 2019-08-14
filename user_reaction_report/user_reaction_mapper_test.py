@@ -42,15 +42,15 @@ class TestUserReactionMapper(TestCase):
     async def runTest(self):
         actual = await map_message_to_user_reaction_dict(self.mock_message)
         # dict of user_id: [{"user": userobj, "emojis": [emojis]}]
-        assert 1 in actual
-        assert len(actual[1]["emojis"]) == 1
-        assert "👍" in actual[1]["emojis"]
+        assert "1" in actual
+        assert len(actual["1"]["emojis"]) == 1
+        assert "👍" in actual["1"]["emojis"]
 
-        assert 2 in actual
-        assert len(actual[2]["emojis"]) == 2
-        assert "👍" in actual[2]["emojis"]
-        assert "👎" in actual[2]["emojis"]
+        assert "2" in actual
+        assert len(actual["2"]["emojis"]) == 2
+        assert "👍" in actual["2"]["emojis"]
+        assert "👎" in actual["2"]["emojis"]
 
-        assert 3 in actual
-        assert len(actual[3]["emojis"]) == 1
-        assert "👎" in actual[3]["emojis"]
+        assert "3" in actual
+        assert len(actual["3"]["emojis"]) == 1
+        assert "👎" in actual["3"]["emojis"]

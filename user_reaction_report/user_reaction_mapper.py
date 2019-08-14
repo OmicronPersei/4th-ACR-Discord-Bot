@@ -6,8 +6,8 @@ async def map_message_to_user_reaction_dict(message):
         emoji = reaction.emoji
         async for user in reaction.users():
             if user.id not in user_reaction_dict:
-                user_reaction_dict[user.id] = { "user": user, "emojis": [emoji] }
+                user_reaction_dict[str(user.id)] = { "user": user, "emojis": [emoji] }
             else:
-                user_reaction_dict[user.id]["emojis"].append(emoji)
+                user_reaction_dict[str(user.id)]["emojis"].append(emoji)
     return user_reaction_dict
         

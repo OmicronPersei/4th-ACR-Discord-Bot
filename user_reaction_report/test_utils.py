@@ -13,9 +13,3 @@ def create_mock_role(id, name):
     type(role).id = PropertyMock(return_value=int(id))
     type(role).name = PropertyMock(return_value=name)
     return role
-
-def MockConfigurationService(config_obj):
-    service = MagicMock()
-    service.get = MagicMock()
-    service.get.side_effect = lambda x: config_obj[x]
-    return service
