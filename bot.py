@@ -7,7 +7,7 @@ from dependency_injection import Dependencies
 import json
 
 def readJsonFile(file_name):
-    with open(file_name, mode="r") as f:
+    with open(file_name, mode="r", encoding="utf-8") as f:
         return json.load(f)
 
 def read_secrets():
