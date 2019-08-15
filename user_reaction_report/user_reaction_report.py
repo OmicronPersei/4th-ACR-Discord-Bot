@@ -1,3 +1,5 @@
+import traceback
+
 from bot_command_service_base import BotCommandServiceBase
 
 from user_reaction_report.user_reaction_mapper import map_message_to_user_reaction_dict
@@ -13,8 +15,16 @@ class UserReactionReport(BotCommandServiceBase):
         super().__init__(config, service_name, discord_service)
 
     async def bot_command_callback(self, message):
+        try:
+            await self.perform_user_reaction_report(message)
+        except:
+            msg = traceback.format_exc()
+            print(msg)
+            await self.discord_service.send_channel_message(msg, message.channel.name)
+
+    async def perform_user_reaction_report(self, message):
         if self.should_ignore_this_msg(message):
-            return
+                return
 
         config = self.config.get(service_name)
         

@@ -108,3 +108,33 @@ class TestUserReactionReport(TestCase):
         self.mock_discord_service.get_all_roles.assert_called()
         self.mock_discord_service.send_channel_message.assert_called_with(expected, "the-attendance-chan")
         # assert self.send_channel_message_Future.done()
+
+class MyTestException(Exception):
+    def __init__(self, message):
+        super().__init__()
+        self.message = message
+
+class TestUserReactionReportSendsExceptionToDiscord(TestCase):
+    def setUp(self):
+        self.mock_config = MockConfigurationService({
+            "user_reaction_reporter": {
+                "enabled": True,
+                "command_keyword": "!expected-attendance",
+                "restrict_to_channel": "the-attendance-chan"
+            }
+        })
+        self.mock_discord_service = MagicMock()
+        self.mock_discord_service.get_matching_message = MagicMock(side_effect=MyTestException("my message"))
+
+        self.mock_discord_service.send_channel_message = MagicMock(return_value=Future())
+        self.mock_discord_service.send_channel_message.return_value.set_result(None)
+
+        self.user_reaction_report = UserReactionReport(self.mock_discord_service, self.mock_config)
+
+    async def runTest(self):
+        cmd = "!expected-attendance operations 112358 1st platoon"
+        mock_cmd = create_mock_message(cmd, "the-attendance-chan")
+
+        await self.user_reaction_report.bot_command_callback(mock_cmd)
+
+        self.mock_discord_service.send_channel_message.assert_called()
