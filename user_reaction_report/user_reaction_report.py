@@ -19,10 +19,9 @@ class UserReactionReport(BotCommandServiceBase):
         config = self.config.get(service_name)
         
         tokens = message.content.split(" ")
-        channel_msg_pair = tokens[1].split(":")
-        channel_name = channel_msg_pair[0]
-        msg_id = channel_msg_pair[1]
-        target_role = " ".join(tokens[2:])
+        channel_name = tokens[1]
+        msg_id = tokens[2]
+        target_role = " ".join(tokens[3:])
         
         target_message = await self.discord_service.get_matching_message(channel_name, int(msg_id))
 
@@ -32,12 +31,12 @@ class UserReactionReport(BotCommandServiceBase):
         
         target_role_id = get_role_post_alias(role_id, config)
         role_node = get_matching_role_node(target_role_id, config["role_structure"])
-        all_members = self.discord_service.get_all_members()
+        all_members = list(self.discord_service.get_all_members())
         reaction_tree = create_reaction_tree(role_node, all_members, user_reaction_dict)
         all_roles = self.discord_service.get_all_roles()
         serialized = serialize_reaction_tree(reaction_tree, config["emojis"], all_roles)
         result_channel = self.config.get(service_name)["restrict_to_channel"]
-        self.discord_service.send_channel_message(serialized, result_channel)
+        await self.discord_service.send_channel_message(serialized, result_channel)
 
     def should_ignore_this_msg(self, message):
         return self.config.get(service_name)["restrict_to_channel"].lower() != message.channel.name.lower()

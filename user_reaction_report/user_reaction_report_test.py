@@ -65,18 +65,24 @@ class TestUserReactionReport(TestCase):
         role2 = create_mock_role(2, "Low")
         role3 = create_mock_role(3, "Very Low")
 
-        self.mock_discord_service.get_all_members = MagicMock(return_value=[
+        mock_members = [
             create_mock_user(display_name_val="Alpha", id=111, roles=[role1]),
             create_mock_user(display_name_val="Bravo", id=222, roles=[role2]),
             create_mock_user(display_name_val="Charlie", id=333, roles=[role2]),
             create_mock_user(display_name_val="Delta", id=444, roles=[role3]),
-        ])
+        ]
+        def member_generator():
+            for m in mock_members:
+                yield m    
+
+        type(self.mock_discord_service).get_all_members = PropertyMock(return_value=member_generator)
 
         self.mock_discord_service.get_all_roles = MagicMock(return_value=[
             role1, role2, role3
         ])
-
-        self.mock_discord_service.send_channel_message = MagicMock()
+        
+        self.mock_discord_service.send_channel_message = MagicMock(return_value=Future())
+        self.mock_discord_service.send_channel_message.return_value.set_result(None)
 
         self.mock_discord_service.create_listener_for_bot_command = MagicMock()
 
@@ -85,7 +91,7 @@ class TestUserReactionReport(TestCase):
 
 
     async def runTest(self):
-        cmd = "!expected-attendance operations:112358 1st platoon"
+        cmd = "!expected-attendance operations 112358 1st platoon"
         mock_cmd = create_mock_message(cmd, "the-attendance-chan")
 
         expected = (
@@ -97,4 +103,8 @@ class TestUserReactionReport(TestCase):
 
         await self.user_reaction_report.bot_command_callback(mock_cmd)
 
+        self.mock_discord_service.get_matching_message.assert_called_with("operations", 112358)
+        self.mock_discord_service.get_matching_role.assert_called_with("1st platoon")
+        self.mock_discord_service.get_all_roles.assert_called()
         self.mock_discord_service.send_channel_message.assert_called_with(expected, "the-attendance-chan")
+        # assert self.send_channel_message_Future.done()
