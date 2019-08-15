@@ -3,6 +3,7 @@ This is a [Discord](https://discordapp.com/) bot that makes use of the [`discord
 * Welcome message, user leave notifications.
 * Configurable to mention specific users, roles, users who joined/left.
 * Configurable self service role management.
+* User reaction to message report
 
 ## Requirements
 * Python 3.6.x
@@ -17,6 +18,17 @@ This is a [Discord](https://discordapp.com/) bot that makes use of the [`discord
 4. Windows: `python .\bot.py` or on linux: `python3 ./bot.py`.
 
 *Note that the specific name for the python binary may vary based on the installation method/OS.*
+
+## Bot commands
+### user_reaction_reporter
+This command is used to aggregate all users who have given a specific emoji reaction to a message into a predefined hiearchy of roles defined in the `config.json`.  Any emojis can be watched for, and each have a corresponding display template for how each user (given their specific reaction) is displayed.
+### Usage
+`!expected-attendance <channel> <msg id> <root role name>`
+* `<channel msg is in>`: The channel that the message to be aggregated is located.  The bot must have read access to this channel.
+* `<msg id>`: The message ID that is targeted for aggregation.
+* `<root role name>`: The top role of which to display users who have reacted.
+
+Example: `!expected-attendance operations 610626077920067585 1st platoon` would aggregate all reactions for the message "610626077920067585" in the "operations" channel who is located at or underneath the role "1st platoon" as defined in the role structure in the config.
 
 ## Configuration files
 ### `config.json`
@@ -54,6 +66,35 @@ Example:
         "enabled": true,
         //The below may be ommitted such that this feature is restricted to the below channel
         "restrict_to_channel": "role-request"
+    },
+    "user_reaction_reporter": {
+        "enabled": true,
+        "command_keyword": "!expected-attendance",
+        "restrict_to_channel": "expected-attendance",
+        //The following emojis will be mapped to the given display template.
+        //{user} represents the display name of a member, and {role} is the name of that role.
+        //The blank emoji represents the template to be used when a member of a given {role} has not reacted to the post at all
+        "emojis": [
+            { "emoji": "👍", "display_template": "**{user} ({role})**" },
+            { "emoji": "👎", "display_template": "~~{user} ({role})~~" },
+            { "emoji": "🤷", "display_template": "*{user} ({role})?*" },
+            { "emoji": "", "display_template": "~~{user} ({role})~~" }
+        ],
+        //These represents roles, when given to the command, will map to a new role.
+        //This is used to map a more general role to a specific role within the role structure.
+        "role_aliases": {
+            "12234234232423": "1234234234"
+        },
+        //The hierarchical layout of roles and their children.  It can support as many children and depth as needed.
+        //The root node does need to be an object with a corresponding role_id.
+        "role_structure": {
+            "role_id": "1",
+            "children": [
+                {
+                    "role_id": "2"
+                }
+            ]
+        }
     }
 }
 ```

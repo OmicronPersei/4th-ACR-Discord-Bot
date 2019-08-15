@@ -7,7 +7,7 @@ from dependency_injection import Dependencies
 import json
 
 def readJsonFile(file_name):
-    with open(file_name, mode="r") as f:
+    with open(file_name, mode="r", encoding="utf-8") as f:
         return json.load(f)
 
 def read_secrets():
@@ -31,6 +31,9 @@ if __name__ == "__main__":
 
     if config_service.get("user_role_self_service")["enabled"]:
         services.user_roles_service()
+
+    if config_service.get("user_reaction_reporter")["enabled"]:
+        services.user_reaction_report()
 
     discord_service = services.discord_service()
     discord_service.run(discord_token)

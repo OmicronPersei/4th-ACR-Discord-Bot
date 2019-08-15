@@ -17,9 +17,12 @@ class DiscordService(discord.Client):
             await callback(member)
 
     async def send_channel_message(self, message, channel_name):
-        channels = self.get_all_channels()
-        channel = [x for x in channels if x.name == channel_name][0]
+        channel = self.get_channel(channel_name)
         await channel.send(message)
+
+    def get_channel(self, channel_name):
+        channels = self.get_all_channels()
+        return [x for x in channels if x.name == channel_name][0]
 
     def get_matching_Member(self, username, discriminator):
         all_members = self.get_all_members()
@@ -46,5 +49,11 @@ class DiscordService(discord.Client):
                 await callback(message)
             else:
                 callback(message)
+
+    async def get_matching_message(self, target_channel, message_id):
+        channel = self.get_channel(target_channel)
+        async for m in channel.history(limit=100):
+            if m.id == message_id:
+                return m
                 
                 
