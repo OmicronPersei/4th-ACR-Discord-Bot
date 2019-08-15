@@ -43,6 +43,10 @@ class TestSerializeReactionTree(TestCase):
                                 {
                                     "user": create_mock_user(id=5555, display_name_val="Foxtrot"),
                                     "emoji": ""
+                                },
+                                {
+                                    "user": create_mock_user(id=6666, display_name_val="Golf"),
+                                    "emoji": "💯"
                                 }
                             ]
                         }
