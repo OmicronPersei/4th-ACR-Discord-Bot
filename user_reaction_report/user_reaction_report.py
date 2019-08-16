@@ -13,11 +13,13 @@ class UserReactionReport(BotCommandServiceBase):
         super().__init__(config, service_name, discord_service)
 
     async def bot_command_callback(self, message):
+        await self.run_cmd(message)
+        
+    async def run_cmd(self, message):
         if self._should_ignore_this_msg(message):
             return
 
         config = self.config.get(service_name)
-        
         tokens = message.content.split(" ")
         channel_name = tokens[1]
         msg_id = tokens[2]

@@ -7,6 +7,27 @@ class DiscordService(discord.Client):
         self.on_member_join_callbacks = []
         self.on_member_remove_callbacks = []
         self.bot_command_callbacks = dict()
+        self.channel_dict = dict()
+
+    async def on_ready(self):
+        self._populate_channel_dict()
+        print("bot is ready")
+
+    def _populate_channel_dict(self):
+        channels = self.get_all_channels()
+        for channel in channels:
+            self.channel_dict[channel.name.lower()] = channel.id
+
+    def _get_channel_id(self, name):
+        name_lower = name.lower()
+        if name_lower in self.channel_dict:
+            return self.channel_dict[name_lower]
+
+        #Cache miss.  Find then enter it into the cache
+        for channel in self.get_all_channels():
+            if channel.name.lower() == name_lower:
+                self.channel_dict[name_lower] = channel.id
+                return channel.id
 
     async def on_member_join(self, member):
         for callback in self.on_member_join_callbacks:
@@ -21,18 +42,21 @@ class DiscordService(discord.Client):
         await channel.send(message)
 
     def get_channel(self, channel_name):
-        channels = self.get_all_channels()
-        return [x for x in channels if x.name == channel_name][0]
+        chan_id = self._get_channel_id(channel_name)
+        return super().get_channel(chan_id)
 
     def get_matching_Member(self, username, discriminator):
         all_members = self.get_all_members()
-
-        matching_member = [x for x in all_members if x.name == username and x.discriminator == discriminator][0]
-        return matching_member
+        for member in all_members:
+            if member.name == username and member.discriminator == discriminator:
+                return member
 
     def get_matching_role(self, role_name):
         all_roles = self.guilds[0].roles
-        return [x for x in all_roles if x.name.lower() == role_name.lower()][0]
+        role_name_lower = role_name.lower()
+        for role in all_roles:
+            if role.name.lower() == role_name_lower:
+                return role
 
     def get_all_roles(self):
         return self.guilds[0].roles
