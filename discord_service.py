@@ -1,5 +1,5 @@
 import discord
-import inspect, time
+import inspect
 
 class DiscordService(discord.Client):
     def __init__(self):
