@@ -6,6 +6,9 @@ from user_reaction_report.get_matching_role_node import get_matching_role_node
 from user_reaction_report.create_reaction_tree import create_reaction_tree
 from user_reaction_report.serialize_reaction_tree import serialize_reaction_tree
 
+# from profilehooks import profile
+import cProfile, time
+
 service_name = "user_reaction_reporter"
 
 class UserReactionReport(BotCommandServiceBase):
@@ -13,11 +16,14 @@ class UserReactionReport(BotCommandServiceBase):
         super().__init__(config, service_name, discord_service)
 
     async def bot_command_callback(self, message):
+        # cProfile.runctx('await self.run_cmd(message)', globals(), locals(), 'output.txt')
+        await self.run_cmd(message)
+        
+    async def run_cmd(self, message):
         if self._should_ignore_this_msg(message):
             return
 
         config = self.config.get(service_name)
-        
         tokens = message.content.split(" ")
         channel_name = tokens[1]
         msg_id = tokens[2]
