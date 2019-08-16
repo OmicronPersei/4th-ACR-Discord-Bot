@@ -10,8 +10,8 @@ class DiscordService(discord.Client):
         self.channel_dict = dict()
 
     async def on_ready(self):
-        print("bot is ready")
         self._populate_channel_dict()
+        print("bot is ready")
 
     def _populate_channel_dict(self):
         channels = self.get_all_channels()
@@ -20,7 +20,7 @@ class DiscordService(discord.Client):
 
     def _get_channel_id(self, name):
         name_lower = name.lower()
-        if self.channel_dict[name_lower]:
+        if name_lower in self.channel_dict:
             return self.channel_dict[name_lower]
 
         #Cache miss.  Find then enter it into the cache
