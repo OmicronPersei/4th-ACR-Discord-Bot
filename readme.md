@@ -86,7 +86,6 @@ Example:
             "12234234232423": "1234234234"
         },
         //The hierarchical layout of roles and their children.  It can support as many children and depth as needed.
-        //The root node does need to be an object with a corresponding role_id.
         "role_structure": {
             "role_id": "1",
             "children": [
