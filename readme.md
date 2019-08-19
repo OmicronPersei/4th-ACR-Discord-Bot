@@ -20,9 +20,16 @@ This is a [Discord](https://discordapp.com/) bot that makes use of the [`discord
 *Note that the specific name for the python binary may vary based on the installation method/OS.*
 
 ## Bot commands
+### user_roles_service
+This command allows users to list all available roles (that aren't blacklisted), and add/remove themselves from them.
+#### Usage
+* `!roles`: Lists all available roles.
+* `!roles add <role name>`: Adds self to the provided `<role name>`.
+* `!roles remove <role name>`: Removes self from the provided `<role name>`.
+
 ### user_reaction_reporter
 This command is used to aggregate all users who have given a specific emoji reaction to a message into a predefined hiearchy of roles defined in the `config.json`.  Any emojis can be watched for, and each have a corresponding display template for how each user (given their specific reaction) is displayed.
-### Usage
+#### Usage
 `!expected-attendance <channel> <msg id> <root role name>`
 * `<channel msg is in>`: The channel that the message to be aggregated is located.  The bot must have read access to this channel.
 * `<msg id>`: The message ID that is targeted for aggregation.
