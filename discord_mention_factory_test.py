@@ -92,7 +92,7 @@ class TestReplacesChannelMention(asynctest.TestCase):
 
         matching_channel = MagicMock()
         type(matching_channel).mention = PropertyMock(return_value="<channelVal>")
-        self.discord.get_matching_channel = MagicMock(return_value=matching_channel)
+        self.discord.get_channel = MagicMock(return_value=matching_channel)
 
         self.message_template = "Please see us in {channel:the-channel}"
 
@@ -100,6 +100,6 @@ class TestReplacesChannelMention(asynctest.TestCase):
         actual_message = self.discord_mention_factory.perform_replacement(self.message_template)
         expected_message = "Please see us in <channelVal>"
 
-        self.discord.get_matching_channel.assert_called_once_with("the-channel")
+        self.discord.get_channel.assert_called_once_with("the-channel")
 
         assert actual_message == expected_message

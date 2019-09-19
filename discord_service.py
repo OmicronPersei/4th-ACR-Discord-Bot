@@ -79,5 +79,4 @@ class DiscordService(discord.Client):
         async for m in channel.history(limit=100):
             if m.id == message_id:
                 return m
-                
-                
+    
