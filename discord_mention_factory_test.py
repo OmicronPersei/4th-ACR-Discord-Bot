@@ -83,3 +83,23 @@ class TestReplacesRolesWithCorrespondingDiscordMentions(asynctest.TestCase):
         self.discord.get_matching_role.assert_called_once_with("Recruiter")
         
         assert actual_message == expected_message
+
+class TestReplacesChannelMention(asynctest.TestCase):
+    def setUp(self):
+        self.discord = asynctest.Mock(DiscordService())
+
+        self.discord_mention_factory = DiscordMentionFactory(self.discord)
+
+        matching_channel = MagicMock()
+        type(matching_channel).mention = PropertyMock(return_value="<channelVal>")
+        self.discord.get_channel = MagicMock(return_value=matching_channel)
+
+        self.message_template = "Please see us in {channel:the-channel}"
+
+    def test(self):
+        actual_message = self.discord_mention_factory.perform_replacement(self.message_template)
+        expected_message = "Please see us in <channelVal>"
+
+        self.discord.get_channel.assert_called_once_with("the-channel")
+
+        assert actual_message == expected_message

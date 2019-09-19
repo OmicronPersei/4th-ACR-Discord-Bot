@@ -10,6 +10,7 @@ class DiscordMentionFactory:
             template = self.perform_user_mention_replacement(template, user_objs)
             template = self.perform_user_display_name_replacement(template, user_objs)
         template = self.perform_role_replacement(template)
+        template = self.perform_channel_replacement(template)
         return template
 
     def perform_member_replacement(self, message):
@@ -54,15 +55,35 @@ class DiscordMentionFactory:
         
         return message
 
+    def perform_channel_replacement(self, message):
+        channels_mentioned = set(self.get_channel_strings(message))
+        channel_mention_dict = dict()
+
+        for channel_mention in channels_mentioned:
+            #eg: `{channel:thechannel}`
+            channel_name = channel_mention[9:-1]
+            channel_obj = self._discord.get_channel(channel_name)
+            channel_mention_dict[channel_mention] = channel_obj.mention
+        
+        for key,value in channel_mention_dict.items():
+            message = message.replace(key, value)
+        
+        return message
+
     def get_role_strings(self, message):
-        matches_for_replacement = self.get_replacable_items(message)
-        return [x for x in matches_for_replacement if x.startswith("{role:")]
+        return self.get_replacable_items_with_prefix("role", message)
+
+    def get_member_strings(self, message):
+        return self.get_replacable_items_with_prefix("member", message)
+
+    def get_channel_strings(self, message):
+        return self.get_replacable_items_with_prefix("channel", message)
+
+    def get_replacable_items_with_prefix(self, prefix, message):
+        replacable_items = self.get_replacable_items(message)
+        formatted_prefix = '{' + prefix + ':'
+        return [x for x in replacable_items if x.startswith(formatted_prefix)]
 
     def get_replacable_items(self, message):
         return set(re.findall(r"\{[^\{\}]*}", message))
-
-    def get_member_strings(self, message):
-        matches_for_replacement = self.get_replacable_items(message)
-        return [x for x in matches_for_replacement if x.startswith("{member:")]
-
     
