@@ -9,24 +9,7 @@ from user_leave_notification import UserLeaveNotification
 from user_roles_service import UserRolesService
 from cached_configuration_service import CachedConfigurationService
 from user_reaction_report.user_reaction_report import UserReactionReport
-
-def create_mock_config():
-    return {
-        "welcome_message": {
-            "message": "the message",
-            "channel": "the channel",
-            "enabled": True
-        },
-        "user_leave_notification": {
-            "message": "the message",
-            "channel": "the channel",
-            "enabled": True
-        },
-        "user_role_self_service": {
-            "blacklisted_roles": [ "admin" ],
-            "command_keyword": "!roles"
-        }
-    }
+from announcement_service import AnnouncementService
 
 class TestBase:
     def setUp(self):
@@ -128,3 +111,22 @@ class TestUserReactionReportDependencyInjection(TestCase):
         user_reaction_report_instance = self.dependencies.user_reaction_report()
         assert isinstance(user_reaction_report, dependency_injector.providers.Singleton)
         assert isinstance(user_reaction_report_instance, UserReactionReport)
+
+class MockConfigServiceForAnnouncementService:
+    def get(self, prop_key):
+        return { "command_keyword": "!announce" }
+
+class MockDependenciesForAnnouncementService(Dependencies):
+    def _create_config_service(self, config_path):
+        return dependency_injector.providers.Singleton(MockConfigServiceForAnnouncementService)
+
+class TestAnnouncementServiceDependencyInjection(TestBase, TestCase):
+    def setUp(self):
+        self.dependencies = MockDependenciesForAnnouncementService(None)
+
+    def runTest(self):
+        announcement_service = self.dependencies.announcement_service
+        announcement_service_instance = self.dependencies.announcement_service()
+
+        assert isinstance(announcement_service, dependency_injector.providers.Singleton)
+        assert isinstance(announcement_service_instance, AnnouncementService)
