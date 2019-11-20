@@ -4,9 +4,9 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+discord = "*"
 asynctest = "*"
 dependency-injector = "*"
-"discord.py" = "*"
 
 [dev-packages]
 pylint = "*"
