@@ -11,10 +11,15 @@ class AnnouncementService(BotCommandServiceBase):
             return
 
         msg_tokens = message.content.split(' ')
-        channel = msg_tokens[1]
-        announcement = ' '.join(msg_tokens[2:])
+        command = msg_tokens[1]
 
-        await self.discord_service.send_channel_message(announcement, channel)
+        if command.lower() == 'create':
+            channel = msg_tokens[2]
+            announcement = ' '.join(msg_tokens[3:])
+            await self.create_announcement(channel, announcement)
+
+    async def create_announcement(self, channel, message):
+        await self.discord_service.send_channel_message(message, channel)
 
     def user_has_allowed_role(self, message):
         allowed_roles = set(self.config.get(service_name)["allowed_roles"])
