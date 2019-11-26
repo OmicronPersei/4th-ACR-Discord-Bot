@@ -17,6 +17,12 @@ class AnnouncementService(BotCommandServiceBase):
             channel = msg_tokens[2]
             announcement = ' '.join(msg_tokens[3:])
             await self.create_announcement(channel, announcement)
+        elif command.lower() == 'edit':
+            channel = msg_tokens[2]
+            msg_id = int(msg_tokens[3])
+            announcement = ' '.join(msg_tokens[4:])
+            msg_to_edit = await self.discord_service.get_matching_message(channel, msg_id)
+            await msg_to_edit.edit(content=announcement)
 
     async def create_announcement(self, channel, message):
         await self.discord_service.send_channel_message(message, channel)

@@ -29,16 +29,18 @@ def create_mock_message(msg_content, channel_name, user_roles=None):
     type(mock_channel).name = PropertyMock(return_value=channel_name)
     type(mock_message).channel = PropertyMock(return_value=mock_channel)
 
-    if user_roles is not None:
-        mock_member = MagicMock()
+    mock_content_edit = MagicMock(return_value=Future())
+    mock_content_edit.return_value.set_result(None)
+    type(mock_message).edit = mock_content_edit
 
+    mock_member = MagicMock()
+    mock_user_roles_edit = MagicMock(return_value=Future())
+    mock_user_roles_edit.return_value.set_result(None)
+    type(mock_member).edit = mock_user_roles_edit
+    type(mock_message).author = PropertyMock(return_value=mock_member)
+
+    if user_roles is not None:
         type(mock_member).roles = user_roles
-        
-        mock_edit = MagicMock(return_value=Future())
-        mock_edit.return_value.set_result(None)
-        type(mock_member).edit = mock_edit
-        
-        type(mock_message).author = PropertyMock(return_value=mock_member)
 
     mock_message.delete = MagicMock(return_value=Future())
     mock_message.delete.return_value.set_result(None) 
