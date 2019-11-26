@@ -1,4 +1,5 @@
 from unittest.mock import MagicMock, PropertyMock
+from asyncio import Future
 
 def create_mock_user(mention_val="some_val", display_name_val="stub_name_here", id=2343243, roles=None):
     mock_user = MagicMock()
@@ -19,3 +20,29 @@ def MockConfigurationService(config_obj):
     service.get = MagicMock()
     service.get.side_effect = lambda x: config_obj[x]
     return service
+
+def create_mock_message(msg_content, channel_name, user_roles=None):
+    mock_message = MagicMock()
+    type(mock_message).content = PropertyMock(return_value=msg_content)
+    
+    mock_channel = MagicMock()
+    type(mock_channel).name = PropertyMock(return_value=channel_name)
+    type(mock_message).channel = PropertyMock(return_value=mock_channel)
+
+    mock_content_edit = MagicMock(return_value=Future())
+    mock_content_edit.return_value.set_result(None)
+    type(mock_message).edit = mock_content_edit
+
+    mock_member = MagicMock()
+    mock_user_roles_edit = MagicMock(return_value=Future())
+    mock_user_roles_edit.return_value.set_result(None)
+    type(mock_member).edit = mock_user_roles_edit
+    type(mock_message).author = PropertyMock(return_value=mock_member)
+
+    if user_roles is not None:
+        type(mock_member).roles = user_roles
+
+    mock_message.delete = MagicMock(return_value=Future())
+    mock_message.delete.return_value.set_result(None) 
+
+    return mock_message 

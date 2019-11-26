@@ -3,37 +3,13 @@ from asyncio import Future
 from asynctest import MagicMock, TestCase, PropertyMock
 from user_roles_service import UserRolesService
 
-from test_utils import MockConfigurationService
+from test_utils import MockConfigurationService, create_mock_message
 
 def create_mock_role(role_props):
     role = MagicMock()
     type(role).name = role_props["name"]
     type(role).id = role_props["id"]
     return role
-
-def create_mock_message(msg_content, channel_name, user_roles=None):
-    mock_message = MagicMock()
-    type(mock_message).content = PropertyMock(return_value=msg_content)
-    
-    mock_channel = MagicMock()
-    type(mock_channel).name = PropertyMock(return_value=channel_name)
-    type(mock_message).channel = PropertyMock(return_value=mock_channel)
-
-    if user_roles is not None:
-        mock_member = MagicMock()
-
-        type(mock_member).roles = user_roles
-        
-        mock_edit = MagicMock(return_value=Future())
-        mock_edit.return_value.set_result(None)
-        type(mock_member).edit = mock_edit
-        
-        type(mock_message).author = PropertyMock(return_value=mock_member)
-
-    mock_message.delete = MagicMock(return_value=Future())
-    mock_message.delete.return_value.set_result(None) 
-
-    return mock_message 
 
 class BaseTestSetup:
     def setUp(self, mock_config=None):

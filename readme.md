@@ -23,19 +23,26 @@ This is a [Discord](https://discordapp.com/) bot that makes use of the [`discord
 ### user_roles_service
 This command allows users to list all available roles (that aren't blacklisted), and add/remove themselves from them.
 #### Usage
-* `!roles`: Lists all available roles.
-* `!roles add <role name>`: Adds self to the provided `<role name>`.
-* `!roles remove <role name>`: Removes self from the provided `<role name>`.
+* **`!roles`**: Lists all available roles.
+* **`!roles add <role name>`**: Adds self to the provided `<role name>`.
+* **`!roles remove <role name>`**: Removes self from the provided `<role name>`.
 
 ### user_reaction_reporter
 This command is used to aggregate all users who have given a specific emoji reaction to a message into a predefined hiearchy of roles defined in the `config.json`.  Any emojis can be watched for, and each have a corresponding display template for how each user (given their specific reaction) is displayed.
 #### Usage
-`!expected-attendance <channel> <msg id> <root role name>`
+**`!expected-attendance <channel> <msg id> <root role name>`**
 * `<channel msg is in>`: The channel that the message to be aggregated is located.  The bot must have read access to this channel.
 * `<msg id>`: The message ID that is targeted for aggregation.
 * `<root role name>`: The top role of which to display users who have reacted.
 
 Example: `!expected-attendance operations 610626077920067585 1st platoon` would aggregate all reactions for the message "610626077920067585" in the "operations" channel who is located at or underneath the role "1st platoon" as defined in the role structure in the config.
+
+### announcement_service
+This command allows the bot to make messages on your behalf in any channel with the ability to edit them for mistakes.
+
+#### Usage
+* **`!announce create <channelName> <announcementContent>`**: Create an announcement in the channel `<channelName>` with the message of `<announcementContent>`.
+* **`!announce edit <channelName> <announcementMessaegId> <newAnnouncementContent>`**: Edit an existing announcement within the channel `<channelName>`, having a message id of `<announcementMessageId>` to now display `<newAnnouncementContent>`.
 
 ## Configuration files
 ### `config.json`
@@ -101,6 +108,14 @@ Example:
                 }
             ]
         }
+    },
+    "announcement_service": {
+        "enabled": true,
+        "command_keyword": "!announce",
+        //The role IDs allowed to make use of this command
+        "allowed_roles": [
+            611325505114734593
+        ]
     }
 }
 ```

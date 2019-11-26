@@ -35,5 +35,8 @@ if __name__ == "__main__":
     if config_service.get("user_reaction_reporter")["enabled"]:
         services.user_reaction_report()
 
+    if config_service.get("announcement_service")["enabled"]:
+        services.announcement_service()
+
     discord_service = services.discord_service()
     discord_service.run(discord_token)
