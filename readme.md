@@ -3,7 +3,8 @@ This is a [Discord](https://discordapp.com/) bot that makes use of the [`discord
 * Welcome message, user leave notifications.
 * Configurable to mention specific users, roles, users who joined/left, channels.
 * Configurable self service role management.
-* User reaction to message report
+* User reaction to message report.
+* Announcement/message creator.
 
 ## Requirements
 * Python 3.6.x
