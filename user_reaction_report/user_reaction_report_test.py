@@ -20,6 +20,7 @@ def create_mock_message(msg_content, channel_name):
 class TestUserReactionReport(TestCase):
     def setUp(self):
         self.mock_config = MockConfigurationService({
+            "discord_max_char_limit": 2000,
             "user_reaction_reporter": {
                 "enabled": True,
                 "command_keyword": "!expected-attendance",

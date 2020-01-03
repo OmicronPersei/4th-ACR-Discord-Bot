@@ -5,6 +5,7 @@ from user_reaction_report.get_role_post_alias import get_role_post_alias
 from user_reaction_report.get_matching_role_node import get_matching_role_node
 from user_reaction_report.create_reaction_tree import create_reaction_tree
 from user_reaction_report.serialize_reaction_tree import serialize_reaction_tree
+from user_reaction_report.message_splitter import split_message
 
 service_name = "user_reaction_reporter"
 
@@ -38,7 +39,12 @@ class UserReactionReport(BotCommandServiceBase):
         all_roles = self.discord_service.get_all_roles()
         serialized = serialize_reaction_tree(reaction_tree, config["emojis"], all_roles)
         result_channel = self.config.get(service_name)["restrict_to_channel"]
-        await self.discord_service.send_channel_message(serialized, result_channel)
+
+        max_char_limit = self.config.get("discord_max_char_limit")
+        split_by_newline = split_message("\n", max_char_limit, serialized)
+        for msg in split_by_newline:
+            await self.discord_service.send_channel_message(msg, result_channel)
+        
 
     def _should_ignore_this_msg(self, message):
         return self.config.get(service_name)["restrict_to_channel"].lower() != message.channel.name.lower()
