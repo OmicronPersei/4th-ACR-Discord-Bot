@@ -8,14 +8,11 @@ This is a [Discord](https://discordapp.com/) bot that makes use of the [`discord
 
 ## Requirements
 * Python 3.6.x
-  * Visit [https://www.python.org/downloads/](https://www.python.org/downloads/) for a list of versions for download, or use your OS's package manager.
-* [`pipenv`](https://pypi.org/project/pipenv/)
-  * You can install typically using `pip install pipenv`.
+  * Visit [https://www.python.org/downloads/](https://www.python.org/downloads/) for a list of versions for download, or use your OS's package manager..
 
 ## Starting up the bot
 1. First ensure that both `config.json` and `secrets.json` are properly setup.
-2. `pipenv install`
-3. `pipenv shell`
+2. `pip install -r requirements.txt`
 4. Windows: `python .\bot.py` or on linux: `python3 ./bot.py`.
 
 *Note that the specific name for the python binary may vary based on the installation method/OS.*
