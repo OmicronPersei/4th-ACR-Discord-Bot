@@ -5,7 +5,7 @@ from user_reaction_report.get_role_post_alias import get_role_post_alias
 from user_reaction_report.get_matching_role_node import get_matching_role_node
 from user_reaction_report.create_reaction_tree import create_reaction_tree
 from user_reaction_report.serialize_reaction_tree import serialize_reaction_tree
-from message_splitter import split_message
+from user_reaction_report.message_splitter import split_message
 
 service_name = "user_reaction_reporter"
 
