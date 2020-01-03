@@ -52,7 +52,9 @@ Example:
 ```
 {
     //Config is cached and not reloaded for 300 seconds (5 minutes)
-    "config_cache_expires_after": 300
+    "config_cache_expires_after": 300,
+    //The maximum allowable characters per message to be sent.  At the time of writing it is 2000.
+    "discord_max_char_limit": 2000,
     "welcome_message": {
         //The following tokens are replaced with appropriate Discord mentions:
         //{joined_user} is replaced with the user who joined the Discord guild

@@ -39,7 +39,9 @@ class UserReactionReport(BotCommandServiceBase):
         all_roles = self.discord_service.get_all_roles()
         serialized = serialize_reaction_tree(reaction_tree, config["emojis"], all_roles)
         result_channel = self.config.get(service_name)["restrict_to_channel"]
-        split_by_newline = split_message("\n", 2000, serialized)
+
+        max_char_limit = self.config.get("discord_max_char_limit")
+        split_by_newline = split_message("\n", max_char_limit, serialized)
         for msg in split_by_newline:
             await self.discord_service.send_channel_message(msg, result_channel)
         
