@@ -1,5 +1,6 @@
-from unittest.mock import MagicMock, PropertyMock
+from unittest.mock import MagicMock, PropertyMock, Mock
 from asyncio import Future
+from discord import Reaction
 
 def create_mock_user(mention_val="some_val", display_name_val="stub_name_here", id=2343243, roles=None):
     mock_user = MagicMock()
@@ -21,7 +22,7 @@ def MockConfigurationService(config_obj):
     service.get.side_effect = lambda x: config_obj[x]
     return service
 
-def create_mock_message(msg_content, channel_name, user_roles=None):
+def create_mock_message(msg_content, channel_name, user_roles=None, reactions=None):
     mock_message = MagicMock()
     type(mock_message).content = PropertyMock(return_value=msg_content)
     
@@ -45,4 +46,13 @@ def create_mock_message(msg_content, channel_name, user_roles=None):
     mock_message.delete = MagicMock(return_value=Future())
     mock_message.delete.return_value.set_result(None) 
 
-    return mock_message 
+    if reactions is not None:
+        mock_message.reactions = reactions
+
+    return mock_message
+
+def create_mock_reaction(emoji) -> Reaction:
+    reaction = Mock(Reaction)
+    reaction.emoji = emoji
+
+    return reaction

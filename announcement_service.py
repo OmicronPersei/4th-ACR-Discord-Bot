@@ -17,6 +17,8 @@ class AnnouncementService(BotCommandServiceBase):
             await self.create_announcement(message)
         elif command.lower() == 'edit':
             await self.edit_announcement(message)
+        elif command.lower() == 'set-reactions':
+            await self.set_reactions(message)
 
     async def create_announcement(self, message):
         msg_tokens = message.content.split(' ')
@@ -31,6 +33,16 @@ class AnnouncementService(BotCommandServiceBase):
         announcement = ' '.join(msg_tokens[4:])
         msg_to_edit = await self.discord_service.get_matching_message(channel, msg_id)
         await msg_to_edit.edit(content=announcement)
+
+    async def set_reactions(self, message):
+        msg_tokens = message.content.split(' ')
+        channel = msg_tokens[2]
+        msg_id = int(msg_tokens[3])
+        new_reactions = msg_tokens[4:]
+
+        msg_to_edit = await self.discord_service.get_matching_message(channel, msg_id)
+        for new_reaction in new_reactions:
+            await msg_to_edit.add_reaction(new_reaction)
 
     def user_has_allowed_role(self, message):
         allowed_roles = set(self.config.get(service_name)["allowed_roles"])

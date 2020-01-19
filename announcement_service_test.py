@@ -3,7 +3,7 @@ from discord_service import DiscordService
 from asynctest import TestCase, MagicMock, Mock, main
 from asyncio import Future
 
-from test_utils import MockConfigurationService, create_mock_message, create_mock_role
+from test_utils import MockConfigurationService, create_mock_message, create_mock_role, create_mock_reaction
 
 class TestAnnouncementBase:
     def setUp(self):
@@ -71,3 +71,28 @@ class TestEditAnouncementWithoutRoles(TestAnnouncementBase, TestCase):
 
         self.mock_discord_service.get_matching_message.assert_not_called()
         self.mock_message_to_edit.edit.assert_not_called()
+
+class TestSetReactionsOnAnnouncementWithRolesNoReactions(TestAnnouncementBase, TestCase):
+    def setUp(self):
+        TestAnnouncementBase.setUp(self)
+
+        self.mock_role = create_mock_role(12345, "MyRole")
+
+        self.mock_message_to_edit = create_mock_message("the message", "the chan", reactions=[])
+
+        self.mock_discord_service.get_matching_message = MagicMock(return_value=Future())
+        self.mock_discord_service.get_matching_message.set_result(self.mock_message_to_edit)
+        
+        self.mock_message_to_edit.add_reaction = MagicMock(return_value=Future())
+        self.mock_message_to_edit.add_reaction.return_value.set_result(None)
+
+    async def runTest(self):
+        mock_command = create_mock_message("!announce seT-Reactions operations 987 👍 👎", "the chan", user_roles=[ self.mock_role ])
+
+        await self.announcement_service.bot_command_callback(mock_command)
+
+        self.mock_discord_service.get_matching_message.assert_called_with("operations", 987)
+        self.mock_message_to_edit.add_reaction.assert_called_with("👍")
+        self.mock_message_to_edit.add_reaction.assert_called_with("👎")
+
+    
