@@ -47,7 +47,7 @@ class AnnouncementService(BotCommandServiceBase):
         for cur_reaction in current_reactions:
             if cur_reaction not in new_reactions:
                 reaction_to_remove = [x for x in msg_to_edit.reactions if x.emoji == cur_reaction][0]
-                async for user in reaction_to_remove.users:
+                async for user in reaction_to_remove.users():
                     await msg_to_edit.remove_reaction(cur_reaction, user)
         
         # add new reactions

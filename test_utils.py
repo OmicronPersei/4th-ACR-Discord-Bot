@@ -66,8 +66,8 @@ class AsyncIterator:
         self._index = self._index + 1
         return item
 
-def create_mock_reaction(emoji, members=None) -> Reaction:
-    reaction = Mock(Reaction)
+def create_mock_reaction(emoji, members=None):
+    reaction = MagicMock()
     reaction.emoji = emoji
     
     if members is not None:

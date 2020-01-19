@@ -108,8 +108,8 @@ class TestSetReactionsOnAnnouncementWithRolesHasReactions(TestAnnouncementBase, 
         self.member_shrug_1 = create_mock_user()
         self.member_shrug_2 = create_mock_user()
 
-        mock_reaction_1 = create_mock_reaction("👍", [ self.member_thumbs_up1, self.member_thumbs_up2 ])
-        mock_reaction_2 = create_mock_reaction("🤷", [ self.member_shrug_1, self.member_shrug_2 ])
+        mock_reaction_1 = create_mock_reaction("👍", members=[ self.member_thumbs_up1, self.member_thumbs_up2 ])
+        mock_reaction_2 = create_mock_reaction("🤷", members=[ self.member_shrug_1, self.member_shrug_2 ])
 
         self.mock_message_to_edit = create_mock_message("the message", "the chan", reactions=[ mock_reaction_1, mock_reaction_2 ])
         
