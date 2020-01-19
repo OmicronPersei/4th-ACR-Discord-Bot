@@ -51,8 +51,26 @@ def create_mock_message(msg_content, channel_name, user_roles=None, reactions=No
 
     return mock_message
 
-def create_mock_reaction(emoji) -> Reaction:
+class AsyncIterator:
+    def __init__(self, items):
+        self._items = list(items)
+        self._index = 0
+
+    def __aiter__(self):
+        return self
+
+    async def __anext__(self):
+        if self._index >= len(self._items):
+            raise StopAsyncIteration
+        item = self._items[self._index]
+        self._index = self._index + 1
+        return item
+
+def create_mock_reaction(emoji, members=None) -> Reaction:
     reaction = Mock(Reaction)
     reaction.emoji = emoji
+    
+    if members is not None:
+        reaction.users = MagicMock(return_value=AsyncIterator(members))
 
     return reaction

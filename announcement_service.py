@@ -38,11 +38,22 @@ class AnnouncementService(BotCommandServiceBase):
         msg_tokens = message.content.split(' ')
         channel = msg_tokens[2]
         msg_id = int(msg_tokens[3])
-        new_reactions = msg_tokens[4:]
+        new_reactions = set(msg_tokens[4:])
 
         msg_to_edit = await self.discord_service.get_matching_message(channel, msg_id)
+        current_reactions = set([x.emoji for x in msg_to_edit.reactions])
+
+        # remove any reactions no longer necessary
+        for cur_reaction in current_reactions:
+            if cur_reaction not in new_reactions:
+                reaction_to_remove = [x for x in msg_to_edit.reactions if x.emoji == cur_reaction][0]
+                async for user in reaction_to_remove.users:
+                    await msg_to_edit.remove_reaction(cur_reaction, user)
+        
+        # add new reactions
         for new_reaction in new_reactions:
-            await msg_to_edit.add_reaction(new_reaction)
+            if new_reaction not in current_reactions:
+                await msg_to_edit.add_reaction(new_reaction)
 
     def user_has_allowed_role(self, message):
         allowed_roles = set(self.config.get(service_name)["allowed_roles"])
