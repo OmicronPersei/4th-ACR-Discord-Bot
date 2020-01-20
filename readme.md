@@ -36,11 +36,12 @@ This command is used to aggregate all users who have given a specific emoji reac
 Example: `!expected-attendance operations 610626077920067585 1st platoon` would aggregate all reactions for the message "610626077920067585" in the "operations" channel who is located at or underneath the role "1st platoon" as defined in the role structure in the config.
 
 ### announcement_service
-This command allows the bot to make messages on your behalf in any channel with the ability to edit them for mistakes.
+This command allows the bot to make messages on your behalf in any channel with the ability to edit them for mistakes.  It also allows you to place and edit reactions to the target message.
 
 #### Usage
 * **`!announce create <channelName> <announcementContent>`**: Create an announcement in the channel `<channelName>` with the message of `<announcementContent>`.
-* **`!announce edit <channelName> <announcementMessaegId> <newAnnouncementContent>`**: Edit an existing announcement within the channel `<channelName>`, having a message id of `<announcementMessageId>` to now display `<newAnnouncementContent>`.
+* **`!announce edit <channelName> <announcementMessageId> <newAnnouncementContent>`**: Edit an existing announcement within the channel `<channelName>`, having a message id of `<announcementMessageId>` to now display `<newAnnouncementContent>`.
+* **`!announce set-reactions <channelName> <announcementMessageId> <spaceSeparatedEmojis>`**: Edit an existing announcement's reactions within the channel `<channelName>`, having a message id of `<announcementMessageId>` to now have reactions within the `<spaceSeparatedEmojis>` list.
 
 ## Configuration files
 ### `config.json`
