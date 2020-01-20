@@ -38,7 +38,7 @@ class AnnouncementService(BotCommandServiceBase):
         msg_tokens = message.content.split(' ')
         channel = msg_tokens[2]
         msg_id = int(msg_tokens[3])
-        new_reactions = set(filter(lambda x: x != "", msg_tokens[4:]))
+        new_reactions = list(filter(lambda x: x != "", msg_tokens[4:]))
 
         msg_to_edit = await self.discord_service.get_matching_message(channel, msg_id)
         current_reactions = set([x.emoji for x in msg_to_edit.reactions])

@@ -95,7 +95,7 @@ class TestSetReactionsOnAnnouncementWithRolesNoReactions(TestAnnouncementBase, T
         self.mock_discord_service.get_matching_message.assert_called_with("operations", 987)
         
         expected_calls = [ call("👍"), call("👎") ]
-        self.mock_message_to_edit.add_reaction.assert_has_calls(calls=expected_calls, any_order=True)
+        self.mock_message_to_edit.add_reaction.assert_has_calls(calls=expected_calls, any_order=False)
         assert self.mock_message_to_edit.add_reaction.call_count == 2
 
 class TestSetReactionsOnAnnouncementWithRolesNoReactionsExtraSpaces(TestAnnouncementBase, TestCase):
@@ -120,8 +120,9 @@ class TestSetReactionsOnAnnouncementWithRolesNoReactionsExtraSpaces(TestAnnounce
 
         self.mock_discord_service.get_matching_message.assert_called_with("operations", 987)
         
-        self.mock_message_to_edit.add_reaction.assert_any_call("👍")
-        self.mock_message_to_edit.add_reaction.assert_any_call("👎")
+        expected_calls = [ call("👍"), call("👎")]
+        self.mock_message_to_edit.add_reaction.assert_has_calls(calls=expected_calls, any_order=False)
+
         assert self.mock_message_to_edit.add_reaction.call_count == 2
 
 class TestSetReactionsOnAnnouncementWithRolesHasReactions(TestAnnouncementBase, TestCase):
@@ -166,5 +167,18 @@ class TestSetReactionsOnAnnouncementWithRolesHasReactions(TestAnnouncementBase, 
         self.mock_message_to_edit.remove_reaction.assert_has_calls(calls=expected_remove_reaction_calls, any_order=True)
         
         self.mock_message_to_edit.add_reaction.assert_any_call("👎")
+
+class TestSetReactionsOnAnnouncementWithNoMatchingRole(TestAnnouncementBase, TestCase):
+    def setUp(self):
+        TestAnnouncementBase.setUp(self)
+
+        self.mock_role = create_mock_role(978, "MyRole")
+
+    async def runTest(self):
+        mock_command = create_mock_message("!announce seT-Reactions operations 987 👍 👎", "the chan", user_roles=[ self.mock_role ])
+
+        await self.announcement_service.bot_command_callback(mock_command)
+
+        self.mock_discord_service.get_matching_message.assert_not_called()
 
 # main()
