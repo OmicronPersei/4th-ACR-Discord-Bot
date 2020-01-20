@@ -125,6 +125,33 @@ class TestSetReactionsOnAnnouncementWithRolesNoReactionsExtraSpaces(TestAnnounce
 
         assert self.mock_message_to_edit.add_reaction.call_count == 2
 
+class TestSetReactionsOnAnnouncementWithRolesNoReactionsNoSpacesBetweenNewReactions(TestAnnouncementBase, TestCase):
+    def setUp(self):
+        TestAnnouncementBase.setUp(self)
+
+        self.mock_role = create_mock_role(12345, "MyRole")
+
+        self.mock_message_to_edit = create_mock_message("the message", "the chan", reactions=[])
+        
+        add_reaction_mock = MagicMock(return_value=Future())
+        add_reaction_mock.return_value.set_result(None)
+        type(self.mock_message_to_edit).add_reaction = add_reaction_mock
+
+        self.mock_discord_service.get_matching_message = MagicMock(return_value=Future())
+        self.mock_discord_service.get_matching_message.return_value.set_result(self.mock_message_to_edit)
+
+    async def runTest(self):
+        mock_command = create_mock_message("!announce seT-Reactions operations 987 👍👎", "the chan", user_roles=[ self.mock_role ])
+
+        await self.announcement_service.bot_command_callback(mock_command)
+
+        self.mock_discord_service.get_matching_message.assert_called_with("operations", 987)
+        
+        expected_calls = [ call("👍"), call("👎")]
+        self.mock_message_to_edit.add_reaction.assert_has_calls(calls=expected_calls, any_order=False)
+
+        assert self.mock_message_to_edit.add_reaction.call_count == 2
+
 class TestSetReactionsOnAnnouncementWithRolesHasReactions(TestAnnouncementBase, TestCase):
     def setUp(self):
         TestAnnouncementBase.setUp(self)
