@@ -74,8 +74,16 @@ Example:
     },
     "user_role_self_service": {
         //All role IDs that users cannot self add/remove from.
-        "blacklisted_roles": [
-            45645646545465
+        "available_roles": [
+            {
+                "role": "45645646545465",
+                "sub_roles_accessable_channel": "234324324234",
+                "sub_roles": [
+                    {
+                        "role": "2342323423"
+                    }
+                ]
+            }
         ],
         "command_keyword": "!roles",
         "enabled": true,
