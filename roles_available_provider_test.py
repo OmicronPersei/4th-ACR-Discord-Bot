@@ -1,5 +1,5 @@
 from unittest import TestCase, main
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, call
 import json
 
 from test_utils import create_mock_user, create_mock_role, create_mock_message
@@ -55,8 +55,8 @@ class TestGetsRoles(TestCase):
 
         self.mock_config_service.get.assert_called_with("user_role_self_service")
         self.mock_user_roles_hierarchy_parser.assert_called_with(mock_config["available_roles"], mock_config["restrict_to_channel"])
-        self.mock_discord_service.get_role_by_id.assert_called_with(11111)
-        self.mock_discord_service.get_role_by_id.assert_called_with(22222)
+        expected_calls = [ call(11111), call(22222) ]
+        self.mock_discord_service.get_role_by_id.assert_has_calls(calls=expected_calls, any_order=True)
         
         assert len(actual) == 2
         assert len([x for x in actual if x.id == 11111 and x.name == "MyRole1"]) == 1
