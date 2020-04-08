@@ -58,6 +58,12 @@ class DiscordService(discord.Client):
             if role.name.lower() == role_name_lower:
                 return role
 
+    def get_role_by_id(self, role_id):
+        all_roles = self.guilds[0].roles
+        for role in all_roles:
+            if role.id == role_id:
+                return role
+
     def get_all_roles(self):
         return self.guilds[0].roles
 

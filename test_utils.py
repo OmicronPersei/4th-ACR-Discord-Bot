@@ -22,12 +22,14 @@ def MockConfigurationService(config_obj):
     service.get.side_effect = lambda x: config_obj[x]
     return service
 
-def create_mock_message(msg_content, channel_name, user_roles=None, reactions=None):
+def create_mock_message(msg_content, channel_name, channel_id=None, user_roles=None, reactions=None):
     mock_message = MagicMock()
     type(mock_message).content = PropertyMock(return_value=msg_content)
     
     mock_channel = MagicMock()
     type(mock_channel).name = PropertyMock(return_value=channel_name)
+    if channel_id is not None:
+        type(mock_channel).id = PropertyMock(return_value=channel_id)
     type(mock_message).channel = PropertyMock(return_value=mock_channel)
 
     mock_content_edit = MagicMock(return_value=Future())

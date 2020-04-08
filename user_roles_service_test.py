@@ -59,7 +59,7 @@ class TestRolesReturnsAllAvailableRoles(BaseTestSetup, TestCase):
 class TestAddRoleWhenUserDoesntHaveRole(BaseTestSetup, TestCase):
     def setUp(self):
         BaseTestSetup.setUp(self)
-        self.mock_message = create_mock_message("!roles add fun-stuff", "the_channel", [])
+        self.mock_message = create_mock_message("!roles add fun-stuff", "the_channel", user_roles=[])
         self.mock_new_role = self.get_mock_role("Fun-stuff")
 
     async def runTest(self):
@@ -72,7 +72,7 @@ class TestAddRoleWhenUserDoesntHaveRole(BaseTestSetup, TestCase):
 class TestAddRoleWhenUserAlreadyHasRole(BaseTestSetup, TestCase):
     def setUp(self):
         BaseTestSetup.setUp(self)
-        self.mock_message = create_mock_message("!roles add fun-stuff", "the_channel", [ self.get_mock_role("Fun-stuff") ])
+        self.mock_message = create_mock_message("!roles add fun-stuff", "the_channel", user_roles=[ self.get_mock_role("Fun-stuff") ])
 
     async def runTest(self):
         await self.callback(self.mock_message)
@@ -82,7 +82,7 @@ class TestAddRoleWhenUserAlreadyHasRole(BaseTestSetup, TestCase):
 class TestCantAddBlacklistedRole(BaseTestSetup, TestCase):
     def setUp(self):
         BaseTestSetup.setUp(self)
-        self.mock_message = create_mock_message("!roles add admin", "the_channel", [])
+        self.mock_message = create_mock_message("!roles add admin", "the_channel", user_roles=[])
 
     async def runTest(self):
         await self.callback(self.mock_message)
@@ -92,7 +92,7 @@ class TestCantAddBlacklistedRole(BaseTestSetup, TestCase):
 class TestCantAddBlacklistedRoleDifferentCase(BaseTestSetup, TestCase):
     def setUp(self):
         BaseTestSetup.setUp(self)
-        self.mock_message = create_mock_message("!roles add AdMiN", "the_channel", [])
+        self.mock_message = create_mock_message("!roles add AdMiN", "the_channel", user_roles=[])
 
     async def runTest(self):
         await self.callback(self.mock_message)
@@ -102,7 +102,7 @@ class TestCantAddBlacklistedRoleDifferentCase(BaseTestSetup, TestCase):
 class TestCanRemoveRoleWhenUserHasIt(BaseTestSetup, TestCase):
     def setUp(self):
         BaseTestSetup.setUp(self)
-        self.mock_message = create_mock_message("!roles remove fun-stuff", "the_channel", [ self.get_mock_role("Fun-stuff"), self.get_mock_role("admin") ])
+        self.mock_message = create_mock_message("!roles remove fun-stuff", "the_channel", user_roles=[ self.get_mock_role("Fun-stuff"), self.get_mock_role("admin") ])
 
     async def runTest(self):
         await self.callback(self.mock_message)
@@ -113,7 +113,7 @@ class TestCanRemoveRoleWhenUserHasIt(BaseTestSetup, TestCase):
 class TestCanRemoveRoleWhenUserHasItCaseInsensitive(BaseTestSetup, TestCase):
     def setUp(self):
         BaseTestSetup.setUp(self)
-        self.mock_message = create_mock_message("!roles remove fun-stuff", "the_channel", [ self.get_mock_role("Fun-stuff"), self.get_mock_role("admin") ])
+        self.mock_message = create_mock_message("!roles remove fun-stuff", "the_channel", user_roles=[ self.get_mock_role("Fun-stuff"), self.get_mock_role("admin") ])
 
     async def runTest(self):
         await self.callback(self.mock_message)
@@ -124,7 +124,7 @@ class TestCanRemoveRoleWhenUserHasItCaseInsensitive(BaseTestSetup, TestCase):
 class TestCannotRemoveRoleThatIsBlacklisted(BaseTestSetup, TestCase):
     def setUp(self):
         BaseTestSetup.setUp(self)
-        self.mock_message = create_mock_message("!roles remove admin", "the_channel", [ self.get_mock_role("Fun-stuff"), self.get_mock_role("admin") ])
+        self.mock_message = create_mock_message("!roles remove admin", "the_channel", user_roles=[ self.get_mock_role("Fun-stuff"), self.get_mock_role("admin") ])
 
     async def runTest(self):
         await self.callback(self.mock_message)
@@ -134,7 +134,7 @@ class TestCannotRemoveRoleThatIsBlacklisted(BaseTestSetup, TestCase):
 class TestCannotRemoveRoleThatMemberDoesntHave(BaseTestSetup, TestCase):
     def setUp(self):
         BaseTestSetup.setUp(self)
-        self.mock_message = create_mock_message("!roles remove starcraft", "the_channel", [ self.get_mock_role("Fun-stuff"), self.get_mock_role("admin") ])
+        self.mock_message = create_mock_message("!roles remove starcraft", "the_channel", user_roles=[ self.get_mock_role("Fun-stuff"), self.get_mock_role("admin") ])
 
     async def runTest(self):
         await self.callback(self.mock_message)
@@ -145,7 +145,7 @@ class TestMessageIsDeleted(BaseTestSetup, TestCase):
     def setUp(self):
         BaseTestSetup.setUp(self)
 
-        self.mock_message = create_mock_message("!roles", "the_channel", [ self.get_mock_role("admin") ])
+        self.mock_message = create_mock_message("!roles", "the_channel", user_roles=[ self.get_mock_role("admin") ])
     
     async def runTest(self):
         await self.callback(self.mock_message)
@@ -157,7 +157,7 @@ class TestFunctionalityIsRestrictedToSpecificChannel(BaseTestSetup, TestCase):
         mock_config = { "user_role_self_service": { "command_keyword": "!roles", "blacklisted_roles": [ 1111 ], "restrict_to_channel": "role-request" } }
         BaseTestSetup.setUp(self, mock_config)
         
-        self.mock_message = create_mock_message("!roles", "barracks", [])
+        self.mock_message = create_mock_message("!roles", "barracks", user_roles=[])
 
     async def runTest(self):
         await self.callback(self.mock_message)
@@ -169,7 +169,7 @@ class TestFunctionalityIsNotRestrictedToSpecificChannelWhenNotSpecifiedInConfig(
         mock_config = { "user_role_self_service": { "command_keyword": "!roles", "blacklisted_roles": [ 1111 ], "restrict_to_channel": None } }
         BaseTestSetup.setUp(self, mock_config)
 
-        self.mock_message = create_mock_message("!roles", "barracks", [])
+        self.mock_message = create_mock_message("!roles", "barracks", user_roles=[])
 
     async def runTest(self):
         await self.callback(self.mock_message)

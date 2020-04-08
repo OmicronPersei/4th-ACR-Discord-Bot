@@ -3,9 +3,7 @@ import json
 
 from user_roles_hierarchy_parser import create_roles_dictionary
 
-class TestGetSubRolesInTopLevelOfDictionary(TestCase):
-    def setUp(self):
-        self.mock_config = json.loads("""
+mock_config = json.loads("""
 [
     {
         "role": "11111"
@@ -30,10 +28,13 @@ class TestGetSubRolesInTopLevelOfDictionary(TestCase):
     }
 ]
         """)
+
+class TestGetSubRolesInTopLevelOfDictionary(TestCase):
+    def setUp(self):
         self.default_channel = "21349280sdf23432"
 
     def test(self):
-        channel_roles_dict = create_roles_dictionary(self.mock_config, self.default_channel)
+        channel_roles_dict = create_roles_dictionary(mock_config, self.default_channel)
 
         assert self.default_channel in channel_roles_dict
         default_channel_roles = channel_roles_dict[self.default_channel]
