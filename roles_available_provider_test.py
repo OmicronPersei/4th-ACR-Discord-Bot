@@ -51,7 +51,7 @@ class TestGetsRoles(TestCase):
         
 
     def test(self):
-        actual = self.roles_available_provider.get_roles_for_channel(self.sent_msg)
+        actual = self.roles_available_provider.get_roles_for_message(self.sent_msg)
 
         self.mock_config_service.get.assert_called_with("user_role_self_service")
         self.mock_user_roles_hierarchy_parser.assert_called_with(mock_config["available_roles"], mock_config["main_request_channel"])

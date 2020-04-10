@@ -22,7 +22,7 @@ def MockConfigurationService(config_obj):
     service.get.side_effect = lambda x: config_obj[x]
     return service
 
-def create_mock_message(msg_content, channel_name, channel_id=None, user_roles=None, reactions=None):
+def create_mock_message(msg_content, channel_name=None, channel_id=None, user_roles=None, reactions=None):
     mock_message = MagicMock()
     type(mock_message).content = PropertyMock(return_value=msg_content)
     

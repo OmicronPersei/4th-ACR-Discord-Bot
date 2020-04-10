@@ -3,8 +3,9 @@ from bot_command_service_base import BotCommandServiceBase
 config_key = "user_role_self_service"
 
 class UserRolesService(BotCommandServiceBase):
-    def __init__(self, config, discord_service):
+    def __init__(self, config, discord_service, roles_available_provider):
         super().__init__(config, config_key, discord_service)
+        self.roles_available_provider = roles_available_provider
 
     async def bot_command_callback(self, message):
         command_tokens = message.content.split(" ")
@@ -13,7 +14,7 @@ class UserRolesService(BotCommandServiceBase):
             return
 
         if len(command_tokens) == 1:
-            await self.reply_with_all_roles(message)
+            await self.reply_with_roles_available(message)
         elif command_tokens[1].lower() == "add":
             await self.handle_add_role(message)
         elif command_tokens[1].lower() == "remove":
@@ -27,11 +28,13 @@ class UserRolesService(BotCommandServiceBase):
             config["restrict_to_channel"] != None and
             message.channel.name.lower() != config["restrict_to_channel"].lower())
 
-    async def reply_with_all_roles(self, message):
-        available_role_strs = ["`{}`".format(x.name) for x in self.get_available_roles()]
+    async def reply_with_roles_available(self, message):
+        available_roles = self.roles_available_provider.get_roles_for_message(message)
+        available_role_strs = ["`{}`".format(x.name) for x in available_roles]
         response = "Roles available:\n{}".format("\n".join(available_role_strs))
-        destination_channel = message.channel.name
-        await self.discord_service.send_channel_message(response, destination_channel)
+        destination_channel_id = message.channel.id
+        await self.discord_service.send_channel_message(response, channel_id=destination_channel_id)
+        
 
     async def handle_add_role(self, message):
         role_name = get_role_name_from_command(message)

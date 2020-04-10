@@ -37,13 +37,14 @@ class DiscordService(discord.Client):
         for callback in self.on_member_remove_callbacks:
             await callback(member)
 
-    async def send_channel_message(self, message, channel_name):
-        channel = self.get_channel(channel_name)
+    async def send_channel_message(self, message, channel_name=None, channel_id=None):
+        channel = self.get_channel(channel_name, channel_id)
         await channel.send(message)
 
-    def get_channel(self, channel_name):
-        chan_id = self._get_channel_id(channel_name)
-        return super().get_channel(chan_id)
+    def get_channel(self, channel_name=None, channel_id=None):
+        if channel_id is None:
+            channel_id = self._get_channel_id(channel_name)
+        return super().get_channel(channel_id)
 
     def get_matching_Member(self, username, discriminator):
         all_members = self.get_all_members()

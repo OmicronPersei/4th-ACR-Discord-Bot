@@ -6,7 +6,7 @@ class RolesAvailableProvider:
         self.discord_service = discord_service
         self.config_service = config_service
 
-    def get_roles_for_channel(self, message):
+    def get_roles_for_message(self, message):
         config = self.config_service.get("user_role_self_service")
         chan_id = message.channel.id
         roles_for_channels = self.user_roles_hierarchy_parser(config["available_roles"], config["main_request_channel"])
