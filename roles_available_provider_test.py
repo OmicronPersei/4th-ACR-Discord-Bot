@@ -21,7 +21,7 @@ mock_config = json.loads('''
     ],
     "command_keyword": "!roles",
     "enabled": true,
-    "restrict_to_channel": "role-request"
+    "main_request_channel": "98749874954984"
 }
 ''')
 
@@ -54,7 +54,7 @@ class TestGetsRoles(TestCase):
         actual = self.roles_available_provider.get_roles_for_channel(self.sent_msg)
 
         self.mock_config_service.get.assert_called_with("user_role_self_service")
-        self.mock_user_roles_hierarchy_parser.assert_called_with(mock_config["available_roles"], mock_config["restrict_to_channel"])
+        self.mock_user_roles_hierarchy_parser.assert_called_with(mock_config["available_roles"], mock_config["main_request_channel"])
         expected_calls = [ call(11111), call(22222) ]
         self.mock_discord_service.get_role_by_id.assert_has_calls(calls=expected_calls, any_order=True)
         
