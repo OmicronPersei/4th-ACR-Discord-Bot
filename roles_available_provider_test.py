@@ -62,4 +62,28 @@ class TestGetsRoles(TestCase):
         assert len([x for x in actual if x.id == 11111 and x.name == "MyRole1"]) == 1
         assert len([x for x in actual if x.id == 22222 and x.name == "MyRole2"]) == 1
 
-# main()
+class TestGetsRolesFails(TestCase):
+    def setUp(self):
+        self.mock_chan_id = 381231232
+        
+        self.mock_user_roles_hierarchy_parser = MagicMock()
+        self.mock_user_roles_hierarchy_parser.side_effect = KeyError()
+
+        self.mock_config_service = MagicMock()
+        self.mock_config_service.get = MagicMock(return_value=mock_config)
+
+        self.sent_msg = create_mock_message("!roles", None, channel_id=self.mock_chan_id)
+
+        self.mock_discord_service = MagicMock()
+
+        self.roles_available_provider = RolesAvailableProvider(self.mock_user_roles_hierarchy_parser, self.mock_discord_service, self.mock_config_service)
+
+    def test(self):
+        actual = self.roles_available_provider.get_roles_for_message(self.sent_msg)
+
+        self.mock_config_service.get.assert_called_with("user_role_self_service")
+        self.mock_user_roles_hierarchy_parser.assert_called_with(mock_config["available_roles"], mock_config["main_request_channel"])
+        
+        self.mock_discord_service.get_role_by_id.assert_not_called()
+        
+        assert len(actual) == 0
