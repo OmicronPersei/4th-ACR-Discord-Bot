@@ -67,7 +67,7 @@ class BaseTestSetup:
         return [x for x in self.all_mock_roles if x.name.lower() == name.lower()][0]
 
 
-class TestReturnsAvailableRolesWhenCalledFromMainChannel(BaseTestSetup, TestCase):
+class TestReturnsAvailableRolesWhenCalledWithAvailableRoles(BaseTestSetup, TestCase):
     def setUp(self):
         BaseTestSetup.setUp(self)
         self.mock_roles_availabe_provider.get_roles_for_message = MagicMock(return_value=[self.politics_role, self.funstuff_role])
@@ -79,4 +79,15 @@ class TestReturnsAvailableRolesWhenCalledFromMainChannel(BaseTestSetup, TestCase
         expected_message = "Roles available:\n`politics`\n`Fun-stuff`"
         expected_channel_id = 9999
         self.mock_discord_service.send_channel_message.assert_called_with(expected_message, channel_id=expected_channel_id)
+
+class TestReturnsAvailableRolesWhenCalledWithNoAvailableRoles(BaseTestSetup, TestCase):
+    def setUp(self):
+        BaseTestSetup.setUp(self)
+        self.mock_roles_availabe_provider.get_roles_for_message = MagicMock(return_value=[])
+        self.mock_message = create_mock_message("!roles", channel_id=9999)
+
+    async def runTest(self):
+        await self.callback(self.mock_message)
+
+        self.mock_discord_service.send_channel_message.assert_not_called()
 

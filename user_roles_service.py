@@ -30,6 +30,8 @@ class UserRolesService(BotCommandServiceBase):
 
     async def reply_with_roles_available(self, message):
         available_roles = self.roles_available_provider.get_roles_for_message(message)
+        if len(available_roles) == 0:
+            return
         available_role_strs = ["`{}`".format(x.name) for x in available_roles]
         response = "Roles available:\n{}".format("\n".join(available_role_strs))
         destination_channel_id = message.channel.id
