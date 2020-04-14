@@ -53,3 +53,12 @@ class TestGetSubRolesInTopLevelOfDictionary(TestCase):
         six_sub_roles = channel_roles_dict["66666"]
         assert len(six_sub_roles) == 1
         assert "77777" in six_sub_roles
+
+class TestGettingRolesForUnsupportedChannelThrows(TestCase):
+    def setUp(self):
+        self.default_channel = "12345"
+
+    def test(self):
+        channel_roles_dict = create_roles_dictionary(mock_config, self.default_channel)
+
+        self.assertRaises(KeyError, lambda: channel_roles_dict["sadfasfasdfsdfasd"])
