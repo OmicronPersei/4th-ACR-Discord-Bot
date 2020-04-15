@@ -76,11 +76,11 @@ Example:
         //All role IDs that users cannot self add/remove from.
         "available_roles": [
             {
-                "role": "45645646545465",
-                "sub_roles_accessable_channel": "234324324234",
+                "role": "45645646545465",   //role id
+                "sub_roles_accessable_channel": "234324324234", //channel id
                 "sub_roles": [
                     {
-                        "role": "2342323423"
+                        "role": "2342323423"    //role id
                     }
                 ]
             }
@@ -88,7 +88,7 @@ Example:
         "command_keyword": "!roles",
         "enabled": true,
         //The below may be ommitted such that this feature is restricted to the below channel
-        "restrict_to_channel": "role-request"
+        "main_request_channel": "2342356435"    // role id
     },
     "user_reaction_reporter": {
         "enabled": true,

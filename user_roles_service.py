@@ -9,45 +9,47 @@ class UserRolesService(BotCommandServiceBase):
 
     async def bot_command_callback(self, message):
         command_tokens = message.content.split(" ")
+        command_keyword = self.config.get(config_key)["command_keyword"]
+        if self.should_ignore_command(command_tokens, command_keyword):
+            return
+        
+        available_roles = self.roles_available_provider.get_roles_for_message(message)
 
-        if self.should_ignore_command(message):
+        
+
+        if self.has_available_roles_for_cmd(available_roles):
+            await message.delete()
             return
 
         if len(command_tokens) == 1:
-            await self.reply_with_roles_available(message)
+            await self.reply_with_roles_available(message, available_roles)
         elif command_tokens[1].lower() == "add":
-            await self.handle_add_role(message)
+            await self.handle_add_role(message, available_roles)
         elif command_tokens[1].lower() == "remove":
-            await self.handle_remove_role(message)
+            await self.handle_remove_role(message, available_roles)
 
         await message.delete()
 
-    def should_ignore_command(self, message):
-        config = self.config.get(config_key)
-        return ("restrict_to_channel" in config and
-            config["restrict_to_channel"] != None and
-            message.channel.name.lower() != config["restrict_to_channel"].lower())
+    def should_ignore_command(self, command_tokens, command_keyword):
+        return command_tokens[0].lower() != command_keyword.lower()
 
-    async def reply_with_roles_available(self, message):
-        available_roles = self.roles_available_provider.get_roles_for_message(message)
-        if len(available_roles) == 0:
-            return
+    def has_available_roles_for_cmd(self, available_roles):
+        return len(available_roles) == 0
+
+    async def reply_with_roles_available(self, message, available_roles):
+        # available_roles = self.roles_available_provider.get_roles_for_message(message)
         available_role_strs = ["`{}`".format(x.name) for x in available_roles]
         response = "Roles available:\n{}".format("\n".join(available_role_strs))
         destination_channel_id = message.channel.id
         await self.discord_service.send_channel_message(response, channel_id=destination_channel_id)
         
 
-    async def handle_add_role(self, message):
+    async def handle_add_role(self, message, available_roles):
         role_name = get_role_name_from_command(message)
         try:
-            new_role = self.get_role_obj_from_name(role_name)
+            new_role = get_matching_role_obj(available_roles, role_name)
         except:
-            # Role name didn't resolve to an existing role object, return
-            return
-
-        if new_role.id not in [x.id for x in self.get_available_roles()]:
-            # Role is not available for self assignment, return
+            # Role name didn't resolve to an available role object, return
             return
 
         new_roles = message.author.roles[:]
@@ -59,16 +61,14 @@ class UserRolesService(BotCommandServiceBase):
         new_roles.append(new_role)
         await message.author.edit(roles=new_roles)
 
-    async def handle_remove_role(self, message):
+    
+
+    async def handle_remove_role(self, message, available_roles):
         role_name = get_role_name_from_command(message)
         try:
-            matching_role_obj = self.get_role_obj_from_name(role_name)
+            matching_role_obj = get_matching_role_obj(available_roles, role_name)
         except:
             # Role name didn't resolve to an existing role object, return
-            return
-
-        if matching_role_obj.id not in [x.id for x in self.get_available_roles()]:
-            # Role is not available for self assignment, return
             return
 
         if matching_role_obj.id not in [x.id for x in message.author.roles]:
@@ -90,3 +90,6 @@ class UserRolesService(BotCommandServiceBase):
 
 def get_role_name_from_command(message):
     return " ".join(message.content.split(" ")[2:]).lower()
+
+def get_matching_role_obj(roles, role_name):
+    return [x for x in roles if x.name.lower() == role_name][0]
