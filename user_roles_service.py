@@ -15,8 +15,6 @@ class UserRolesService(BotCommandServiceBase):
         
         available_roles = self.roles_available_provider.get_roles_for_message(message)
 
-        
-
         if self.has_available_roles_for_cmd(available_roles):
             await message.delete()
             return
@@ -37,13 +35,11 @@ class UserRolesService(BotCommandServiceBase):
         return len(available_roles) == 0
 
     async def reply_with_roles_available(self, message, available_roles):
-        # available_roles = self.roles_available_provider.get_roles_for_message(message)
         available_role_strs = ["`{}`".format(x.name) for x in available_roles]
         response = "Roles available:\n{}".format("\n".join(available_role_strs))
         destination_channel_id = message.channel.id
         await self.discord_service.send_channel_message(response, channel_id=destination_channel_id)
         
-
     async def handle_add_role(self, message, available_roles):
         role_name = get_role_name_from_command(message)
         try:
@@ -78,15 +74,6 @@ class UserRolesService(BotCommandServiceBase):
         new_roles = [x for x in message.author.roles if x.id != matching_role_obj.id]
 
         await message.author.edit(roles=new_roles)
-
-    def get_available_roles(self):
-        blacklisted_roles = self.config.get(config_key)["blacklisted_roles"]
-        all_roles = self.discord_service.get_all_roles()
-        return [x for x in all_roles if x.id not in blacklisted_roles]
-
-    def get_role_obj_from_name(self, name):
-        roles = self.get_available_roles()
-        return [x for x in roles if x.name.lower() == name.lower()][0]
 
 def get_role_name_from_command(message):
     return " ".join(message.content.split(" ")[2:]).lower()

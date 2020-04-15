@@ -1,6 +1,6 @@
 from asyncio import Future
 import json
-from asynctest import MagicMock, TestCase, PropertyMock, main
+from asynctest import MagicMock, TestCase, PropertyMock
 from user_roles_service import UserRolesService
 
 
@@ -161,8 +161,6 @@ class TestCanNotRemoveRoleWhenUserDoesNotHaveRole(BaseTestSetup, TestCase):
 class TestCommandIgnoredWhenDoesntBeginWithKeyword(BaseTestSetup, TestCase):
     def setUp(self):
         BaseTestSetup.setUp(self)
-        # self.mock_roles_availabe_provider.get_roles_for_message = MagicMock(return_value=[self.politics_role, self.funstuff_role])
-        # self.user_roles = [self.politics_role]
         self.mock_message = create_mock_message("sdfasfasdfasdfdas")
 
     async def runTest(self):
@@ -170,5 +168,3 @@ class TestCommandIgnoredWhenDoesntBeginWithKeyword(BaseTestSetup, TestCase):
         
         self.mock_message.delete.assert_not_called()
         self.mock_roles_availabe_provider.get_roles_for_message.assert_not_called()
-
-# main()
