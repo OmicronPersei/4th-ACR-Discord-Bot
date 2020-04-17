@@ -1,6 +1,6 @@
 from announcement_service import AnnouncementService, service_name
 from discord_service import DiscordService
-from asynctest import TestCase, MagicMock, Mock, main, call
+from asynctest import TestCase, MagicMock, Mock, call
 from asyncio import Future
 
 from test_utils import MockConfigurationService, create_mock_message, create_mock_role, create_mock_reaction, create_mock_user
@@ -207,5 +207,3 @@ class TestSetReactionsOnAnnouncementWithNoMatchingRole(TestAnnouncementBase, Tes
         await self.announcement_service.bot_command_callback(mock_command)
 
         self.mock_discord_service.get_matching_message.assert_not_called()
-
-# main()

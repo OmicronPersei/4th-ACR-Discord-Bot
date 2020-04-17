@@ -1,4 +1,4 @@
-from asynctest import TestCase, main
+from asynctest import TestCase
 
 from user_reaction_report.get_matching_role_node import get_matching_role_node
 

@@ -3,7 +3,6 @@ import json
 from asynctest import MagicMock, TestCase, PropertyMock
 from user_roles_service import UserRolesService
 
-
 from test_utils import MockConfigurationService, create_mock_message
 
 def create_mock_role(role_props):
@@ -56,9 +55,9 @@ class BaseTestSetup:
 
         self.mock_config_service = MockConfigurationService(self.mock_config)
 
-        self.mock_roles_availabe_provider = MagicMock()
+        self.mock_roles_available_provider = MagicMock()
 
-        self.user_roles_service = UserRolesService(self.mock_config_service, self.mock_discord_service, self.mock_roles_availabe_provider)
+        self.user_roles_service = UserRolesService(self.mock_config_service, self.mock_discord_service, self.mock_roles_available_provider)
 
     def create_callback_side_effect(self, *args, **kwargs):
         self.callback = args[1]
@@ -66,11 +65,10 @@ class BaseTestSetup:
     def get_mock_role(self, name):
         return [x for x in self.all_mock_roles if x.name.lower() == name.lower()][0]
 
-
 class TestReturnsAvailableRolesWhenCalledWithAvailableRoles(BaseTestSetup, TestCase):
     def setUp(self):
         BaseTestSetup.setUp(self)
-        self.mock_roles_availabe_provider.get_roles_for_message = MagicMock(return_value=[self.politics_role, self.funstuff_role])
+        self.mock_roles_available_provider.get_roles_for_message = MagicMock(return_value=[self.politics_role, self.funstuff_role])
         self.mock_message = create_mock_message("!roles", channel_id=9999)
 
     async def runTest(self):
@@ -84,7 +82,7 @@ class TestReturnsAvailableRolesWhenCalledWithAvailableRoles(BaseTestSetup, TestC
 class TestReturnsAvailableRolesWhenCalledWithNoAvailableRoles(BaseTestSetup, TestCase):
     def setUp(self):
         BaseTestSetup.setUp(self)
-        self.mock_roles_availabe_provider.get_roles_for_message = MagicMock(return_value=[])
+        self.mock_roles_available_provider.get_roles_for_message = MagicMock(return_value=[])
         self.mock_message = create_mock_message("!roles", channel_id=9999)
 
     async def runTest(self):
@@ -96,7 +94,7 @@ class TestReturnsAvailableRolesWhenCalledWithNoAvailableRoles(BaseTestSetup, Tes
 class TestCanAddRoleWhenAvailableAndUserDoesntHaveRole(BaseTestSetup, TestCase):
     def setUp(self):
         BaseTestSetup.setUp(self)
-        self.mock_roles_availabe_provider.get_roles_for_message = MagicMock(return_value=[self.politics_role, self.funstuff_role])
+        self.mock_roles_available_provider.get_roles_for_message = MagicMock(return_value=[self.politics_role, self.funstuff_role])
         self.user_roles = [self.politics_role]
         self.mock_message = create_mock_message("!roles add fun-stuff", channel_id=9999, user_roles=self.user_roles)
 
@@ -109,7 +107,7 @@ class TestCanAddRoleWhenAvailableAndUserDoesntHaveRole(BaseTestSetup, TestCase):
 class TestCanNotAddRoleWhenAvailableAndUserHasRole(BaseTestSetup, TestCase):
     def setUp(self):
         BaseTestSetup.setUp(self)
-        self.mock_roles_availabe_provider.get_roles_for_message = MagicMock(return_value=[self.politics_role, self.funstuff_role])
+        self.mock_roles_available_provider.get_roles_for_message = MagicMock(return_value=[self.politics_role, self.funstuff_role])
         self.user_roles = [self.politics_role, self.funstuff_role]
         self.mock_message = create_mock_message("!roles add fun-stuff", channel_id=9999, user_roles=self.user_roles)
 
@@ -122,7 +120,7 @@ class TestCanNotAddRoleWhenAvailableAndUserHasRole(BaseTestSetup, TestCase):
 class TestCanNotAddRoleWhenRoleNotAvailable(BaseTestSetup, TestCase):
     def setUp(self):
         BaseTestSetup.setUp(self)
-        self.mock_roles_availabe_provider.get_roles_for_message = MagicMock(return_value=[self.politics_role, self.funstuff_role])
+        self.mock_roles_available_provider.get_roles_for_message = MagicMock(return_value=[self.politics_role, self.funstuff_role])
         self.user_roles = [self.politics_role, self.funstuff_role]
         self.mock_message = create_mock_message("!roles add starcraft", channel_id=9999, user_roles=self.user_roles)
 
@@ -135,7 +133,7 @@ class TestCanNotAddRoleWhenRoleNotAvailable(BaseTestSetup, TestCase):
 class TestCanRemoveRoleWhenUserHasRole(BaseTestSetup, TestCase):
     def setUp(self):
         BaseTestSetup.setUp(self)
-        self.mock_roles_availabe_provider.get_roles_for_message = MagicMock(return_value=[self.politics_role, self.funstuff_role])
+        self.mock_roles_available_provider.get_roles_for_message = MagicMock(return_value=[self.politics_role, self.funstuff_role])
         self.user_roles = [self.politics_role]
         self.mock_message = create_mock_message("!roles remove politics", channel_id=9999, user_roles=self.user_roles)
 
@@ -148,7 +146,7 @@ class TestCanRemoveRoleWhenUserHasRole(BaseTestSetup, TestCase):
 class TestCanNotRemoveRoleWhenUserDoesNotHaveRole(BaseTestSetup, TestCase):
     def setUp(self):
         BaseTestSetup.setUp(self)
-        self.mock_roles_availabe_provider.get_roles_for_message = MagicMock(return_value=[self.politics_role, self.funstuff_role])
+        self.mock_roles_available_provider.get_roles_for_message = MagicMock(return_value=[self.politics_role, self.funstuff_role])
         self.user_roles = [self.politics_role]
         self.mock_message = create_mock_message("!roles remove fun-stuff", channel_id=9999, user_roles=self.user_roles)
 
@@ -167,4 +165,4 @@ class TestCommandIgnoredWhenDoesntBeginWithKeyword(BaseTestSetup, TestCase):
         await self.callback(self.mock_message)
         
         self.mock_message.delete.assert_not_called()
-        self.mock_roles_availabe_provider.get_roles_for_message.assert_not_called()
+        self.mock_roles_available_provider.get_roles_for_message.assert_not_called()

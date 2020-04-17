@@ -1,4 +1,4 @@
-from asynctest import TestCase, main
+from asynctest import TestCase
 
 from user_reaction_report.create_reaction_tree import create_reaction_tree
 
@@ -69,6 +69,3 @@ class TestCreateReactionTree(TestCase):
         assert len(role3_node["reactions"]) == 1
         assert role3_node["reactions"][0]["user"].id == 5555
         assert role3_node["reactions"][0]["emoji"] == ""
-
-
-# main()

@@ -1,4 +1,4 @@
-from unittest import TestCase, main
+from unittest import TestCase
 from unittest.mock import MagicMock, call
 import json
 
@@ -47,8 +47,6 @@ class TestGetsRoles(TestCase):
             return create_mock_role(11111, "MyRole1")
         elif args[0] == 22222:
             return create_mock_role(22222, "MyRole2")
-
-        
 
     def test(self):
         actual = self.roles_available_provider.get_roles_for_message(self.sent_msg)

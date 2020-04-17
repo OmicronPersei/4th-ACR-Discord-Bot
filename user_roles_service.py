@@ -15,7 +15,7 @@ class UserRolesService(BotCommandServiceBase):
         
         available_roles = self.roles_available_provider.get_roles_for_message(message)
 
-        if self.has_available_roles_for_cmd(available_roles):
+        if self.does_not_has_available_roles_for_cmd(available_roles):
             await message.delete()
             return
 
@@ -31,7 +31,7 @@ class UserRolesService(BotCommandServiceBase):
     def should_ignore_command(self, command_tokens, command_keyword):
         return command_tokens[0].lower() != command_keyword.lower()
 
-    def has_available_roles_for_cmd(self, available_roles):
+    def does_not_has_available_roles_for_cmd(self, available_roles):
         return len(available_roles) == 0
 
     async def reply_with_roles_available(self, message, available_roles):

@@ -1,5 +1,5 @@
 from cached_configuration_service import CachedConfigurationService
-from asynctest import TestCase, MagicMock, call, main
+from asynctest import TestCase, MagicMock, call
 
 class MockCachedConfigurationService(CachedConfigurationService):
     def __init__(self, config_file_path, mock_config_file_contents):
@@ -60,5 +60,3 @@ class TestConfigReadsMultipleTimesDueToStaleCache(BaseTestCase, TestCase):
 
         # test it was called twice, once for initial fetch, second for stale cache
         self.mock_cached_config_service._read_config_file.assert_has_calls([call(), call()])
-        
-# main()
