@@ -37,13 +37,14 @@ class DiscordService(discord.Client):
         for callback in self.on_member_remove_callbacks:
             await callback(member)
 
-    async def send_channel_message(self, message, channel_name):
-        channel = self.get_channel(channel_name)
+    async def send_channel_message(self, message, channel_name=None, channel_id=None):
+        channel = self.get_channel(channel_name, channel_id)
         await channel.send(message)
 
-    def get_channel(self, channel_name):
-        chan_id = self._get_channel_id(channel_name)
-        return super().get_channel(chan_id)
+    def get_channel(self, channel_name=None, channel_id=None):
+        if channel_id is None:
+            channel_id = self._get_channel_id(channel_name)
+        return super().get_channel(channel_id)
 
     def get_matching_Member(self, username, discriminator):
         all_members = self.get_all_members()
@@ -56,6 +57,12 @@ class DiscordService(discord.Client):
         role_name_lower = role_name.lower()
         for role in all_roles:
             if role.name.lower() == role_name_lower:
+                return role
+
+    def get_role_by_id(self, role_id):
+        all_roles = self.guilds[0].roles
+        for role in all_roles:
+            if role.id == role_id:
                 return role
 
     def get_all_roles(self):

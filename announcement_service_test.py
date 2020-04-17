@@ -1,6 +1,6 @@
 from announcement_service import AnnouncementService, service_name
 from discord_service import DiscordService
-from asynctest import TestCase, MagicMock, Mock, main, call
+from asynctest import TestCase, MagicMock, Mock, call
 from asyncio import Future
 
 from test_utils import MockConfigurationService, create_mock_message, create_mock_role, create_mock_reaction, create_mock_user
@@ -27,7 +27,7 @@ class TestMakeAnnouncementUserHasRole(TestAnnouncementBase, TestCase):
 
     async def runTest(self):
         mock_role = create_mock_role(12345, "MyRole")
-        mock_message = create_mock_message("!announce create operations This is an operation announcement", "the chan", [ mock_role ])
+        mock_message = create_mock_message("!announce create operations This is an operation announcement", "the chan", user_roles=[ mock_role ])
         await self.announcement_service.bot_command_callback(mock_message)
 
         self.mock_discord_service.send_channel_message.assert_called_with("This is an operation announcement", "operations")
@@ -53,7 +53,7 @@ class TestEditAnouncement(TestAnnouncementBase, TestCase):
 
     async def runTest(self):
         mock_role = create_mock_role(12345, "MyRole")
-        mock_message = create_mock_message("!announce edit operations 12345 fixed announcement", "the chan", [ mock_role ])
+        mock_message = create_mock_message("!announce edit operations 12345 fixed announcement", "the chan", user_roles=[ mock_role ])
         await self.announcement_service.bot_command_callback(mock_message)
 
         self.mock_discord_service.get_matching_message.assert_called_with("operations", 12345)
@@ -207,5 +207,3 @@ class TestSetReactionsOnAnnouncementWithNoMatchingRole(TestAnnouncementBase, Tes
         await self.announcement_service.bot_command_callback(mock_command)
 
         self.mock_discord_service.get_matching_message.assert_not_called()
-
-# main()
