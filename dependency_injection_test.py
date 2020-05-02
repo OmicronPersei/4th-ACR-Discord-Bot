@@ -10,7 +10,6 @@ from user_roles_service import UserRolesService
 from cached_configuration_service import CachedConfigurationService
 from user_reaction_report.user_reaction_report import UserReactionReport
 from announcement_service import AnnouncementService
-from user_roles_hierarchy_parser import create_roles_dictionary
 from roles_available_provider import RolesAvailableProvider
 
 class TestBase:
@@ -132,15 +131,6 @@ class TestAnnouncementServiceDependencyInjection(TestBase, TestCase):
 
         assert isinstance(announcement_service, dependency_injector.providers.Singleton)
         assert isinstance(announcement_service_instance, AnnouncementService)
-
-class TestUserRolesHierarchyParser(TestBase, TestCase):
-    def setUp(self):
-        TestBase.setUp(self)
-    
-    def runTest(self):
-        create_roles_dictionary_func = self.dependencies.create_roles_dictionary
-
-        assert create_roles_dictionary == create_roles_dictionary_func
 
 class TestRolesAvailableProvider(TestBase, TestCase):
     def setUp(self):

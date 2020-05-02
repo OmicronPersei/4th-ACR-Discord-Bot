@@ -33,22 +33,7 @@ class BaseTestSetup:
         self.mock_config = json.loads('''
                 {
                     "user_role_self_service": {
-                        "command_keyword": "!roles",
-                        "main_request_channel": "9999",
-                        "available_roles": [
-                            {
-                                "role": "1111",
-                                "sub_roles_accessable_channel": "0239043989",
-                                "sub_roles": [
-                                    {
-                                        "role": "3333"
-                                    }
-                                ]
-                            },
-                            {
-                                "role": "2222"
-                            }
-                        ]
+                        "command_keyword": "!roles"
                     }
                 }
             ''')
@@ -76,6 +61,7 @@ class TestReturnsAvailableRolesWhenCalledWithAvailableRoles(BaseTestSetup, TestC
 
         expected_message = "Roles available:\n`politics`\n`Fun-stuff`"
         expected_channel_id = 9999
+        self.mock_roles_available_provider.get_roles_for_message.assert_called_with(self.mock_message)
         self.mock_discord_service.send_channel_message.assert_called_with(expected_message, channel_id=expected_channel_id)
         self.mock_message.delete.assert_called()
 
@@ -88,6 +74,7 @@ class TestReturnsAvailableRolesWhenCalledWithNoAvailableRoles(BaseTestSetup, Tes
     async def runTest(self):
         await self.callback(self.mock_message)
 
+        self.mock_roles_available_provider.get_roles_for_message.assert_called_with(self.mock_message)
         self.mock_discord_service.send_channel_message.assert_not_called()
         self.mock_message.delete.assert_called()
 
@@ -101,6 +88,7 @@ class TestCanAddRoleWhenAvailableAndUserDoesntHaveRole(BaseTestSetup, TestCase):
     async def runTest(self):
         await self.callback(self.mock_message)
         
+        self.mock_roles_available_provider.get_roles_for_message.assert_called_with(self.mock_message)
         self.mock_message.delete.assert_called()
         self.mock_message.author.edit.assert_called_with(roles=[self.politics_role, self.funstuff_role])
 
@@ -114,6 +102,7 @@ class TestCanNotAddRoleWhenAvailableAndUserHasRole(BaseTestSetup, TestCase):
     async def runTest(self):
         await self.callback(self.mock_message)
         
+        self.mock_roles_available_provider.get_roles_for_message.assert_called_with(self.mock_message)
         self.mock_message.delete.assert_called()
         self.mock_message.author.edit.assert_not_called()
 
@@ -127,6 +116,7 @@ class TestCanNotAddRoleWhenRoleNotAvailable(BaseTestSetup, TestCase):
     async def runTest(self):
         await self.callback(self.mock_message)
         
+        self.mock_roles_available_provider.get_roles_for_message.assert_called_with(self.mock_message)
         self.mock_message.delete.assert_called()
         self.mock_message.author.edit.assert_not_called()
 
@@ -140,6 +130,7 @@ class TestCanRemoveRoleWhenUserHasRole(BaseTestSetup, TestCase):
     async def runTest(self):
         await self.callback(self.mock_message)
         
+        self.mock_roles_available_provider.get_roles_for_message.assert_called_with(self.mock_message)
         self.mock_message.delete.assert_called()
         self.mock_message.author.edit.assert_called_with(roles=[])
 
@@ -153,6 +144,7 @@ class TestCanNotRemoveRoleWhenUserDoesNotHaveRole(BaseTestSetup, TestCase):
     async def runTest(self):
         await self.callback(self.mock_message)
         
+        self.mock_roles_available_provider.get_roles_for_message.assert_called_with(self.mock_message)
         self.mock_message.delete.assert_called()
         self.mock_message.author.edit.assert_not_called()
 
