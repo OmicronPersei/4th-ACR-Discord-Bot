@@ -19,7 +19,7 @@ This is a [Discord](https://discordapp.com/) bot that makes use of the [`discord
 
 ## Bot commands
 ### user_roles_service
-This command allows users to add/remove themselves from available, whitelisted roles.  Roles may be segregated into individual channels, as seen in the config example.
+This command allows users to add/remove themselves from available, whitelisted roles.  Available roles are separated by channel.
 #### Usage
 * **`!roles`**: Lists all available roles.
 * **`!roles add <role name>`**: Adds self to the provided `<role name>`.
