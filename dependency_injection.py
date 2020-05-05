@@ -8,7 +8,6 @@ from user_roles_service import UserRolesService
 from cached_configuration_service import CachedConfigurationService
 from user_reaction_report.user_reaction_report import UserReactionReport
 from announcement_service import AnnouncementService
-from user_roles_hierarchy_parser import create_roles_dictionary
 from roles_available_provider import RolesAvailableProvider
 
 class Dependencies:
@@ -20,8 +19,7 @@ class Dependencies:
         self.discord_mention_factory = providers.Singleton(DiscordMentionFactory, self.discord_service)
         self.welcome_message = providers.Singleton(WelcomeMessage, self.config, self.discord_service, self.discord_mention_factory)
         self.user_leave_notification = providers.Singleton(UserLeaveNotification, self.config, self.discord_service, self.discord_mention_factory)
-        self.create_roles_dictionary = create_roles_dictionary
-        self.roles_available_provider = providers.Singleton(RolesAvailableProvider, self.create_roles_dictionary, self.discord_service, self.config)
+        self.roles_available_provider = providers.Singleton(RolesAvailableProvider, self.discord_service, self.config)
         self.user_roles_service = providers.Singleton(UserRolesService, self.config, self.discord_service, self.roles_available_provider)
         self.user_reaction_report = providers.Singleton(UserReactionReport, self.discord_service, self.config)
         self.announcement_service = providers.Singleton(AnnouncementService, self.config, self.discord_service)

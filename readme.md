@@ -19,7 +19,7 @@ This is a [Discord](https://discordapp.com/) bot that makes use of the [`discord
 
 ## Bot commands
 ### user_roles_service
-This command allows users to add/remove themselves from available, whitelisted roles.  Roles may be segregated into individual channels, as seen in the config example.
+This command allows users to add/remove themselves from available, whitelisted roles.  Available roles are separated by channel.
 #### Usage
 * **`!roles`**: Lists all available roles.
 * **`!roles add <role name>`**: Adds self to the provided `<role name>`.
@@ -73,23 +73,15 @@ Example:
         "enabled": true
     },
     "user_role_self_service": {
-        //All role IDs that users cannot self add/remove from.
-        "available_roles": [
-            {
-                "role": "45645646545465",   //role id
-                "sub_roles_accessable_channel": "234324324234", //channel id
-                "sub_roles": [
-                    {
-                        //Note these roles are only available in the above `sub_roles_accessable_channel`.
-                        //These may be nested as many times as desired.
-                        "role": "2342323423"    //role id
-                    }
-                ]
-            }
-        ],
+        //Channel IDs as the key for an array of role IDs accessable within that channel
+        "channels_available_roles": {
+            "11111": [
+                "1",
+                "2"
+            ]
+        },
         "command_keyword": "!roles",
-        "enabled": true,
-        "main_request_channel": "2342356435"    // channel id
+        "enabled": true
     },
     "user_reaction_reporter": {
         "enabled": true,
